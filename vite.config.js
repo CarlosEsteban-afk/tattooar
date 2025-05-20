@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: 'https://carlosesteban-afk.github.io/pwa-test/', 
+  base: 'https://carlosesteban-afk.github.io/tattooar/', 
   plugins: [vue(), VitePWA({
     registerType: 'autoUpdate',
     injectRegister: false,
