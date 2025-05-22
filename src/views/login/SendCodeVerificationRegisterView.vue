@@ -4,7 +4,7 @@
         <div class="flex-1 mt-20 px-6 py-8 ">
             <form @submit.prevent="sendVerificationCode"
                 class="max-w-md mx-auto space-y-6 bg-white p-6 rounded-lg shadow">
-                <p class="text-gray-700 text-sm">Se enviará un código a su correo, ingrese su correo en el siguiente
+                <p class="text-gray-700 text-sm">Se enviará un código de verificación a su correo, ingrese su correo en el siguiente
                     recuadro:</p>
                 <div>
                     <InputField id="email" v-model="form.email" type="email" placeholder="correo@ejemplo.com"
@@ -36,7 +36,7 @@ const sendVerificationCode = () => {
     console.log('Código de verificación enviado a:', form.email);
     showAlert.value = true;
     setTimeout(() => {
-        router.push({ name: 'CodeVerification' });
+        router.push({ name: 'RegisterCodeVerification' });
     }, 3000);
 }
 
