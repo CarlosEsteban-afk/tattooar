@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
 import LandingView from '../views/LandingView.vue'
 
 const routes = [
     { path: '/tattooar/', name: 'LandingView', component: LandingView },
-    { path: '/tattooar/login', name: 'Login', component: Login },
+    { path: '/tattooar/login', name: 'Login', component: RegisterView },
 ]
 
 const router = createRouter({
