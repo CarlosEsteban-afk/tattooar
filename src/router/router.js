@@ -7,12 +7,12 @@ import ResetPasswordView from '../views/login/ResetPasswordView.vue'
 import HomeView from '../views/HomeView.vue'
 
 const routes = [
-    { path: '/tattooar', name: 'Home', component: HomeView },
-    { path: '/tattooar/login', name: 'Login', component: LoginView },
-    { path: '/tattooar/register', name: 'Register', component: RegisterView },
-    { path: '/tattooar/forgot-password', name: 'ForgotPassword', component: ForgotPasswordView },
-    { path: '/tattooar/code-verification', name: 'CodeVerification', component: CodeVerificationView },
-    { path: '/tattooar/reset-password', name: 'ResetPassword', component: ResetPasswordView },
+    { path: '/tattooar/#', name: 'Home', component: HomeView },
+    { path: '/tattooar/#/login', name: 'Login', component: LoginView },
+    { path: '/tattooar/#/register', name: 'Register', component: RegisterView },
+    { path: '/tattooar/#/forgot-password', name: 'ForgotPassword', component: ForgotPasswordView },
+    { path: '/tattooar/#/code-verification', name: 'CodeVerification', component: CodeVerificationView },
+    { path: '/tattooar/#/reset-password', name: 'ResetPassword', component: ResetPasswordView },
 ]
 
 const router = createRouter({
