@@ -4,8 +4,10 @@ import LoginView from '../views/login/LoginView.vue'
 import ForgotPasswordView from '../views/login/ForgotPasswordView.vue'
 import CodeVerificationView from '../views/login/CodeVerificationView.vue'
 import ResetPasswordView from '../views/login/ResetPasswordView.vue'
+import HomeView from '../views/HomeView.vue'
 
 const routes = [
+    { path: '/tattooar', name: 'Home', component: HomeView },
     { path: '/tattooar/login', name: 'Login', component: LoginView },
     { path: '/tattooar/register', name: 'Register', component: RegisterView },
     { path: '/tattooar/forgot-password', name: 'ForgotPassword', component: ForgotPasswordView },
