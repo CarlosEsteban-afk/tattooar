@@ -1,109 +1,103 @@
 <template>
-    <div>
-        <!-- Botón hamburguesa en móvil - Ahora con posición fija en la parte superior -->
-        <button @click="toggleSidebar"
-            class="fixed top-4 left-4 z-[100] md:hidden p-2 bg-purple-700 rounded-md text-white focus:outline-none shadow-md">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path v-if="!isOpen" d="M4 6h16M4 12h16M4 18h16" />
-                <path v-else d="M18 6L6 18M6 6l12 12" />
-            </svg>
-        </button>
+    <!-- Botón Hamburguesa para móviles -->
+    <button @click="toggleSidebar" type="button"
+        class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-[#B1A9D1] rounded-lg sm:hidden hover:bg-[#2E076B] focus:outline-none focus:ring-2 focus:ring-gray-200">
+        <span class="sr-only">Abrir menú</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+            </path>
+        </svg>
+    </button>
 
-        <!-- Overlay para móvil cuando el sidebar está abierto - Ahora más claro -->
-        <div v-if="isOpen && !isDesktop" @click="closeSidebar"
-            class="fixed inset-0 bg-black bg-opacity-70 z-40 transition-opacity duration-300 ease-in-out"></div>
+    <!-- Sidebar -->
+    <aside id="default-sidebar" :class="[
+        'fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-[#2E076B]',
+        isOpen ? 'translate-x-0' : '-translate-x-full',
+        'sm:translate-x-0'
+    ]" aria-label="Sidebar">
+        <div class="flex flex-col justify-between h-full px-3 py-4 bg-[#2E076B]">
+            <!-- Menú principal -->
+            <ul class="space-y-2 font-medium">
+                <!-- Logo -->
+                <li class="mb-4">
+                    <img src="/assets/Logo.png" alt="Logo" class="mx-auto w-24 h-auto" />
+                </li>
 
-        <!-- Sidebar -->
-        <div v-show="isOpen || isDesktop"
-            class="fixed md:relative z-50 top-0 left-0 w-64 h-full bg-purple-900 text-white shadow-lg transition-all duration-300 ease-in-out transform"
-            :class="{ 'translate-x-0': isOpen, '-translate-x-full md:translate-x-0': !isOpen }">
-            <div class="p-6">
-                <div class="flex items-center justify-center mb-8">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
-                        <line x1="16" y1="8" x2="2" y2="22"></line>
-                        <line x1="17.5" y1="15" x2="9" y2="15"></line>
-                    </svg>
+                <!-- Usuarios -->
+                <li>
+                    <button @click="navigateTo('/tattooar/admin/users')"
+                        class="flex items-center w-full p-2 text-[#F0F0F0] rounded-lg hover:bg-[#38158A] group"
+                        type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-circle-user-round-icon lucide-circle-user-round">
+                            <path d="M18 20a6 6 0 0 0-12 0" />
+                            <circle cx="12" cy="10" r="4" />
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                        <span class="ms-3 whitespace-nowrap">Usuarios</span>
+                    </button>
+                </li>
+
+                <!-- Tatuajes -->
+                <li>
+                    <button @click="navigateTo('/tattooar/admin/tattoos')"
+                        class="flex items-center w-full p-2 text-[#F0F0F0] rounded-lg hover:bg-[#38158A] group"
+                        type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white transform rotate-45"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z" />
+                            <path
+                                d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18" />
+                            <path d="m2.3 2.3 7.286 7.286" />
+                            <circle cx="11" cy="11" r="2" />
+                        </svg>
+                        <span class="ms-3 whitespace-nowrap">Tatuajes</span>
+                    </button>
+                </li>
+
+                <!-- Logs -->
+                <li>
+                    <button @click="navigateTo('/tattooar/admin/logs')"
+                        class="flex items-center w-full p-2 text-[#F0F0F0] rounded-lg hover:bg-[#38158A] group"
+                        type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+                            <path
+                                d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
+                        </svg>
+                        <span class="ms-3 whitespace-nowrap">Logs</span>
+                    </button>
+                </li>
+
+                <!-- Botón cerrar sesión -->
+                <div class="mt-4">
+                    <button @click="navigateTo('/tattooar/')"
+                        class="flex items-center justify-center p-2 text-white bg-[#B90000] rounded-lg hover:bg-red-700 transition-colors duration-200 w-full text-center"
+                        type="button">
+                        <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 16 16">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 8h11m0 0-4-4m4 4-4 4m-5 3H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h3" />
+                        </svg>
+                        <span>Cerrar Sesión</span>
+                    </button>
                 </div>
-            </div>
-
-            <nav class="mt-10 overflow-y-auto max-h-[calc(100vh-200px)]">
-                <div @click="navigateTo('usuarios')"
-                    class="px-6 py-4 flex items-center hover:bg-purple-800 cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                    <span>Usuarios</span>
-                </div>
-
-                <div @click="navigateTo('tatuajes')"
-                    class="px-6 py-4 flex items-center hover:bg-purple-800 cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                    </svg>
-                    <span>Tatuajes</span>
-                </div>
-            </nav>
-
-            <div class="absolute bottom-0 w-full">
-                <button @click="$emit('logout')"
-                    class="flex items-center justify-center w-full bg-red-600 hover:bg-red-700 text-white py-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" y1="12" x2="9" y2="12" />
-                    </svg>
-                    Cerrar Sesión
-                </button>
-            </div>
+            </ul>
         </div>
-    </div>
+    </aside>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
-
-const isOpen = ref(false)
-const isDesktop = ref(false)
-
-const toggleSidebar = () => {
-    isOpen.value = !isOpen.value
-}
-
-const closeSidebar = () => {
-    if (!isDesktop.value) {
-        isOpen.value = false
-    }
-}
-
-const navigateTo = (route) => {
-    // Aquí puedes implementar la navegación real con vue-router
-    console.log(`Navegando a ${route}`)
-
-    // Cerrar el sidebar en móvil después de navegar
-    if (!isDesktop.value) {
-        isOpen.value = false
-    }
-}
-
-const handleResize = () => {
-    isDesktop.value = window.innerWidth >= 768
-
-    // En escritorio, el sidebar siempre está visible
-    if (isDesktop.value) {
-        isOpen.value = true
-    }
-}
 
 onMounted(() => {
     initFlowbite()
@@ -114,13 +108,45 @@ onMounted(() => {
 onBeforeUnmount(() => {
     window.removeEventListener('resize', handleResize)
 })
+
+const router = useRouter()
+const isOpen = ref(false)
+const isDesktop = ref(false)
+
+const navigateToUsers = () => {
+    router.push({ name: 'AdminUsersView' })
+    if (!isDesktop.value) isOpen.value = false
+}
+const navigateToTattoos = () => {
+    router.push({ name: 'AdminTattoos' })
+    if (!isDesktop.value) isOpen.value = false
+}
+const navigateToLogs = () => {
+    router.push({ name: 'AdminLogs' })
+    if (!isDesktop.value) isOpen.value = false
+}
+const navigateToHome = () => {
+    router.push({ name: 'LandingView' })
+    if (!isDesktop.value) isOpen.value = false
+}
+const toggleSidebar = () => {
+    isOpen.value = !isOpen.value
+}
+
+
+
+const handleResize = () => {
+    isDesktop.value = window.innerWidth >= 768
+
+    // En escritorio, el sidebar siempre está visible
+    if (isDesktop.value) {
+        isOpen.value = true
+    }
+}
+
+
+
+
 </script>
 
-<style scoped>
-/* Aseguramos que la transición sea suave */
-.transform {
-    transition-property: transform;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
-}
-</style>
+<style scoped></style>
