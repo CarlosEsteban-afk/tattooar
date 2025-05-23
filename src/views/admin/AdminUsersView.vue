@@ -218,7 +218,6 @@
                             <select v-model="currentUser.rol"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
                                 <option value="Cliente">Cliente</option>
-                                <option value="Administrador">Administrador</option>
                                 <option value="Tatuador">Tatuador</option>
                             </select>
                         </div>
