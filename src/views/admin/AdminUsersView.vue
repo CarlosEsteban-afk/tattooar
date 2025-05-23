@@ -1,18 +1,19 @@
 <template>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg sm:pl-64">
         <div class="flex flex-col md:flex-row min-h-screen bg-gray-100">
-            <!-- Sidebar -->
-            <Sidebar @logout="logout" />
-
             <!-- Main Content -->
             <div class="flex-1 overflow-auto w-full">
                 <div class="p-4 md:p-6 pt-6 md:pt-6 sm:pt-6">
                     <!-- Header con título y logo -->
+                    <div class="">
+                        <Sidebar @logout="logout" />
+                    </div>
                     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                         <h1 class="text-5xl md:text-5xl font-regular" style="font-family: 'Pirata One', cursive">
                             Administrar Usuarios
                         </h1>
-                        <div class="text-xl md:text-2xl font-bold text-purple-900 flex items-center">
+
+                        <div class="text-xl md:text-2xl font-bold text-purple-900 flex items-left">
                             <div class="flex flex-col items-center py-2">
                                 <img src="/assets/Banner.png" alt="Banner" class="h-16 md:h-16 mx-auto mb-2 mr-6" />
                             </div>
@@ -34,16 +35,19 @@
                                     </svg>
                                 </button>
                             </div>
-                            <button @click="openAddModal"
-                                class="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                </svg>
-                                Agregar Usuario
-                            </button>
+                            <div class="flex items-center justify-end w-full md:w-1/3">
+                                <button @click="openAddModal"
+                                    class="bg-[#2E076B] hover:bg-purple-800 text-white p-2  rounded-md flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    Agregar Usuario
+                                </button>
+                            </div>
+
                         </div>
 
                         <!-- Users Table - Responsive -->
@@ -85,10 +89,10 @@
                                         </thead>
                                         <tbody
                                             class="bg-[#2E076B] text-white divide-y divide-y-[4px] divide-purple-800">
-                                            <tr v-for="(user, index) in filteredUsers" :key="index"
+                                            <tr v-for="(user, index) in filteredUsers" :key="user.id"
                                                 class="hover:bg-purple-800">
                                                 <td class="px-4 py-3 whitespace-nowrap text-xs md:text-sm">
-                                                    <div class="flex items-center">
+                                                    <div class="flex space-x-2">
                                                         <div class="ml-0">
                                                             <div class="text-sm font-medium">{{ user.alias }}</div>
                                                             <div class="text-xs text-gray-300 md:hidden">
@@ -125,8 +129,10 @@
                                                     class="px-4 py-3 whitespace-nowrap text-xs md:text-sm hidden sm:table-cell">
                                                     {{ user.rol }}
                                                 </td>
+
+                                                <!-- Acciones -->
                                                 <td class="px-4 py-3 whitespace-nowrap text-xs md:text-sm">
-                                                    <div class="flex space-x-2">
+                                                    <div class="flex space-x-4">
                                                         <button @click="openEditModal(user)"
                                                             class="text-blue-400 hover:text-blue-600">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
@@ -137,25 +143,6 @@
                                                                     d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                                                                 <path
                                                                     d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                                            </svg>
-                                                        </button>
-                                                        <button @click="toggleUserStatus(user)" :class="user.estado === 'Activo'
-                                                            ? 'text-red-500 hover:text-red-700'
-                                                            : 'text-green-400 hover:text-green-600'">
-                                                            <svg v-if="user.estado === 'Activo'"
-                                                                xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                                stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round">
-                                                                <path d="M18 6L6 18" />
-                                                                <path d="M6 6l12 12" />
-                                                            </svg>
-                                                            <svg v-else xmlns="http://www.w3.org/2000/svg"
-                                                                class="h-5 w-5" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                                                                <polyline points="22 4 12 14.01 9 11.01" />
                                                             </svg>
                                                         </button>
                                                         <button @click="confirmDelete(user)"
@@ -170,6 +157,12 @@
                                                                 <line x1="10" y1="11" x2="10" y2="17" />
                                                                 <line x1="14" y1="11" x2="14" y2="17" />
                                                             </svg>
+                                                        </button>
+                                                        <button @click="goToUserDetail(user.id)"
+                                                            class="text-blue-400 text-lg hover:text-white-100 ml-4">
+                                                            <u>
+                                                                Ir al detalle
+                                                            </u>
                                                         </button>
                                                     </div>
                                                 </td>
@@ -237,7 +230,7 @@
                             Cancelar
                         </button>
                         <button @click="saveUser"
-                            class="w-full sm:w-auto px-4 py-2 bg-purple-700 text-white rounded-md hover:bg-purple-800 order-1 sm:order-2 mb-2 sm:mb-0">
+                            class="w-full sm:w-auto px-4 py-2 bg-[#2E076B] text-white rounded-md hover:bg-purple-800 order-1 sm:order-2 mb-2 sm:mb-0">
                             Guardar
                         </button>
                     </div>
@@ -272,8 +265,15 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 import Sidebar from '../../components/Sidebar.vue'
+
+onMounted(() => {
+    initFlowbite()
+})
+
+const router = useRouter()
 
 // Estado para los usuarios
 const users = ref([
@@ -428,6 +428,10 @@ function toggleUserStatus(user) {
     if (index !== -1) {
         users.value[index].estado = user.estado === 'Activo' ? 'Inactivo' : 'Activo'
     }
+}
+
+function goToUserDetail(userId) {
+    router.push({ name: 'UserDetail', params: { id: userId } })
 }
 
 function logout() {

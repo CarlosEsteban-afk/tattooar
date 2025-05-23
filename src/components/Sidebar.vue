@@ -1,7 +1,7 @@
 <template>
     <!-- Botón Hamburguesa para móviles -->
-    <button @click="toggleSidebar" type="button"
-        class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-[#B1A9D1] rounded-lg sm:hidden hover:bg-[#2E076B] focus:outline-none focus:ring-2 focus:ring-gray-200">
+    <button v-if="!isOpen" @click="toggleSidebar" type="button"
+        class="inline-flex items-left p-2 mt-2 mb-5 text-sm text-[#B1A9D1] rounded-lg bg-[#2E076B] sm:hidden hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-black-200">
         <span class="sr-only">Abrir menú</span>
         <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg">
@@ -10,7 +10,9 @@
             </path>
         </svg>
     </button>
-
+    <!-- Overlay para móviles -->
+    <div v-if="isOpen && !isDesktop" class="fixed inset.0 z-30 bg-black bg-opacity-50 transition-opacity"
+        @click="closeSidebar"></div>
     <!-- Sidebar -->
     <aside id="default-sidebar" :class="[
         'fixed top-0 left-0 z-40 w-64 h-screen transition-transform bg-[#2E076B]',
@@ -19,7 +21,17 @@
     ]" aria-label="Sidebar">
         <div class="flex flex-col justify-between h-full px-3 py-4 bg-[#2E076B]">
             <!-- Menú principal -->
-            <ul class="space-y-2 font-medium">
+            <div class="flex items-center justify-between">
+                <button v-if="!isDesktop" @click="closeSidebar" class="p-2 rounded hover:bg-[#38158A] focus:outline-none"
+                    aria-label="Cerrar sidebar">
+                    <!-- Flecha a la izquierda (Heroicons o SVG simple) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+            </div>
+            <ul class="space-y-2 font-medium text-xl flex flex-col space-between m-4">
                 <!-- Logo -->
                 <li class="mb-4">
                     <img src="/assets/Logo.png" alt="Logo" class="mx-auto w-24 h-auto" />
@@ -28,7 +40,7 @@
                 <!-- Usuarios -->
                 <li>
                     <button @click="navigateToUsers('/tattooar/admin/users')"
-                        class="flex items-center w-full p-2 text-[#F0F0F0] rounded-lg hover:bg-[#38158A] group"
+                        class="flex items-center w-full p-2 mt-20 text-[#F0F0F0] rounded-lg hover:bg-[#38158A] group"
                         type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -77,9 +89,9 @@
                 </li>
 
                 <!-- Botón cerrar sesión -->
-                <div class="mt-4">
-                    <button @click="navigateToHome('/tattooar/')"
-                        class="flex items-center justify-center p-2 text-white bg-[#B90000] rounded-lg hover:bg-red-700 transition-colors duration-200 w-full text-center"
+                <div class="mt-45 mb-15">
+                    <button @click="handleLogout"
+                        class="flex items-center justify-center p-2 text-white bg-[#B90000] rounded-lg hover:bg-red-900 transition-colors duration-200 w-full text-center"
                         type="button">
                         <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 16 16">
@@ -109,6 +121,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', handleResize)
 })
 
+const emit = defineEmits(['logout'])
 const router = useRouter()
 const isOpen = ref(false)
 const isDesktop = ref(false)
@@ -122,26 +135,22 @@ const navigateToTattoos = () => {
 const navigateToLogs = () => {
     router.push({ name: 'AdminLogs' })
 }
-const navigateToHome = () => {
-    router.push({ name: 'LandingView' })
-}
 const toggleSidebar = () => {
     isOpen.value = !isOpen.value
 }
-
-
-
+const closeSidebar = () => {
+    isOpen.value = false
+}
 const handleResize = () => {
-    isDesktop.value = window.innerWidth >= 768
-
-    // En escritorio, el sidebar siempre está visible
-    if (isDesktop.value) {
-        isOpen.value = true
-    }
+    isDesktop.value = window.innerWidth >= 640 // sm breakpoint
+    if (isDesktop.value) isOpen.value = true
+    else isOpen.value = false
 }
 
-
-
+function handleLogout() {
+    emit('logout') // Notifica al padre
+    router.push({ name: 'LandingView' })
+}
 
 </script>
 

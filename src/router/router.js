@@ -4,6 +4,7 @@ import LandingView from '../views/LandingView.vue'
 import AdminUsersView from '../views/admin/AdminUsersView.vue'
 import AdminTattoos from '../views/admin/TattooAdminView.vue'
 import AdminLogs from '../views/admin/LogsAdminView.vue'
+import UserDetailView from '../views/admin/UserDetailView.vue'
 
 const routes = [
     { path: '/tattooar/', name: 'LandingView', component: LandingView },
@@ -11,6 +12,7 @@ const routes = [
     { path: '/tattooar/admin/users', name: 'AdminUsersView', component: AdminUsersView },
     { path: '/tattooar/admin/tattoos', name: 'AdminTattoos', component: AdminTattoos },
     { path: '/tattooar/admin/logs', name: 'AdminLogs', component: AdminLogs },
+    { path: '/tattooar/admin/user/:id', name: 'UserDetail', component: UserDetailView },
 ]
 
 const router = createRouter({
