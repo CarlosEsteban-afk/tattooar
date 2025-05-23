@@ -27,7 +27,7 @@
 
                 <!-- Usuarios -->
                 <li>
-                    <button @click="navigateTo('/tattooar/admin/users')"
+                    <button @click="navigateToUsers('/tattooar/admin/users')"
                         class="flex items-center w-full p-2 text-[#F0F0F0] rounded-lg hover:bg-[#38158A] group"
                         type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -43,7 +43,7 @@
 
                 <!-- Tatuajes -->
                 <li>
-                    <button @click="navigateTo('/tattooar/admin/tattoos')"
+                    <button @click="navigateToTattoos('/tattooar/admin/tattoos')"
                         class="flex items-center w-full p-2 text-[#F0F0F0] rounded-lg hover:bg-[#38158A] group"
                         type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white transform rotate-45"
@@ -62,7 +62,7 @@
 
                 <!-- Logs -->
                 <li>
-                    <button @click="navigateTo('/tattooar/admin/logs')"
+                    <button @click="navigateToLogs('/tattooar/admin/logs')"
                         class="flex items-center w-full p-2 text-[#F0F0F0] rounded-lg hover:bg-[#38158A] group"
                         type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24"
@@ -78,7 +78,7 @@
 
                 <!-- Botón cerrar sesión -->
                 <div class="mt-4">
-                    <button @click="navigateTo('/tattooar/')"
+                    <button @click="navigateToHome('/tattooar/')"
                         class="flex items-center justify-center p-2 text-white bg-[#B90000] rounded-lg hover:bg-red-700 transition-colors duration-200 w-full text-center"
                         type="button">
                         <svg class="w-5 h-5 mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -115,19 +115,15 @@ const isDesktop = ref(false)
 
 const navigateToUsers = () => {
     router.push({ name: 'AdminUsersView' })
-    if (!isDesktop.value) isOpen.value = false
 }
 const navigateToTattoos = () => {
     router.push({ name: 'AdminTattoos' })
-    if (!isDesktop.value) isOpen.value = false
 }
 const navigateToLogs = () => {
     router.push({ name: 'AdminLogs' })
-    if (!isDesktop.value) isOpen.value = false
 }
 const navigateToHome = () => {
     router.push({ name: 'LandingView' })
-    if (!isDesktop.value) isOpen.value = false
 }
 const toggleSidebar = () => {
     isOpen.value = !isOpen.value
