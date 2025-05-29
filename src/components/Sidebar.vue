@@ -1,6 +1,6 @@
 <template>
     <div>
-   
+        <!-- Botón hamburguesa en móvil - Ahora con posición fija en la parte superior -->
         <button @click="toggleSidebar"
             class="fixed top-4 left-4 z-[100] md:hidden p-2 bg-purple-700 rounded-md text-white focus:outline-none shadow-md">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
@@ -9,8 +9,12 @@
                 <path v-else d="M18 6L6 18M6 6l12 12" />
             </svg>
         </button>
+
+        <!-- Overlay para móvil cuando el sidebar está abierto - Ahora más claro -->
         <div v-if="isOpen && !isDesktop" @click="closeSidebar"
             class="fixed inset-0 bg-black bg-opacity-70 z-40 transition-opacity duration-300 ease-in-out"></div>
+
+        <!-- Sidebar -->
         <div v-show="isOpen || isDesktop"
             class="fixed md:relative z-50 top-0 left-0 w-64 h-full bg-purple-900 text-white shadow-lg transition-all duration-300 ease-in-out transform"
             :class="{ 'translate-x-0': isOpen, '-translate-x-full md:translate-x-0': !isOpen }">
@@ -67,7 +71,7 @@
                 </div>
                 
             <div class="absolute bottom-0 w-full">
-                <button @click="logout"
+                <button @click="$emit('logout')"
             class="flex items-center justify-center w-full bg-red-600 hover:bg-red-700 text-white py-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -121,6 +125,8 @@ const navigateTo = (route) => {
 
 const handleResize = () => {
     isDesktop.value = window.innerWidth >= 768
+
+    // En escritorio, el sidebar siempre está visible
     if (isDesktop.value) {
         isOpen.value = true
     }
