@@ -1,9 +1,4 @@
-<template>
-<h1>ADMIN TATTOOS VIEW</h1>
-<<<<<<< HEAD
-</template>
-=======
-</template>
+
 <template>
   <div class="flex h-screen">
     <Sidebar />
@@ -70,4 +65,3 @@ const filteredTattoos = computed(() =>
   )
 )
 </script>
->>>>>>> feature/admin-viewers

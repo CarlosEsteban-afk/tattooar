@@ -1,8 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <h1>LOGS ADMIN VIEW</h1>
-</template>
-=======
   <div class="flex h-screen">
     <Sidebar />
 
@@ -92,4 +88,3 @@ const filteredLogs = computed(() =>
   )
 )
 </script>
->>>>>>> feature/admin-viewers
