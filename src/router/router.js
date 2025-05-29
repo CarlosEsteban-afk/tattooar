@@ -12,12 +12,12 @@ const routes = [
     { path: '/tattooar/admin/users', name: 'AdminUsersView', component: AdminUsersView },
     { path: '/tattooar/admin/tattoos', name: 'AdminTattoos', component: AdminTattoos },
     { path: '/tattooar/admin/logs', name: 'AdminLogs', component: AdminLogs },
-     { path: '/tattooar/admin/reportes', name: 'AdminReports', component: AdminReports },
+    { path: '/tattooar/admin/reportes', name: 'AdminReports', component: AdminReports },
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
-})
+  history: createWebHistory("/tattooar/"),
+  routes,
+});
 
-export default router
+export default router;

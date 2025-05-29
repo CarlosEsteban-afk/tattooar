@@ -1,4 +1,7 @@
 <template>
+<h1>ADMIN TATTOOS VIEW</h1>
+</template>
+<template>
   <div class="flex h-screen">
     <Sidebar />
 
