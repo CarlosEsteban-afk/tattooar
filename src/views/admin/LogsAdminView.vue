@@ -3,7 +3,10 @@
     <Sidebar />
 
     <main class="flex-1 bg-gray-50 p-6 overflow-y-auto">
-      <h1 class="text-2xl font-bold mb-4">Visualización de logs</h1>
+
+         <Topbar title="Visualización de logs" :notificationCount="3" />
+      <br />
+       <!-- <h1 class="text-2xl font-bold mb-4">Visualización de logs</h1>--> 
 
       <!-- Barra de búsqueda -->
       <div class="flex items-center gap-2 mb-6">
@@ -59,6 +62,7 @@
 
 <script setup>
 import Sidebar from '../../components/Sidebar.vue'
+import Topbar from '../../components/TopBar.vue'
 import { ref, computed } from 'vue'
 
 const search = ref("")

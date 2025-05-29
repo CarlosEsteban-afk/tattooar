@@ -3,7 +3,11 @@
     <Sidebar />
 
     <main class="flex-1 bg-gray-50 p-6 overflow-y-auto">
-      <h1 class="text-2xl font-bold mb-4">Administración de Tatuajes</h1>
+
+        <Topbar title="Administración de Tatuajes" :notificationCount="3" />
+      <br />
+
+     <!-- <h1 class="text-2xl font-bold mb-4">Administración de Tatuajes</h1> --> 
 
       <!-- Barra de búsqueda -->
       <div class="flex items-center gap-2 mb-6">
@@ -25,6 +29,7 @@
           :key="tattoo.id"
           :title="tattoo.title"
           :author="tattoo.author"
+           @delete="deleteTattoo(tattoo.id)"
         />
       </div>
     </main>
@@ -34,9 +39,14 @@
 <script setup>
 import Sidebar from '../../components/Sidebar.vue'
 import TattooCard from '../../components/TattooCard.vue'
+import Topbar from '../../components/TopBar.vue'
 import { ref, computed } from 'vue'
 
 const search = ref("")
+
+const deleteTattoo = (id) => {
+  tattoos.value = tattoos.value.filter(t => t.id !== id)
+}
 
 const tattoos = ref([
   { id: 1, title: "Flor de loto.png", author: "María González" },
