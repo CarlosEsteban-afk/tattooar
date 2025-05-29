@@ -1,8 +1,8 @@
 <template>
   <div class="flex h-screen">
-    <Sidebar />
+    <AdminSidebar @logout="logout" class="h-full" />
 
-    <main class="flex-1 bg-gray-50 p-6 overflow-y-auto">
+    <main class="pl-68 flex-1 bg-gray-50 p-6 overflow-y-auto">
       <!-- Topbar aquí -->
       <Topbar title="Administración de Reportes" :notificationCount="3" />
       <br />
@@ -125,6 +125,7 @@
 import Sidebar from "../../components/Sidebar.vue";
 import TattooCard from "../../components/TattooCard.vue";
 import Topbar from "../../components/TopBar.vue";
+import AdminSidebar from '../../components/AdminSidebar.vue'
 import { ref, computed } from "vue";
 
 const search = ref("");

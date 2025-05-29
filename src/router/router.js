@@ -46,12 +46,11 @@ const routes = [
     name: "DashboardAdminView",
     component: DashboardAdminView,
   },
-    { path: '/tattooar/', name: 'LandingView', component: LandingView },
-    { path: '/tattooar/login', name: 'Login', component: Login },
-    { path: '/tattooar/admin/users', name: 'AdminUsersView', component: AdminUsersView },
-    { path: '/tattooar/admin/tattoos', name: 'AdminTattoos', component: AdminTattoos },
-    { path: '/tattooar/admin/logs', name: 'AdminLogs', component: AdminLogs },
-    { path: '/tattooar/admin/reportes', name: 'AdminReports', component: AdminReports },
+   // { path: '/tattooar/', name: 'LandingView', component: LandingView },
+   // { path: '/tattooar/login', name: 'Login', component: Login },
+    { path: '/admin/tattoos', name: 'AdminTattoos', component: AdminTattoos },
+    { path: '/admin/logs', name: 'AdminLogs', component: AdminLogs },
+    { path: '/admin/reportes', name: 'AdminReports', component: AdminReports },
 
 ];
 

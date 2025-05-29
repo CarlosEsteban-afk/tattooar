@@ -91,6 +91,23 @@
                         <span class="mx-3 whitespace-nowrap">Logs</span>
                     </button>
                 </li>
+
+              
+<!-- Reportes -->
+                <li>
+                    <button @click="navigateToReports()"
+                        class="flex items-center w-full p-2 text-[#F0F0F0] rounded-sm hover:bg-[#38158A] group cursor-pointer"
+                        type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-white"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+                            <path
+                                d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
+                        </svg>
+                        <span class="mx-3 whitespace-nowrap">Reportes</span>
+                    </button>
+                </li>
             </ul>
             <!-- Botón cerrar sesión -->
             <div class="mt-auto px-3 flex justify-end flex-col">
@@ -168,6 +185,9 @@ const navigateToLogs = () => {
 const navigateToDashboard = () => {
     router.push({ name: 'DashboardAdminView' })
 }
+const navigateToReports = () => {
+    router.push({ name: 'AdminReports' })
+}
 const toggleSidebar = () => {
     isOpen.value = !isOpen.value
 }
@@ -191,6 +211,6 @@ function confirmLogout() {
 
 function goToLanding() {
     showLogoutSuccess.value = false
-    router.push({ name: 'Home' })
+    router.push({ name: 'Login' })
 }
 </script>

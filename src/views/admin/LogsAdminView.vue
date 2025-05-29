@@ -1,8 +1,7 @@
 <template>
   <div class="flex h-screen">
-    <Sidebar />
-
-    <main class="flex-1 bg-gray-50 p-6 overflow-y-auto">
+<AdminSidebar @logout="logout" class="h-full" />
+    <main class="pl-68 flex-1 bg-gray-50 p-6 overflow-y-auto">
 
          <Topbar title="Visualización de logs" :notificationCount="3" />
       <br />
@@ -63,6 +62,7 @@
 <script setup>
 import Sidebar from '../../components/Sidebar.vue'
 import Topbar from '../../components/TopBar.vue'
+import AdminSidebar from '../../components/AdminSidebar.vue'
 import { ref, computed } from 'vue'
 
 const search = ref("")
