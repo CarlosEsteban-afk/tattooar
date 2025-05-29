@@ -1,20 +1,18 @@
 <template>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg sm:pl-64">
-        <div class="flex flex-col md:flex-row min-h-screen bg-purple-200">
+        <div class="flex flex-col md:flex-row min-h-screen bg-gray-50">
             <div class="flex-1 overflow-auto w-full">
-                <div class="w-full px-2 sm:px-4 md:px-6 p-4 md:p-6 pt-6 md:pt-6 sm:pt-6">
+                <div class="w-full px-2 sm:px-4 md:px-4 p-4 md:p-6 pt-6 md:pt-6 sm:pt-6">
                     <!-- Sidebar -->
                     <AdminSidebar @logout="logout" />
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                        <h1 class="text-5xl md:text-5xl font-regular" style="font-family: 'Pirata One', cursive">
-                            Editar Usuario
-                        </h1>
+                    <Topbar :title="`Editar Usuario: ${user.nombre} ${user.apellido} (${user.alias})`" :notificationCount="3" />
+                    <br />
+                    <div class="flex flex-col md:flex-col items-end mb-6 gap-4 px-4">
                         <button @click="goBack"
                             class="mt-4 md:mt-0 px-4 py-2 bg-[#2E076B] text-white rounded hover:bg-purple-900 cursor-pointer">
                             Volver
                         </button>
                     </div>
-
                     <form @submit.prevent="onSubmit"
                         class="bg-[#7B6EAD] rounded-lg p-4 shadow-lg w-full p-2 sm:p-4 md:p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -138,6 +136,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AdminSidebar from '../../components/AdminSidebar.vue'
+import Topbar from '../../components/Topbar.vue'   
 
 const router = useRouter()
 const showConfirmModal = ref(false)
