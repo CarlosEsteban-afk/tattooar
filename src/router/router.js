@@ -11,6 +11,7 @@ import AdminLogs from "../views/admin/LogsAdminView.vue";
 import UserDetailView from "../views/admin/UserDetailView.vue";
 import EditUserView from "../views/admin/EditUserView.vue";
 import DashboardAdminView from "../views/admin/DashboardAdminView.vue";
+import AdminReports from '../views/admin/ReportsAdminView.vue'
 
 const routes = [
   { path: "/", name: "Home", component: HomeView },
@@ -45,6 +46,13 @@ const routes = [
     name: "DashboardAdminView",
     component: DashboardAdminView,
   },
+    { path: '/tattooar/', name: 'LandingView', component: LandingView },
+    { path: '/tattooar/login', name: 'Login', component: Login },
+    { path: '/tattooar/admin/users', name: 'AdminUsersView', component: AdminUsersView },
+    { path: '/tattooar/admin/tattoos', name: 'AdminTattoos', component: AdminTattoos },
+    { path: '/tattooar/admin/logs', name: 'AdminLogs', component: AdminLogs },
+    { path: '/tattooar/admin/reportes', name: 'AdminReports', component: AdminReports },
+
 ];
 
 const router = createRouter({
