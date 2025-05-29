@@ -1,16 +1,13 @@
 <template>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg sm:pl-64">
-        <div class="flex flex-col md:flex-row min-h-screen bg-purple-200">
-            <!-- Sidebar -->
-            <AdminSidebar @logout="logout" />
+        <div class="flex flex-col md:flex-row min-h-screen bg-gray-50">
             <!-- Main Content -->
             <div class="flex-1 overflow-auto w-full">
-                <div class="p-4 md:p-6 pt-6 md:pt-6 sm:pt-6">
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                        <h1 class="text-5xl font-regular" style="font-family: 'Pirata One', cursive">
-                            Estadísticas Generales
-                        </h1>
-                    </div>
+                <div class="p-4 md:p-4 pt-6 md:pt-6 sm:pt-6">
+                    <!-- Sidebar -->
+                    <AdminSidebar @logout="logout" />
+                    <TopBar title="Visualización de Estadísticas Generales" :notificationCount="3" />
+                    <br />
                     <div class="bg-[#7B6EAD] rounded-lg p-4 md:p-6 shadow-lg w-full">
                         <!-- Gráficos -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -81,6 +78,7 @@ import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 import AdminSidebar from '../../components/AdminSidebar.vue'
+import TopBar from '../../components/TopBar.vue'
 
 const totalUsers = ref(0)
 const totalTattoos = ref(0)

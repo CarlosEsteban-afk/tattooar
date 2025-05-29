@@ -1,17 +1,13 @@
 <template>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg sm:pl-64">
-        <div class="flex flex-col md:flex-row min-h-screen bg-purple-200">
+        <div class="flex flex-col md:flex-row min-h-screen bg-gray-50">
             <!-- Main Content -->
             <div class="flex-1 overflow-auto w-full">
-                <div class="p-4 md:p-6 pt-6 md:pt-6 sm:pt-6">
+                <div class="p-4 md:p-4 pt-6 md:pt-6 sm:pt-6">
                     <!-- Sidebar -->
                     <AdminSidebar @logout="logout" />
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                        <h1 class="text-5xl md:text-5xl font-regular" style="font-family: 'Pirata One', cursive">
-                            Administrar Usuarios
-                        </h1>
-                    </div>
-
+                    <TopBar title="Administración de Usuarios" :notificationCount="3" />
+                    <br />
                     <div class="bg-[#7B6EAD] rounded-lg p-4 md:p-6 shadow-lg">
                         <!-- Searchbar -->
                         <div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
@@ -122,20 +118,21 @@
                                                 <!-- Acciones -->
                                                 <td class="px-4 py-3 whitespace-nowrap text-xs md:text-sm">
                                                     <div class="flex space-x-4">
-                                                        <button @click="goToEditUser(user.id)"
-                                                            class="text-white-400 hover:text-blue-500 cursor-pointer">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                                stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round">
-                                                                <path
-                                                                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                                <path
-                                                                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                                        <button @click="goToUserDetail(user.id)"
+                                                            class="text-purple-300 hover:text-white-100 border rounded-sm cursor-pointer"
+                                                            title="Ver detalle">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 m-1"
+                                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                                stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                             </svg>
                                                         </button>
                                                         <button @click="confirmDelete(user)"
-                                                            class="text-red-500 hover:text-red-700 cursor-pointer">
+                                                            class="text-red-500 hover:text-red-700 cursor-pointer"
+                                                            title="Eliminar">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                                 stroke-width="2" stroke-linecap="round"
@@ -146,12 +143,6 @@
                                                                 <line x1="10" y1="11" x2="10" y2="17" />
                                                                 <line x1="14" y1="11" x2="14" y2="17" />
                                                             </svg>
-                                                        </button>
-                                                        <button @click="goToUserDetail(user.id)"
-                                                            class="text-purple-300 text-lg hover:text-white-100 ml-4 cursor-pointer">
-                                                            <u>
-                                                                Ver detalle
-                                                            </u>
                                                         </button>
                                                     </div>
                                                 </td>
@@ -195,6 +186,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 import AdminSidebar from '../../components/AdminSidebar.vue'
+import TopBar from '../../components/TopBar.vue'
 
 onMounted(() => {
     initFlowbite()
