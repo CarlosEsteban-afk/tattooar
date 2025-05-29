@@ -2,7 +2,8 @@
     <div class="card overflow-hidden shadow bg-white">
         <div class="p-3">
             <button @click="goToProfile" class="flex items-center">
-                <h2 class="text-xs text-gray-600">{{ author }}</h2>
+                <img src="/assets/avatar.png" alt="Avatar" class="rounded-full w-6 h-6" />
+                <h2 class="text-xs text-gray-600 pl-2">{{ author }}</h2>
             </button>
         </div>
         <div class="bg-gray-200 flex items-center justify-center h-70">
