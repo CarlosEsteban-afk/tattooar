@@ -3,7 +3,7 @@
         <div class="flex-1 flex flex-col w-full sm:pl-64"> <!-- Agrega sm:pl-64 aquí -->
             <div class="p-4 md:p-4 pt-6 md:pt-6 sm:pt-6">
                 <AdminSidebar @logout="logout" />
-                <Topbar title="Estadísticas usuarios" :notificationCount="3" />
+                <TopBar title="Estadísticas usuarios" :notificationCount="3" />
                 <br />
                 <div class="flex flex-col md:flex-col items-end mb-6 gap-4 px-4">
                     <button @click="goBack"
@@ -167,7 +167,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import AdminSidebar from '../../components/AdminSidebar.vue'
-import Topbar from '../../components/Topbar.vue'
+import TopBar from '../../components/TopBar.vue'
 
 const defaultImg = 'https://ui-avatars.com/api/?name=User&background=7B6EAD&color=fff'
 

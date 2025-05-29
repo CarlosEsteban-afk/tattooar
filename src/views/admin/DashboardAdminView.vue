@@ -6,7 +6,7 @@
                 <div class="p-4 md:p-4 pt-6 md:pt-6 sm:pt-6">
                     <!-- Sidebar -->
                     <AdminSidebar @logout="logout" />
-                    <Topbar title="Visualización de Estadísticas Generales" :notificationCount="3" />
+                    <TopBar title="Visualización de Estadísticas Generales" :notificationCount="3" />
                     <br />
                     <div class="bg-[#7B6EAD] rounded-lg p-4 md:p-6 shadow-lg w-full">
                         <!-- Gráficos -->
@@ -78,7 +78,7 @@ import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 import AdminSidebar from '../../components/AdminSidebar.vue'
-import Topbar from '../../components/Topbar.vue'
+import TopBar from '../../components/TopBar.vue'
 
 const totalUsers = ref(0)
 const totalTattoos = ref(0)

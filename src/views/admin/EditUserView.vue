@@ -5,7 +5,7 @@
                 <div class="w-full px-2 sm:px-4 md:px-4 p-4 md:p-6 pt-6 md:pt-6 sm:pt-6">
                     <!-- Sidebar -->
                     <AdminSidebar @logout="logout" />
-                    <Topbar :title="`Editar Usuario: ${user.nombre} ${user.apellido} (${user.alias})`" :notificationCount="3" />
+                    <TopBar :title="`Editar Usuario: ${user.nombre} ${user.apellido} (${user.alias})`" :notificationCount="3" />
                     <br />
                     <div class="flex flex-col md:flex-col items-end mb-6 gap-4 px-4">
                         <button @click="goBack"
@@ -136,7 +136,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AdminSidebar from '../../components/AdminSidebar.vue'
-import Topbar from '../../components/Topbar.vue'   
+import TopBar from '../../components/TopBar.vue'   
 
 const router = useRouter()
 const showConfirmModal = ref(false)
