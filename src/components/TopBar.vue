@@ -1,6 +1,6 @@
 <!-- src/components/Topbar.vue -->
 <template>
-  <header class="flex justify-between items-center bg-white shadow px-6 py-4">
+  <header class="flex justify-between items-center bg-white shadow px-6 py-4 rounded-md">
         <!-- <img src="/public/assets/Banner.png" alt="admin banner" class="h-12" />-->
     <h1 class="text-xl font-bold text-gray-800">{{ title }}</h1>
 
