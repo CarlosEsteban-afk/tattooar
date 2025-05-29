@@ -191,6 +191,6 @@ function confirmLogout() {
 
 function goToLanding() {
     showLogoutSuccess.value = false
-    router.push({ name: 'LandingView' })
+    router.push({ name: 'Home' })
 }
 </script>

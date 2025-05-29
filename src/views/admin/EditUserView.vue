@@ -4,7 +4,7 @@
             <div class="flex-1 overflow-auto w-full">
                 <div class="w-full px-2 sm:px-4 md:px-6 p-4 md:p-6 pt-6 md:pt-6 sm:pt-6">
                     <!-- Sidebar -->
-                    <Sidebar @logout="logout" />
+                    <AdminSidebar @logout="logout" />
                     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                         <h1 class="text-5xl md:text-5xl font-regular" style="font-family: 'Pirata One', cursive">
                             Editar Usuario
@@ -137,7 +137,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Sidebar from '../../components/Sidebar.vue'
+import AdminSidebar from '../../components/AdminSidebar.vue'
 
 const router = useRouter()
 const showConfirmModal = ref(false)

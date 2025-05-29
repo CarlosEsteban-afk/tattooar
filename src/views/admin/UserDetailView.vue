@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-purple-200 flex flex-col md:flex-row">
-        <Sidebar @logout="logout" />
+        <AdminSidebar @logout="logout" />
         <div class="flex-1 flex flex-col w-full sm:pl-64"> <!-- Agrega sm:pl-64 aquí -->
             <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 px-4 pt-8">
                 <h1 class="text-4xl md:text-5xl font-regular" style="font-family: 'Pirata One', cursive">
@@ -12,8 +12,8 @@
                 </button>
             </div>
             <div class="w-full flex flex-col items-center px-2 md:px-8">
-                <div class="w-full max-w-6xl bg-white rounded-xl shadow-lg p-4 md:p-8">
-                    <div v-if="user">
+                <div class="w-full max-w-7xl rounded-xl shadow-lg p-2 md:p-5 bg-[#7B6EAD]">
+                    <div v-if="user" class="bg-white rounded-lg p-6 shadow-lg">
                         <!-- Header: Nombre, Imagen, Alias -->
                         <div class="flex flex-col md:flex-row items-center gap-6 mb-8">
                             <img :src="user.imagen || defaultImg" alt="Profile"
@@ -35,15 +35,22 @@
                                     </span>
                                 </div>
                             </div>
-                            <button @click="banUser"
-                                class="ml-auto flex items-center px-4 py-2 bg-red-600 text-white rounded mt-4 md:mt-0">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <button @click="toggleUserStatus"
+                                class="ml-auto flex items-center px-4 py-2 rounded mt-4 md:mt-0" :class="user.estado === 'Activo'
+                                    ? 'bg-red-600 text-white hover:bg-red-700'
+                                    : 'bg-green-600 text-white hover:bg-green-700'">
+                                <svg v-if="user.estado === 'Activo'" class="w-5 h-5 mr-2" fill="none"
+                                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+                                    stroke-linejoin="round">
                                     <path d="M17 17L7 7"></path>
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <path d="M9 15l6-6"></path>
                                 </svg>
-                                Desactivar usuario
+                                <svg v-else class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                {{ user.estado === 'Activo' ? 'Desactivar usuario' : 'Activar usuario' }}
                             </button>
                         </div>
 
@@ -125,22 +132,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Cliente Detalle -->
-                        <div v-else>
-                            <div class="mb-6">
-                                <h3 class="font-semibold mb-1">Alias</h3>
-                                <p class="text-gray-700">{{ user.alias }}</p>
-                            </div>
-                            <div class="mb-6">
-                                <h3 class="font-semibold mb-1">Nombre</h3>
-                                <p class="text-gray-700">{{ user.nombre }} {{ user.apellido }}</p>
-                            </div>
-                            <div class="mb-6">
-                                <h3 class="font-semibold mb-1">Correo electrónico</h3>
-                                <p class="text-gray-700">{{ user.correo }}</p>
-                            </div>
-                        </div>
                     </div>
                     <div v-else class="text-center text-gray-400 py-12">
                         Usuario no encontrado.
@@ -154,7 +145,7 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
-import Sidebar from '../../components/Sidebar.vue'
+import AdminSidebar from '../../components/AdminSidebar.vue'
 
 const defaultImg = 'https://ui-avatars.com/api/?name=User&background=7B6EAD&color=fff'
 
@@ -172,21 +163,21 @@ onMounted(async () => {
     }
 })
 
-function banUser() {
-    if (user.value.estado === 'Inactivo') {
-        alert('El usuario ya está inactivo.')
-        return
-    }
-
-    if (confirm(`¿Estás seguro de que quieres desactivar a ${user.value.nombre}?`)) {
-        user.value.estado = 'Inactivo'
-        // Aquí podrías hacer una llamada a la API para actualizar el estado del usuario
-        // await fetch(`http://localhost:3002/users/${user.value.id}`, {
-        //     method: 'PUT',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ estado: 'Inactivo' })
-        // })
-        alert('Usuario desactivado correctamente.')
+function toggleUserStatus() {
+    if (user.value.estado === 'Activo') {
+        if (confirm(`¿Estás seguro de que quieres desactivar a ${user.value.nombre}?`)) {
+            user.value.estado = 'Inactivo'
+            // Aquí podrías hacer una llamada a la API para actualizar el estado
+            // await fetch(...)
+            alert('Usuario desactivado correctamente.')
+        }
+    } else {
+        if (confirm(`¿Deseas activar nuevamente a ${user.value.nombre}?`)) {
+            user.value.estado = 'Activo'
+            // Aquí podrías hacer una llamada a la API para actualizar el estado
+            // await fetch(...)
+            alert('Usuario activado correctamente.')
+        }
     }
 }
 
