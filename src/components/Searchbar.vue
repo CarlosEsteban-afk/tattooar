@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import FiltersDrawer from './FiltersDrawer.vue'
+import FiltersDrawer from '../components/FiltersDrawer.vue'
 import { SlidersHorizontal } from 'lucide-vue-next'
 
 const emit = defineEmits(['apply-filters', 'search'])

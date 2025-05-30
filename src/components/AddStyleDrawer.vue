@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
-import SearchbarMultiselect from './SearchbarMultiSelect.vue'
+import SearchbarMultiselect from '../components/SearchbarMultiselect.vue'
 
 const props = defineProps({
   visible: Boolean,
