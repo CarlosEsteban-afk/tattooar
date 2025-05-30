@@ -1,29 +1,95 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import RegisterView from '../views/login/RegisterView.vue'
-import LoginView from '../views/login/LoginView.vue'
-import ForgotPasswordView from '../views/login/ForgotPasswordView.vue'
-import CodeVerificationView from '../views/login/CodeVerificationView.vue'
-import ResetPasswordView from '../views/login/ResetPasswordView.vue'
-import CodeVerificationRegisterView from '../views/login/CodeVerificationRegisterView.vue'
-import SendCodeVerificationRegisterView from '../views/login/SendCodeVerificationRegisterView.vue'
-import FinishedRegisterView from '../views/login/FinishedRegisterView.vue'
-
-
+import { createRouter, createWebHistory } from "vue-router";
+import RegisterView from "../views/login/RegisterView.vue";
+import LoginView from "../views/login/LoginView.vue";
+import ForgotPasswordView from "../views/login/ForgotPasswordView.vue";
+import CodeVerificationView from "../views/login/CodeVerificationView.vue";
+import ResetPasswordView from "../views/login/ResetPasswordView.vue";
+import HomeView from "../views/HomeView.vue";
+import AdminUsersView from "../views/admin/AdminUsersView.vue";
+import AdminTattoos from "../views/admin/TattooAdminView.vue";
+import AdminLogs from "../views/admin/LogsAdminView.vue";
+import UserDetailView from "../views/admin/UserDetailView.vue";
+import EditUserView from "../views/admin/EditUserView.vue";
+import DashboardAdminView from "../views/admin/DashboardAdminView.vue";
+import AdminReports from "../views/admin/ReportsAdminView.vue";
+import TatooArtistProfileView from "../views/TattooArtistProfileView.vue";
+import FavoritesView from "../views/FavoritesView.vue";
+import UserProfileView from "../views/UserProfileView.vue";
+import TattooArtistsView from "../views/TattooArtistsView.vue";
+import AboutView from "../views/AboutView.vue";
+import ReportView from "../views/ReportView.vue";
+import CodeVerificationRegisterView from "../views/login/CodeVerificationRegisterView.vue";
+import SendCodeVerificationRegisterView from "../views/login/SendCodeVerificationRegisterView.vue";
+import FinishedRegisterView from "../views/login/FinishedRegisterView.vue";
 
 const routes = [
-    { path: '/tattooar/login', name: 'Login', component: LoginView },
-    { path: '/tattooar/register', name: 'Register', component: RegisterView },
-    { path: '/tattooar/forgot-password', name: 'ForgotPassword', component: ForgotPasswordView },
-    { path: '/tattooar/code-verification', name: 'CodeVerification', component: CodeVerificationView },
-    { path: '/tattooar/reset-password', name: 'ResetPassword', component: ResetPasswordView },
-    { path: '/tattooar/register/send-code-verification', name: 'SendRegisterCodeVerification', component: SendCodeVerificationRegisterView },
-    { path: '/tattooar/register/code-verification', name: 'RegisterCodeVerification', component: CodeVerificationRegisterView },
-    { path: '/tattooar/register/finished', name: 'FinishedRegister', component: FinishedRegisterView },
-]
+  { path: "/", name: "Home", component: HomeView },
+  { path: "/login", name: "Login", component: LoginView },
+  { path: "/register", name: "Register", component: RegisterView },
+  {
+    path: "/forgot-password",
+    name: "ForgotPassword",
+    component: ForgotPasswordView,
+  },
+  {
+    path: "/code-verification",
+    name: "CodeVerification",
+    component: CodeVerificationView,
+  },
+  {
+    path: "/reset-password",
+    name: "ResetPassword",
+    component: ResetPasswordView,
+  },
+  { path: "/admin/users", name: "AdminUsersView", component: AdminUsersView },
+  { path: "/admin/tattoos", name: "AdminTattoos", component: AdminTattoos },
+  { path: "/admin/logs", name: "AdminLogs", component: AdminLogs },
+  { path: "/admin/user/:id", name: "UserDetail", component: UserDetailView },
+  {
+    path: "/admin/edit-user/:id",
+    name: "EditUserView",
+    component: EditUserView,
+  },
+  {
+    path: "/admin/dashboard",
+    name: "DashboardAdminView",
+    component: DashboardAdminView,
+  },
+  { path: "/admin/reports", name: "AdminReports", component: AdminReports },
+  {
+    path: "/tattoo-profile/:id",
+    name: "TattooProfile",
+    component: TatooArtistProfileView,
+  },
+  { path: "/favorites", name: "Favorites", component: FavoritesView },
+  { path: "/user-profile", name: "UserProfile", component: UserProfileView },
+  {
+    path: "/tattoo-artists",
+    name: "TattooArtists",
+    component: TattooArtistsView,
+  },
+  { path: "/about", name: "About", component: AboutView },
+  { path: "/report/", name: "Report", component: ReportView },
+  {
+    path: "/tattooar/register/send-code-verification",
+    name: "SendRegisterCodeVerification",
+    component: SendCodeVerificationRegisterView,
+  },
+  {
+    path: "/tattooar/register/code-verification",
+    name: "RegisterCodeVerification",
+    component: CodeVerificationRegisterView,
+  },
+  {
+    path: "/tattooar/register/finished",
+    name: "FinishedRegister",
+    component: FinishedRegisterView,
+  },
+];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
-})
+  history: createWebHistory("/tattooar/"),
+  routes,
+});
 
-export default router
+export default router;

@@ -2,3 +2,32 @@
 @import "flowbite/src/themes/default";
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
+
+/* style.css */
+:root {
+  /* Primary Colors */
+  --color-primary: #4E1C94;       
+  --color-primary-dark: #2E076B;  
+  --color-primary-light: #B1A9D1; 
+
+  /* Secondary Colors */
+  --color-secondary: #3b82f6;    
+  --color-secondary-dark: #1e3a8a;
+
+  /* Accent Colors */
+  --color-accent: #ec4899;       
+  --color-accent-light: #f472b6; 
+
+  /* Neutral Colors */
+  --color-background: #f9fafb;    
+  --color-surface: #ffffff;
+  --color-border: #e5e7eb;
+  --color-muted: #9F9CA3;       
+  --color-text: #1F1E24;          
+  --color-subtle-text: #36343B;   
+
+  /* Alert Colors */
+  --color-success: #038A36;       
+  --color-warning: #deb978;       
+  --color-error: #B90000;         
+}

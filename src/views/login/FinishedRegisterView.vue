@@ -27,7 +27,7 @@ const router = useRouter()
 
 const verifyCode = () => {
     setTimeout(() => {
-        router.push({ name: 'Login' });
+        router.push({ name: 'Home' });
     }, 3000);
 }
 
