@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center h-20">
+  <div class="flex items-center justify-center h-20 p-4 pt-8">
     <img src="/assets/Banner.png" />
   </div>
   <div class="relative" ref="sidebarRef">

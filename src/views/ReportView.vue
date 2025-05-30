@@ -1,33 +1,33 @@
 <template>
     <div class="min-h-screen bg-gray-50 relative">
-        <div class="container mx-auto px-4 pt-18 max-w-2xl">
+        <div class="container mx-auto px-4 pt-16 max-w-2xl">
             <!-- Header -->
-            <div class="text-center mb-8 relative">
-        <button @click="$router.back()" class="absolute left-4 text-2xl z-10 cursor-pointer">
-            ←
-        </button>
-                <h1 class="text-xl font-bold text-gray-800 mb-2">Reportar Problema</h1>
-                <p class="text-gray-600 text-md">Ayúdanos a mejorar TattooAR reportando cualquier problema técnico</p>
+            <div class="text-center relative">
+                <button @click="$router.back()" class="absolute left-4 text-2xl z-10 cursor-pointer">
+                    ←
+                </button>
+                <h1 class="text-xl font-bold text-gray-800">Reportar Problema</h1>
+                <p class="text-gray-600 text-sm mb-2">Ayúdanos a mejorar TattooAR reportando cualquier problema técnico</p>
             </div>
 
-            <div class="bg-white shadow-lg rounded-lg p-6 space-y-6">
+            <div class="bg-white shadow-lg rounded-lg p-6 space-y-4">
                 <!-- Issue Type -->
                 <div class="space-y-2">
                     <label class="text-md py-1 font-semibold border-purple-800 text-gray-800">Tipo de Problema</label>
-                    <select v-model="selectedIssueType" class="w-full p-2 border rounded">
+                    <select v-model="selectedIssueType" class="w-full text-sm p-2 border rounded">
                         <option disabled value="">Selecciona el tipo de problema</option>
                         <option v-for="type in issueTypes" :key="type" :value="type">{{ type }}</option>
                     </select>
                 </div>
 
                 <!-- Description -->
-                <div class="space-y-2">
+                <div class="space-y-1">
                     <label for="description" class="text-md font-semibold text-gray-800">Descripción del
                         Problema</label>
                     <textarea id="description" v-model="description"
                         placeholder="Describe detalladamente el problema que experimentaste..."
-                        class="w-full min-h-[120px] p-2 border border-purple-800 rounded resize-none"></textarea>
-                    <p class="text-sm text-gray-500">Incluye todos los detalles relevantes</p>
+                        class="w-full text-sm min-h-[120px] p-2 border border-purple-800 rounded resize-none"></textarea>
+                    <p class="text-xs text-gray-500">Incluye todos los detalles relevantes</p>
                 </div>
 
                 <!-- Screenshot Upload -->
@@ -40,7 +40,7 @@
                                 <Camera class="w-8 h-8 text-gray-400" />
                             </div>
                             <p class="text-gray-600">Adjuntar Imagen</p>
-                            <button class="bg-purple-600 text-white px-4 py-1 rounded hover:bg-purple-700">
+                            <button class="bg-purple-900 text-white px-4 py-1 rounded hover:bg-purple-700">
                                 <Upload class="inline w-4 h-4 mr-2" />
                                 Examinar
                             </button>
@@ -51,8 +51,8 @@
 
                 <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 pt-6">
-                    <button @click="submitReport"
-                        class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 text-md font-semibold rounded">
+                    <button @click="$router.back()"
+                        class="flex-1 bg-purple-900 hover:bg-purple-00 text-white py-2 text-md font-semibold rounded">
                         Enviar Reporte
                     </button>
                     <button @click="$router.back()"
