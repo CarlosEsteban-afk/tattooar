@@ -64,7 +64,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import SearchbarMultiSelect from '../components/SearchbarMultiSelect.vue'
+import SearchbarMultiSelect from '../SearchbarMultiselect.vue'
 
 const props = defineProps({
   visible: Boolean
