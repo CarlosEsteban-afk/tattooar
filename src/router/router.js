@@ -17,6 +17,7 @@ import FavoritesView from "../views/FavoritesView.vue";
 import UserProfileView from "../views/UserProfileView.vue";
 import TattooArtistsView from "../views/TattooArtistsView.vue";
 import AboutView from "../views/AboutView.vue";
+import ReportView from "../views/ReportView.vue";
 
 const routes = [
   { path: "/", name: "Home", component: HomeView },
@@ -67,6 +68,7 @@ const routes = [
     component: TattooArtistsView,
   },
   { path: "/about", name: "About", component: AboutView },
+  { path: "/report/", name: "Report", component: ReportView },
 ];
 
 const router = createRouter({

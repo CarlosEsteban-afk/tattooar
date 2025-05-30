@@ -24,7 +24,7 @@
         <!-- Footer -->
         <div class="space-y-4">
             <button
-                @click="$router.push('/reportar-incidente')"
+                @click="$router.push('/report')"
                 class="w-full h-10 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors">
                 Reportar incidente
             </button>

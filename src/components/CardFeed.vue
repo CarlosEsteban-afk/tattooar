@@ -13,9 +13,10 @@
                 </button>
             </div>
         </div>
-        <div class="bg-gray-200 flex items-center justify-center aspect-square w-full">
+        <div class="relative bg-gray-200 flex items-center justify-center aspect-square w-full">
             <img src="https://flowbite.com/docs/images/blog/image-4.jpg" alt="tatuaje"
                 class="object-cover w-full h-full" />
+            <ARButton class="absolute top-2 right-2" :url="url" />
         </div>
         <div class="p-3 flex justify-between items-start">
             <div class="flex-1">
@@ -59,9 +60,11 @@ import { useRouter } from 'vue-router';
 import { ref, computed } from 'vue';
 import { Flag, Heart } from 'lucide-vue-next'
 import { useFavoritesStore } from '../stores/FavoritesStore';
+import ARButton from './ARButton.vue';
 
 const favoritesStore = useFavoritesStore()
 const router = useRouter()
+const url = 'https://carlosesteban-afk.github.io/tattooar/'
 
 const isLiked = computed(() => favoritesStore.isFavorite(props.id))
 
