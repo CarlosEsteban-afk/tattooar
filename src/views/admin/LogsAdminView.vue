@@ -50,7 +50,6 @@
 </template>
 
 <script setup>
-import Sidebar from '../../components/Sidebar.vue'
 import Topbar from '../../components/TopBar.vue'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import { ref, computed } from 'vue'

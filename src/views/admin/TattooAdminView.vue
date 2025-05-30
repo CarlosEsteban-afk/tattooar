@@ -91,7 +91,6 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import Sidebar from "../../components/Sidebar.vue";
 import TattooCard from "../../components/TattooCard.vue";
 import Topbar from "../../components/TopBar.vue";
 import AdminSidebar from "../../components/AdminSidebar.vue";
