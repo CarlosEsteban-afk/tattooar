@@ -52,8 +52,6 @@ const routes = [
     name: "DashboardAdminView",
     component: DashboardAdminView,
   },
-  { path: "/admin/tattoos", name: "AdminTattoos", component: AdminTattoos },
-  { path: "/admin/logs", name: "AdminLogs", component: AdminLogs },
   { path: "/admin/reports", name: "AdminReports", component: AdminReports },
   {
     path: "/tattoo-profile/:id",
