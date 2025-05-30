@@ -10,33 +10,34 @@
                     <br />
                     <!-- Searchbar y filtros en una sola fila -->
                     <div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
-                        <div class="relative w-full md:w-1/3 shadow-md">
-                            <input type="text" v-model="searchTerm" placeholder="Buscar usuario..."
-                                class="w-full pl-3 pr-10 bg-white py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-600" />
-                            <button class="absolute right-0 top-0 h-full px-3 text-gray-500">
+                        <div class="relative w-full max-w-md">
+                            <input v-model="searchTerm" type="text" placeholder="Buscar usuarios..."
+                                class="form-input w-full rounded-lg border-gray-300 shadow-md bg-white text-gray-800 pr-10" />
+                            <span
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
                                     <circle cx="11" cy="11" r="8"></circle>
                                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                 </svg>
-                            </button>
+                            </span>
                         </div>
                         <!-- Filtros sobre la tabla -->
                         <div class="flex flex-wrap gap-2 items-center">
-                            <label class="text-sm font-medium text-gray-700">Estado:</label>
+                            <label class="text-sm font-medium">Estado:</label>
                             <div class="relative">
                                 <select v-model="filterEstado"
-                                    class="appearance-none px-3 py-2 pr-8 rounded-lg border border-gray-300 bg-white text-gray-700 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition w-36 shadow-md">
+                                    class="bg-[#2E076B] text-white hover:bg-[#38158A] focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
                                     <option value="">Todos</option>
                                     <option value="Activo">Activo</option>
                                     <option value="Inactivo">Inactivo</option>
                                 </select>
                             </div>
-                            <label class="text-sm font-medium text-gray-700 ml-2">Rol:</label>
+                            <label class="text-sm font-medium ml-2">Rol:</label>
                             <div class="relative">
                                 <select v-model="filterRol"
-                                    class="appearance-none px-3 py-2 pr-8 rounded-lg border border-gray-300 bg-white text-gray-700 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition w-36 shadow-md">
+                                    class="bg-[#2E076B] text-white hover:bg-[#38158A] focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
                                     <option value="">Todos</option>
                                     <option value="Tatuador">Tatuador</option>
                                     <option value="Cliente">Cliente</option>

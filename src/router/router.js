@@ -50,7 +50,7 @@ const routes = [
    // { path: '/tattooar/login', name: 'Login', component: Login },
     { path: '/admin/tattoos', name: 'AdminTattoos', component: AdminTattoos },
     { path: '/admin/logs', name: 'AdminLogs', component: AdminLogs },
-    { path: '/admin/reportes', name: 'AdminReports', component: AdminReports },
+    { path: '/admin/reports', name: 'AdminReports', component: AdminReports },
 
 ];
 

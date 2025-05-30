@@ -1,58 +1,50 @@
 <template>
-  <div class="flex h-screen">
-<AdminSidebar @logout="logout" class="h-full" />
+  <div class="flex min-h-screen bg-gray-50">
+    <AdminSidebar @logout="logout" class="h-full" />
     <main class="pl-68 flex-1 bg-gray-50 p-6 overflow-y-auto">
-
-         <Topbar title="Visualización de Logs" :notificationCount="3" />
+      <Topbar title="Visualización de Logs" :notificationCount="3" />
       <br />
-       <!-- <h1 class="text-2xl font-bold mb-4">Visualización de logs</h1>--> 
-
       <!-- Barra de búsqueda -->
       <div class="flex items-center gap-2 mb-6">
-        <input
-          v-model="search"
-          type="text"
-          placeholder="Buscar Logs..."
-          class="form-input w-full max-w-md rounded-lg border-gray-300 shadow-sm"
-        />
-    
+        <div class="relative w-full max-w-md">
+          <input v-model="search" type="text" placeholder="Buscar logs..."
+            class="form-input w-full rounded-lg border-gray-300 shadow-md bg-white text-gray-800 pr-10" />
+          <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+        </div>
       </div>
 
-      <!-- Grid de tarjetas -->
-      
-
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <!-- Tabla de logs estilo AdminUsersView -->
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg border border-gray-300 bg-white">
+        <table class="w-full text-sm text-left text-black font-semibold">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 font-bold">
             <tr>
-                <th scope="col" class="px-6 py-3">
-                    Descripción
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Autor
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Fecha
-                </th>
+              <th scope="col" class="px-6 py-3">Descripción</th>
+              <th scope="col" class="px-6 py-3">Autor</th>
+              <th scope="col" class="px-6 py-3">Fecha</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             <tr v-for="log in filteredLogs" :key="log.id"
-                class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{ log.title }}
-                </th>
-                <td class="px-6 py-4">
-                    {{ log.author }}
-                </td>
-                <td class="px-6 py-4">
-                    {{ log.date }}
-                </td>
+              class="odd:bg-white even:bg-gray-50 border-b border-gray-200 hover:bg-purple-50 transition">
+              <td class="px-6 py-4 font-bold text-gray-900 whitespace-nowrap">
+                {{ log.title }}
+              </td>
+              <td class="px-6 py-4 text-gray-800">
+                {{ log.author }}
+              </td>
+              <td class="px-6 py-4 text-gray-800">
+                {{ log.date }}
+              </td>
             </tr>
-        </tbody>
-    </table>
-</div>
-
+          </tbody>
+        </table>
+      </div>
     </main>
   </div>
 </template>
