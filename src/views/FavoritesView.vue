@@ -15,12 +15,12 @@
             v-for="(item, index) in favoritesStore.favorites"
             :key="'favorite-' + index"
             class="relative cursor-pointer"
-            @click="gotoArtistProfile(item.author.id)"
+            @click="gotoArtistProfile(id)"
           >
             <img
-              :src="item.image"
+              :src="imageURL"
               :alt="item.title"
-              class="object-cover w-full h-32 shadow-sm"
+              class="object-cover aspect-square w-auto h-auto shadow-sm"
             />
             <p
               class="absolute bottom-1 left-1 text-white bg-black bg-opacity-50 px-2 rounded text-xs"
@@ -41,9 +41,10 @@ import { useRouter } from 'vue-router'
 import TopBanner from '../components/TopBanner.vue'
 import { useFavoritesStore } from '../stores/FavoritesStore'
 
+const imageURL = 'https://flowbite.com/docs/images/blog/image-4.jpg' // Placeholder image URL
 const router = useRouter()
 const favoritesStore = useFavoritesStore()
-
+const id = 1
 const gotoArtistProfile = (id) => {
   router.push({ name: 'TattooProfile', params: { id } })
 }
