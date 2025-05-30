@@ -9,23 +9,28 @@
 
       <!-- <h1 class="text-2xl font-bold mb-4">Administración de Reportes</h1>-->
 
-      <!-- Barra de búsqueda -->
+      <!-- Barra de búsqueda y filtro -->
       <div class="flex items-center gap-2 mb-6">
         <input
           v-model="search"
           type="text"
-          placeholder="Buscar reporte..."
+          placeholder="Buscar tatuajes..."
           class="form-input w-full max-w-md rounded-lg border-gray-300 shadow-sm"
         />
-        <button class="p-2 text-white bg-gray-500 rounded hover:bg-gray-600">
-          <i class="fas fa-filter"></i>
-        </button>
+        <select
+          v-model="filterType"
+          class="form-select rounded-lg border-gray-300 shadow-sm"
+        >
+          <option value="">Seleccione tipo de reporte</option>
+          <option value="userReport">Reportes Usuario</option>
+          <option value="tattooReport">Reportes Tatuaje</option>
+          <option value="contact">Solicitudes de contacto</option>
+          <option value="reclaim">Reclamos</option>
+        </select>
       </div>
 
       <!-- Grid de tarjetas -->
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4"
-      >
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         <TattooCard
           v-for="tattoo in filteredTattoos"
           :key="tattoo.id"
@@ -34,101 +39,36 @@
           :description="tattoo.description"
           :filters="tattoo.filters"
           :date="tattoo.date"
+          :type="tattoo.type"
+          :img="tattoo.tatuImg"
         >
           <template #actions>
             <div class="flex flex-col items-start mb-2">
-              <!-- Etiquetas -->
-              <div class="flex mt-2 mb-2 gap-2">
-               <span
-        v-for="filter in tattoo.filters"
-        :key="filter"
-        class="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded"
-      >
-        {{ filter }}
-      </span>
         
-              </div>
               <!-- Botones de acción -->
-              <button
-                class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs w-full"
-                @click="acceptReport(tattoo.id)"
-              >
-                <div class="flex">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-user-round-x-icon lucide-user-round-x"
-                  >
-                    <path d="M2 21a8 8 0 0 1 11.873-7" />
-                    <circle cx="10" cy="8" r="5" />
-                    <path d="m17 17 5 5" />
-                    <path d="m22 17-5 5" />
-                  </svg>
-                  Suspender usuario
-                </div>
-              </button>
-              <button
-                class="mt-2 px-2 py-1 bg-yellow-400 text-gray-900 rounded hover:bg-yellow-500 text-xs w-full"
-                @click="rejectReport(tattoo.id)"
-              >
-                <div class="flex">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-pencil-off-icon lucide-pencil-off"
-                  >
-                    <path
-                      d="m10 10-6.157 6.162a2 2 0 0 0-.5.833l-1.322 4.36a.5.5 0 0 0 .622.624l4.358-1.323a2 2 0 0 0 .83-.5L14 13.982"
-                    />
-                    <path
-                      d="m12.829 7.172 4.359-4.346a1 1 0 1 1 3.986 3.986l-4.353 4.353"
-                    />
-                    <path d="m15 5 4 4" />
-                    <path d="m2 2 20 20" />
-                  </svg>
-                  Suspender tatuaje
-                </div>
-              </button>
-              <button
-                class="mt-2 px-2 py-1 bg-gray-400 text-white rounded hover:bg-gray-500 text-xs w-full"
-                @click="rejectReport(tattoo.id)"
-              >
-                <div class="flex">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-file-check-icon lucide-file-check"
-                  >
-                    <path
-                      d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
-                    />
-                    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                    <path d="m9 15 2 2 4-4" />
-                  </svg>
-                  Rechazar reporte
-                </div>
-              </button>
+               <div class="flex gap-2 mt-auto">
+        <button class="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded text-xs hover:bg-red-200">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18" />
+            <path d="M6 6l12 12" />
+          </svg>
+          Suspender usuario
+        </button>
+        <button class="flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs hover:bg-yellow-200" @click="$emit('delete')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="m4.9 4.9 14.2 14.2" />
+          </svg>
+          Suspender tatuaje
+        </button>
+        <button class="flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs hover:bg-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Rechazar reporte
+        </button>
+      </div>
+              
             </div>
           </template>
         </TattooCard>
@@ -143,7 +83,9 @@ import TattooCard from "../../components/TattooCard.vue";
 import Topbar from "../../components/TopBar.vue";
 import AdminSidebar from "../../components/AdminSidebar.vue";
 import { ref, computed } from "vue";
-
+import tatuadoraImg from "../../assets/tatuadora.jpg";
+import doc from "../../assets/doc.png";
+import reclamo from "../../assets/reclamo.webp";
 const search = ref("");
 
 const deleteTattoo = (id) => {
@@ -158,33 +100,36 @@ const tattoos = ref([
     description:
       "Tuvimos problemas con el contenido de esta imagen porque soy catolica",
     date: "2023-10-01",
-    filters: ["Religioso", "Flor"]
+    filters: ["Religioso", "Flor"],
+    type: "userReport",
   },
   {
     id: 2,
-    title: "Dragón tribal.png",
+    title: "Raquelota125",
     author: "Carlos Mendoza",
     description:
-      "Este tatuaje infringe las normas de la comunidad por su simbolismo",
+      "Esta tatuadora infringe las normas de la comunidad por su simbolismo",
     date: "2023-10-02",
-    filters: ["Tribal", "Dragón"]
+    type: "contact",
+    tatuImg: tatuadoraImg,
   },
   {
     id: 3,
-    title: "Mandala mano.png",
+    title: "Busco empleo con ustedes",
     author: "Laura Pérez",
-    description:
-      "Este tatuaje es ofensivo para algunas culturas y no es apropiado",
+    description: " Hola, me gustaría trabajar con ustedes como tatuadora",
     date: "2023-10-03",
-    filters: ["Mandala", "Mano"]
+    type: "reclaim",
+    tatuImg: doc,
   },
   {
     id: 4,
-    title: "Lobo realista.png",
+    title: "Bug Encontrado",
     author: "Javier Ruiz",
-    description: "Este tatuaje contiene contenido violento y no es aceptable",
+    description: "Se ha encontrado un bug en la aplicación",
     date: "2023-10-04",
-    filters: ["Realista", "Lobo"]
+    type: "userReport",
+    tatuImg: reclamo,
   },
   {
     id: 5,
@@ -192,7 +137,8 @@ const tattoos = ref([
     author: "Ana Torres",
     description: "Este tatuaje es inapropiado para nuestra comunidad",
     date: "2023-10-05",
-    filters: ["Brújula", "Viaje"]
+    filters: ["Brújula", "Viaje"],
+    type: "tattooReport",
   },
   {
     id: 6,
@@ -201,7 +147,8 @@ const tattoos = ref([
     description:
       "Este tatuaje infringe las normas de la comunidad por su simbolismo",
     date: "2023-10-06",
-    filters: ["Japonés", "Tigre"]
+    filters: ["Japonés", "Tigre"],
+    type: "reclaim",
   },
   {
     id: 7,
@@ -210,15 +157,20 @@ const tattoos = ref([
     description:
       "Este tatuaje es ofensivo para algunas culturas y no es apropiado",
     date: "2023-10-07",
-    filters: ["Egipcio", "Ojo"]
+    filters: ["Egipcio", "Ojo"],
+    type: "report",
   },
 ]);
 
+const filterType = ref("");
 const filteredTattoos = computed(() =>
-  tattoos.value.filter((t) =>
-    t.title.toLowerCase().includes(search.value.toLowerCase())
+  tattoos.value.filter(
+    (t) =>
+      t.title.toLowerCase().includes(search.value.toLowerCase()) &&
+      (filterType.value === "" || t.type === filterType.value)
   )
 );
+
 const acceptReport = (id) => {
   // Lógica para aceptar el reporte
   alert(`Reporte ${id} aceptado`);
@@ -229,8 +181,3 @@ const rejectReport = (id) => {
   alert(`Reporte ${id} rechazado y eliminado`);
 };
 </script>
-
-
-
-
-

@@ -3,7 +3,7 @@
 <AdminSidebar @logout="logout" class="h-full" />
     <main class="pl-68 flex-1 bg-gray-50 p-6 overflow-y-auto">
 
-         <Topbar title="Visualización de logs" :notificationCount="3" />
+         <Topbar title="Visualización de Logs" :notificationCount="3" />
       <br />
        <!-- <h1 class="text-2xl font-bold mb-4">Visualización de logs</h1>--> 
 
@@ -15,9 +15,7 @@
           placeholder="Buscar Logs..."
           class="form-input w-full max-w-md rounded-lg border-gray-300 shadow-sm"
         />
-        <button class="p-2 text-white bg-gray-500 rounded hover:bg-gray-600">
-          <i class="fas fa-filter"></i>
-        </button>
+    
       </div>
 
       <!-- Grid de tarjetas -->
