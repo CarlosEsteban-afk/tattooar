@@ -8,20 +8,22 @@
                     <AdminSidebar @logout="logout" />
                     <TopBar title="Visualización de Estadísticas Generales" :notificationCount="3" />
                     <br />
-                    <div class="bg-[#7B6EAD] rounded-lg p-4 md:p-6 shadow-lg w-full">
+                    <div class="">
                         <!-- Gráficos -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                            <div class="bg-white rounded-lg p-4 shadow flex flex-col items-center">
+                            <div
+                                class="bg-white rounded-lg p-4 shadow-md flex flex-col items-center border border-gray-200">
                                 <h2 class="text-lg font-semibold mb-2 text-purple-900">Usuarios por Rol</h2>
                                 <canvas ref="usersByRoleChartRef" width="300" height="200"></canvas>
                             </div>
-                            <div class="bg-white rounded-lg p-4 shadow flex flex-col items-center">
+                            <div
+                                class="bg-white rounded-lg p-4 shadow-md flex flex-col items-center border border-gray-200">
                                 <h2 class="text-lg font-semibold mb-2 text-purple-900">Tatuajes por Estilo</h2>
                                 <canvas ref="tattoosByStyleChartRef" width="300" height="200"></canvas>
                             </div>
                         </div>
                         <!-- Ranking de Tatuadores -->
-                        <div class="bg-white rounded-lg p-4 shadow">
+                        <div class="bg-white rounded-lg p-4 shadow-md border border-gray-200">
                             <h2 class="text-lg font-semibold mb-4 text-purple-900">Tatuajes con más likes</h2>
                             <table class="min-w-full">
                                 <thead>
@@ -53,15 +55,18 @@
                         </div>
                         <!-- Otras métricas relevantes -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                            <div class="bg-white rounded-lg p-4 shadow flex flex-col items-center">
+                            <div
+                                class="bg-white rounded-lg p-4 shadow-md border border-gray-200 flex flex-col items-center">
                                 <span class="text-2xl font-bold text-purple-800">{{ totalUsers }}</span>
                                 <span class="text-gray-600">Usuarios registrados</span>
                             </div>
-                            <div class="bg-white rounded-lg p-4 shadow flex flex-col items-center">
+                            <div
+                                class="bg-white rounded-lg p-4 shadow-md border border-gray-200 flex flex-col items-center">
                                 <span class="text-2xl font-bold text-purple-800">{{ totalTattoos }}</span>
                                 <span class="text-gray-600">Tatuajes publicados</span>
                             </div>
-                            <div class="bg-white rounded-lg p-4 shadow flex flex-col items-center">
+                            <div
+                                class="bg-white rounded-lg p-4 shadow-md border border-gray-200 flex flex-col items-center">
                                 <span class="text-2xl font-bold text-purple-800">{{ totalLikes }}</span>
                                 <span class="text-gray-600">Likes totales</span>
                             </div>
