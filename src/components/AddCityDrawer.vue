@@ -44,7 +44,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import SearchbarMultiselect from './SearchbarMultiSelect.vue'
+import SearchbarMultiselect from '../components/SearchbarMultiselect.vue'
 import { Search } from 'lucide-react'
 
 const props = defineProps({
