@@ -1,6 +1,9 @@
 <template>
-    <TopBanner />
-    <div class="flex flex-col h-screen items-center">
+  <TopBanner />
+  <button @click="$router.back()" class="absolute left-4 top-10 text-2xl z-10 cursor-pointer">
+    ←
+  </button>
+  <div class="flex flex-col h-screen items-center">
     <!-- Main scrollable content -->
     <div class="flex-1 overflow-y-auto flex flex-col items-center bg-cover pt-20">
       <h1>Mi perfil</h1>
@@ -35,9 +38,7 @@
 import { useRouter } from 'vue-router';
 import TopBanner from '../components/TopBanner.vue';
 
-const router = useRouter();
 
-function goToResetPassword() {
-    router.push('/reset-password');
-}
+const router = useRouter();
+const goToResetPassword = () => router.push({ name: 'ResetPassword' })
 </script>

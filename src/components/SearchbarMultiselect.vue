@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full" ref="container">
     <!-- Badges -->
-    <div class="flex flex-wrap gap-2 mb-2 min-h-[2.5rem]">
+    <div class="flex flex-wrap gap-2 mb-2 min-h-[1.5rem]">
       <span v-if="modelValue.length === 0" class="text-sm text-gray-400">
         {{ placeholderBadges }}
       </span>

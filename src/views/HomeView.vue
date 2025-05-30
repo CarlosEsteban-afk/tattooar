@@ -7,43 +7,43 @@
     <Sidebar :visible="showSidebar" />
   </div>
   <div class="flex items-center justify-center h-10">
-    <Searchbar />
+    <Searchbar class="pl-2" @apply-filters="applyFilters" @search="searchTerm = $event" />
   </div>
   <div class="align-middle flex flex-wrap justify-center gap-4 pt-4">
-    <CardFeed v-for="tattoo in tattoos" :id="tattoo.id" :title="tattoo.title" :author="tattoo.author" />
-  </div>
-  <div>
-    <a class="text-purple-600 hover:underline cursor-pointer" @click="goToLogin">Iniciar Sesión</a>
+    <CardFeed
+      v-for="tattoo in tattooStore.filteredTattoos"
+      :key="tattoo.id"
+      :id="tattoo.id"
+      :title="tattoo.title"
+      :author="tattoo.author"
+      :desc="tattoo.desc"
+    />
   </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useTattooStore } from '../stores/DesignStore'
 import Searchbar from '../components/Searchbar.vue'
-import { ref, onMounted, onBeforeUnmount } from 'vue'
 import SidebarButton from '../components/SidebarButton.vue'
 import Sidebar from '../components/Sidebar.vue'
 import CardFeed from '../components/CardFeed.vue'
-import { computed } from 'vue'
 
+const tattooStore = useTattooStore()
+const searchTerm = ref('')
 
-// Datos de ejemplo para los tatuajes
-const tattoos = ref([
-  { id: 1, title: "Flor de loto.png", author: "María González", desc: "Descripción del tatuaje" },
-  { id: 2, title: "Dragón tribal.png", author: "Carlos Mendoza", desc: "Descripción del tatuaje" },
-  { id: 3, title: "Mandala mano.png", author: "Laura Pérez", desc: "Descripción del tatuaje" },
-  { id: 4, title: "Lobo realista.png", author: "Javier Ruiz", desc: "Descripción del tatuaje" },
-  { id: 5, title: "Brújula viajera.png", author: "Ana Torres", desc: "Descripción del tatuaje" },
-  { id: 6, title: "Tigre japonés.png", author: "Luis Soto", desc: "Descripción del tatuaje" },
-  { id: 7, title: "Ojo de Horus.png", author: "Cecilia Díaz", desc: "Descripción del tatuaje" },
-])
+// Sincronizar búsqueda con el store
+watch(searchTerm, (val) => {
+  tattooStore.searchQuery = val
+})
 
-/* const filteredTattoos = computed(() =>
-  tattoos.value.filter(t =>
-    t.title.toLowerCase().includes(search.value.toLowerCase())
-  )
-) */
+// Aplicar filtros desde el drawer
+function applyFilters({ cities, styles }) {
+  tattooStore.cityFilter = cities[0] || ''
+  tattooStore.styleFilter = styles[0] || ''
+}
 
+// Sidebar
 const showSidebar = ref(false)
 const sidebarRef = ref(null)
 const toggleSidebar = () => {
