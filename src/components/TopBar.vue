@@ -41,7 +41,6 @@
 
           <div class="flex items-center gap-2">
             <i class="fas fa-user text-gray-600"></i>
-            <nbsp></nbsp>
             <span class="text-gray-700 font-medium">Admin</span>
           </div>
         </div>

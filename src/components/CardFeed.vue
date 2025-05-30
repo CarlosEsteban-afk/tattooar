@@ -55,19 +55,18 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import { ref, computed } from 'vue';
 import { Flag, Heart } from 'lucide-vue-next'
 import { useFavoritesStore } from '../stores/FavoritesStore';
 
-const favoritesStore = useFavoritesStore()  
+const favoritesStore = useFavoritesStore()
 const router = useRouter()
 
 const isLiked = computed(() => favoritesStore.isFavorite(props.id))
 
 const toggleLike = () => {
-  favoritesStore.toggleFavorite(props.id)
+    favoritesStore.toggleFavorite(props.id)
 }
 
 const showReportModal = ref(false)

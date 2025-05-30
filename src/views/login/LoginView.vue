@@ -25,7 +25,7 @@
                 </p>
 
             </form>
-            
+
         </div>
 
     </div>
@@ -61,8 +61,8 @@ const goToForgotPassword = () => {
 const login = () => {
     if (form.email === 'test@test.cl' && form.password === 'test1234') {
         console.log('Login successful')
-        showAlert.value = false
-        //router.push({ name: 'Home' })
+        showAlert.value = true
+        router.push({ name: 'DashboardAdminView' })
     } else {
         console.log('Login failed')
         showAlert.value = true

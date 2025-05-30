@@ -11,12 +11,12 @@ import AdminLogs from "../views/admin/LogsAdminView.vue";
 import UserDetailView from "../views/admin/UserDetailView.vue";
 import EditUserView from "../views/admin/EditUserView.vue";
 import DashboardAdminView from "../views/admin/DashboardAdminView.vue";
-import AdminReports from '../views/admin/ReportsAdminView.vue'
-import TatooArtistProfileView from '../views/TattooArtistProfileView.vue'
-import FavoritesView from '../views/FavoritesView.vue'
-import UserProfileView from '../views/UserProfileView.vue'
-import TattooArtistsView from '../views/TattooArtistsView.vue'
-import AboutView from '../views/AboutView.vue'
+import AdminReports from "../views/admin/ReportsAdminView.vue";
+import TatooArtistProfileView from "../views/TattooArtistProfileView.vue";
+import FavoritesView from "../views/FavoritesView.vue";
+import UserProfileView from "../views/UserProfileView.vue";
+import TattooArtistsView from "../views/TattooArtistsView.vue";
+import AboutView from "../views/AboutView.vue";
 
 const routes = [
   { path: "/", name: "Home", component: HomeView },
@@ -51,17 +51,22 @@ const routes = [
     name: "DashboardAdminView",
     component: DashboardAdminView,
   },
-   // { path: '/tattooar/', name: 'LandingView', component: LandingView },
-   // { path: '/tattooar/login', name: 'Login', component: Login },
-    { path: '/admin/tattoos', name: 'AdminTattoos', component: AdminTattoos },
-    { path: '/admin/logs', name: 'AdminLogs', component: AdminLogs },
-    { path: '/admin/reports', name: 'AdminReports', component: AdminReports },
-    { path: '/tattoo-profile/:id', name: 'TattooProfile', component: TatooArtistProfileView },
-    { path: '/favorites', name: 'Favorites', component: FavoritesView },
-    { path: '/user-profile', name: 'UserProfile', component: UserProfileView },
-    { path: '/tattoo-artists', name: 'TattooArtists', component: TattooArtistsView },
-    { path: '/about', name: 'About', component: AboutView },
-
+  { path: "/admin/tattoos", name: "AdminTattoos", component: AdminTattoos },
+  { path: "/admin/logs", name: "AdminLogs", component: AdminLogs },
+  { path: "/admin/reports", name: "AdminReports", component: AdminReports },
+  {
+    path: "/tattoo-profile/:id",
+    name: "TattooProfile",
+    component: TatooArtistProfileView,
+  },
+  { path: "/favorites", name: "Favorites", component: FavoritesView },
+  { path: "/user-profile", name: "UserProfile", component: UserProfileView },
+  {
+    path: "/tattoo-artists",
+    name: "TattooArtists",
+    component: TattooArtistsView,
+  },
+  { path: "/about", name: "About", component: AboutView },
 ];
 
 const router = createRouter({
