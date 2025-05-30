@@ -63,6 +63,6 @@ function register() {
         return;
     }
     console.log('Registrando usuario:', form)
-    router.push({ name: 'Home' })
+    router.push({ name: 'CodeVerification' })
 }
 </script>
