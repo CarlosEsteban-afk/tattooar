@@ -10,7 +10,7 @@
 
       <!-- Grid Section -->
       <div class="mb-12 pt-4">
-        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-2">
+        <div class="grid grid-cols-3 gap-2 max-w-md mx-auto">
           <div
             v-for="(item, index) in favoritesStore.favorites"
             :key="'favorite-' + index"
@@ -20,7 +20,7 @@
             <img
               :src="imageURL"
               :alt="item.title"
-              class="object-cover aspect-square w-auto h-auto shadow-sm"
+              class="object-cover aspect-square w-full shadow-sm"
             />
             <p
               class="absolute bottom-1 left-1 text-white bg-black bg-opacity-50 px-2 rounded text-xs"
