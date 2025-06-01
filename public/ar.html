@@ -7,22 +7,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            height: 100%;
-        }
+     
 
-        a-scene {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw !important;
-            height: 100vh !important;
-            margin: 0;
-        }
     </style>
 </head>
 
@@ -33,13 +19,13 @@
         </a-assets>
 
         <a-marker preset="hiro">
-            <a-image src="#tattoo-img" position="0 0.05 0" rotation="-90 0 0" scale="1 1 1"
+            <a-image src="#tattoo-img" position="0 0 0" rotation="-90 0 0" scale="0 0 0"
                 transparent="true"></a-image>
 
 
         </a-marker>
 
-        <a-entity camera position="0 0 0" scale="1 1 1"></a-entity>
+        <a-entity camera position="0 0 0" scale="1 1.5 1.5"></a-entity>
     </a-scene>
 
     <script>
