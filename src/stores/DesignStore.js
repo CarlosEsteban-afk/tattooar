@@ -2,15 +2,15 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useTattooStore = defineStore('tattoos', () => {
-    const tattoos = ref([
-      { id: 1, title: "Flor de loto.png", author: "María González", city: "Santiago", style: "Minimalista", desc: "Descripción del tatuaje" },
-      { id: 2, title: "Dragón tribal.png", author: "Carlos Mendoza", city: "Valparaíso", style: "Tribal", desc: "Descripción del tatuaje" },
-      { id: 3, title: "Mandala mano.png", author: "Laura Pérez", city: "Santiago", style: "Geométrico", desc: "Descripción del tatuaje" },
-      { id: 4, title: "Lobo realista.png", author: "Javier Ruiz", city: "Concepción", style: "Realismo", desc: "Descripción del tatuaje" },
-      { id: 5, title: "Brújula viajera.png", author: "Ana Torres", city: "Temuco", style: "Tradicional", desc: "Descripción del tatuaje" },
-      { id: 6, title: "Tigre japonés.png", author: "Luis Soto", city: "Puerto Montt", style: "Acuarela", desc: "Descripción del tatuaje" },
-      { id: 7, title: "Ojo de Horus.png", author: "Cecilia Díaz", city: "Concepción", style: "Fineline", desc: "Descripción del tatuaje" },
-    ])
+  const tattoos = ref([
+    { id: 1, title: "Flor de loto.png", author: "María González", city: "Santiago", style: "Minimalista", desc: "Descripción del tatuaje", image: "https://pub-ad324ec6344b410d83910468b9057f19.r2.dev/tattoo.png" },
+    { id: 2, title: "Dragón tribal.png", author: "Carlos Mendoza", city: "Valparaíso", style: "Tribal", desc: "Descripción del tatuaje", image: "assets/tattoo.png" },
+    { id: 3, title: "Mandala mano.png", author: "Laura Pérez", city: "Santiago", style: "Geométrico", desc: "Descripción del tatuaje", image: "assets/tattoo.png" },
+    { id: 4, title: "Lobo realista.png", author: "Javier Ruiz", city: "Concepción", style: "Realismo", desc: "Descripción del tatuaje", image: "assets/tattoo.png" },
+    { id: 5, title: "Brújula viajera.png", author: "Ana Torres", city: "Temuco", style: "Tradicional", desc: "Descripción del tatuaje", image: "assets/tattoo.png" },
+    { id: 6, title: "Tigre japonés.png", author: "Luis Soto", city: "Puerto Montt", style: "Acuarela", desc: "Descripción del tatuaje", image: "assets/tattoo.png" },
+    { id: 7, title: "Ojo de Horus.png", author: "Cecilia Díaz", city: "Concepción", style: "Fineline", desc: "Descripción del tatuaje", image: "assets/tattoo.png" },
+  ])
 
   const styleFilter = ref('')
   const cityFilter = ref('')
@@ -28,11 +28,18 @@ export const useTattooStore = defineStore('tattoos', () => {
     })
   })
 
+  
+  const getTattooById = (id) => {
+    return tattoos.value.find(tattoo => tattoo.id === id)
+  }
+
   return {
     tattoos,
     styleFilter,
     cityFilter,
     searchQuery,
-    filteredTattoos
+    filteredTattoos,
+    getTattooById
   }
-})
+}
+)

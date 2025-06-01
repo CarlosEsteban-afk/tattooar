@@ -17,8 +17,10 @@
       :title="tattoo.title"
       :author="tattoo.author"
       :desc="tattoo.desc"
-    />
+      :image="tattoo.image"
+      />
   </div>
+  
 </template>
 
 <script setup>

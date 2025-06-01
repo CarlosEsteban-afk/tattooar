@@ -21,6 +21,7 @@ import ReportView from "../views/ReportView.vue";
 import CodeVerificationRegisterView from "../views/login/CodeVerificationRegisterView.vue";
 import SendCodeVerificationRegisterView from "../views/login/SendCodeVerificationRegisterView.vue";
 import FinishedRegisterView from "../views/login/FinishedRegisterView.vue";
+import ARView from "../views/ARView.vue";
 
 const routes = [
   { path: "/", name: "Home", component: HomeView },
@@ -85,6 +86,11 @@ const routes = [
     name: "FinishedRegister",
     component: FinishedRegisterView,
   },
+  {
+    path: "/ar/:id",
+    name: "ARView",
+    component: ARView
+  }
 ];
 
 const router = createRouter({

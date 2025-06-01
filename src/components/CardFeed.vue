@@ -14,9 +14,10 @@
             </div>
         </div>
         <div class="relative bg-gray-200 flex items-center justify-center aspect-square w-full">
-            <img src="https://flowbite.com/docs/images/blog/image-4.jpg" alt="tatuaje"
-                class="object-cover w-full h-full" />
-            <ARButton class="absolute top-2 right-2" :url="url" />
+            <img :src="image" :alt="desc" class="object-cover w-full h-full" />
+            <div @click="openARView" class="absolute top-2 right-2 bg-white border border-gray-300 rounded-full p-2 shadow hover:bg-gray-100 transition" title="Ver en AR">
+                AR
+            </div>
         </div>
         <div class="p-3 flex justify-between items-start">
             <div class="flex-1">
@@ -82,6 +83,12 @@ const confirmReport = () => {
 const goToProfile = () => {
     router.push({ name: 'TattooProfile', params: { id: props.id } })
 }
+const openARView = () => {
+    router.push({ 
+        name: 'ARView', 
+        params: { id: props.id },
+    })
+}
 const props = defineProps({
     id: {
         type: Number,
@@ -92,6 +99,10 @@ const props = defineProps({
     desc: {
         type: String,
         default: 'Descripción del tatuaje'
+    },
+    image: {
+        type: String,
+        default: '/assets/default-tattoo.jpg'
     }
 })
 
