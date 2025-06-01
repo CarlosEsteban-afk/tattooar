@@ -23,7 +23,6 @@ const tattooId = Number(route.params.id)
 const tattooStore = useTattooStore()
 const tattoo = computed(() => tattooStore.getTattooById(tattooId))
 
-// ✅ Use import.meta.env.BASE_URL inside script
 const iframeSrc = computed(() => {
   const base = import.meta.env.BASE_URL
   const img = tattoo.value?.image || ''
