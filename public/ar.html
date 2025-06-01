@@ -5,7 +5,7 @@
     <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" /> -->
     <style>
     </style>
 </head>
@@ -35,16 +35,16 @@
             imgElement.src = imgUrl;
 
             imgElement.onload = () => {
-                // const w = imgElement.naturalWidth;
-                // const h = imgElement.naturalHeight;
+                const w = imgElement.naturalWidth;
+                const h = imgElement.naturalHeight;
 
-                // const aspect = w / h;
-                // const baseScale = 2; 
+                const aspect = w / h;
+                const baseScale = 2; 
 
-                // const imageEl = document.querySelector('a-image');
-                // if (imageEl) {
-                //     imageEl.setAttribute('scale', `${baseScale * aspect} ${baseScale} ${baseScale}`);
-                // }
+                const imageEl = document.querySelector('a-image');
+                if (imageEl) {
+                    imageEl.setAttribute('scale', `${baseScale * aspect} ${baseScale} ${baseScale}`);
+                }
             };
         }
     </script>
