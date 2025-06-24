@@ -11,22 +11,19 @@
       <!-- Grid Section -->
       <div class="mb-12 pt-4">
         <div class="grid grid-cols-3 gap-2 max-w-md mx-auto">
-          <div
-            v-for="(item, index) in favoritesStore.favorites"
-            :key="'favorite-' + index"
-            class="relative cursor-pointer"
-            @click="gotoArtistProfile(id)"
-          >
-            <img
-              :src="imageURL"
-              :alt="item.title"
-              class="object-cover aspect-square w-full shadow-sm"
-            />
-            <p
-              class="absolute bottom-1 left-1 text-white bg-black bg-opacity-50 px-2 rounded text-xs"
-            >
-              {{ item.title }}
+          <div v-for="(tattoo, index) in favoriteTattoos" :key="'favorite-' + index" class="relative cursor-pointer"
+            @click="gotoArtistProfile(tattoo.id)">
+            <img :src="tattoo.image" :alt="tattoo.title" class="object-cover aspect-square w-full shadow-sm" />
+            <p class="absolute bottom-1 left-1 text-white bg-black bg-opacity-50 px-2 rounded text-xs">
+              {{ tattoo.title }}
             </p>
+          </div>
+
+          <div v-if="favoritesStore.getFavorites().length === 0" class="col-span-3 text-center text-gray-500">
+            No tienes tatuajes favoritos aún.
+            <br />
+            Explora y guarda tus diseños favoritos.
+
           </div>
         </div>
       </div>
@@ -40,12 +37,27 @@
 import { useRouter } from 'vue-router'
 import TopBanner from '../components/TopBanner.vue'
 import { useFavoritesStore } from '../stores/FavoritesStore'
+import { useTattooStore } from '../stores/DesignStore'
+import { computed } from 'vue'
 
-const imageURL = 'https://flowbite.com/docs/images/blog/image-4.jpg' // Placeholder image URL
 const router = useRouter()
 const favoritesStore = useFavoritesStore()
-const id = 1
+const tattooStore = useTattooStore()
+
+
 const gotoArtistProfile = (id) => {
   router.push({ name: 'TattooProfile', params: { id } })
 }
+
+
+const favoriteTattoos = computed(() =>
+  favoritesStore.getFavorites()
+    .map(id => tattooStore.getTattooById(id))
+    .filter(Boolean) // elimina los null o undefined
+)
+
+const openARView = (id) => {
+  router.push({ name: 'ARView', params: { id } })
+}
+
 </script>

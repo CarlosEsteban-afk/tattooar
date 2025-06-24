@@ -27,6 +27,9 @@ export const useFavoritesStore = defineStore('favorites', () => {
     const clearFavorites = () => {
         favorites.value.clear()
     }
+    const getFavorites = () => {
+        return Array.from(favorites.value)
+    }
 
     return {
         favorites,
@@ -34,6 +37,7 @@ export const useFavoritesStore = defineStore('favorites', () => {
         removeFavorite,
         toggleFavorite,
         isFavorite,
-        clearFavorites
+        clearFavorites,
+        getFavorites
     }
 })

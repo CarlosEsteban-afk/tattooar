@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="relative bg-gray-200 flex items-center justify-center aspect-square w-full">
-            <img :src="image" :alt="desc" class="object-cover w-full h-full" />
+            <img :src="image" :alt="desc" class="" />
             <div @click="openARView" class="absolute top-2 right-2 bg-white border border-gray-300 rounded-full p-2 shadow hover:bg-gray-100 transition" title="Ver en AR">
                 AR
             </div>

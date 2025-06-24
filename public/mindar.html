@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: true; filterMinCF:0.001;" embedded
+        color-space="sRGB" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
+        <a-assets>
+            <img id="tattoo-img" crossorigin="anonymous" />
+        </a-assets>
+
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+        <a-entity mindar-image-target="targetIndex: 0">
+            <a-image src="#tattoo-img" position="0 0 0" scale="1 1 1" rotation="0 0 0"></a-image>
+        </a-entity>
+    </a-scene>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const imgUrl = params.get("img");
+            const imgElement = document.getElementById("tattoo-img");
+
+            if (imgUrl) {
+                imgElement.setAttribute('src', imgUrl);
+            }
+        });
+    </script>
+</body>
+
+</html>
