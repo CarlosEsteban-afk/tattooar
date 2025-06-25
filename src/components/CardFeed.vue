@@ -91,7 +91,7 @@ const openARView = () => {
 }
 const props = defineProps({
     id: {
-        type: Number,
+        type: String,
         required: true
     },
     title: String,
@@ -105,7 +105,6 @@ const props = defineProps({
         default: '/assets/default-tattoo.jpg'
     }
 })
-
 </script>
 
 <style scoped>

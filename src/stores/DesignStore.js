@@ -1,37 +1,79 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { defineStore } from "pinia";
+import { ref, computed } from "vue";
+import axios from "axios";
 
-export const useTattooStore = defineStore('tattoos', () => {
-  const tattoos = ref([
-    { id: 1, title: "Flor de loto.png", author: "María González", city: "Santiago", style: "Minimalista", desc: "Descripción del tatuaje", image: "https://pub-ad324ec6344b410d83910468b9057f19.r2.dev/tattoo.png" },
-    { id: 2, title: "Dragón tribal.png", author: "Carlos Mendoza", city: "Valparaíso", style: "Tribal", desc: "Descripción del tatuaje", image: "assets/tattoo-5.png" },
-    { id: 3, title: "Mandala mano.png", author: "Laura Pérez", city: "Santiago", style: "Geométrico", desc: "Descripción del tatuaje", image: "assets/tattoo-1.png" },
-    { id: 4, title: "Lobo realista.png", author: "Javier Ruiz", city: "Concepción", style: "Realismo", desc: "Descripción del tatuaje", image: "assets/tattoo-2.png" },
-    { id: 5, title: "Brújula viajera.png", author: "Ana Torres", city: "Temuco", style: "Tradicional", desc: "Descripción del tatuaje", image: "assets/tattoo-3.png" },
-    { id: 6, title: "Tigre japonés.png", author: "Luis Soto", city: "Puerto Montt", style: "Acuarela", desc: "Descripción del tatuaje", image: "assets/tattoo-4.png" },
-    { id: 7, title: "Ojo de Horus.png", author: "Cecilia Díaz", city: "Concepción", style: "Fineline", desc: "Descripción del tatuaje", image: "assets/tattoo-6.png" },
-  ])
+const api = axios.create({
+  baseURL: "http://localhost:4000",
+});
 
-  const styleFilter = ref('')
-  const cityFilter = ref('')
-  const searchQuery = ref('')
+export const useTattooStore = defineStore("tattoos", () => {
+  // Estado
+  const tattoos = ref([]);
+  const styleFilter = ref("");
+  const cityFilter = ref("");
+  const searchQuery = ref("");
 
+  // Getters filtrados
   const filteredTattoos = computed(() => {
-    return tattoos.value.filter(t => {
-      const matchesStyle = styleFilter.value ? t.style === styleFilter.value : true
-      const matchesCity = cityFilter.value ? t.city === cityFilter.value : true
+    return tattoos.value.filter((t) => {
+      const matchesStyle = styleFilter.value
+        ? t.style === styleFilter.value
+        : true;
+      const matchesCity = cityFilter.value ? t.city === cityFilter.value : true;
+      const text = `${t.title} ${t.desc}`.toLowerCase();
       const matchesSearch = searchQuery.value
-        ? (t.title + t.desc).toLowerCase().includes(searchQuery.value.toLowerCase())
-        : true
+        ? text.includes(searchQuery.value.toLowerCase())
+        : true;
+      return matchesStyle && matchesCity && matchesSearch;
+    });
+  });
 
-      return matchesStyle && matchesCity && matchesSearch
-    })
-  })
+  // Acciones para integrar con backend
+  async function fetchTattoos(params = {}) {
+    try {
+      const response = await api.get("/v1/designs", { params });
+      tattoos.value = response.data;
 
-  
-  const getTattooById = (id) => {
-    return tattoos.value.find(tattoo => tattoo.id === id)
+      console.log(tattoos.value);
+      
+    } catch (error) {
+      console.error("Error fetching tattoos:", error);
+      // Optionally, handle error state here (e.g., show notification)
+    }
   }
+
+  async function fetchARTattoos() {
+    const response = await api.get("/v1/designs", {
+      params: { booleanAR: true },
+    });
+    tattoos.value = response.data;
+  }
+
+  async function createTattoo(formData) {
+    // formData: instancia de FormData con campos name, description, styles[], booleanAR y file 'image'
+    const response = await api.post("/v1/designs", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    tattoos.value.unshift(response.data);
+  }
+
+  async function updateTattoo(id, payload) {
+    const response = await api.patch(`/v1/designs/${id}`, payload);
+    const idx = tattoos.value.findIndex((t) => t._id === id);
+    if (idx !== -1) tattoos.value[idx] = response.data;
+  }
+
+  async function deleteTattoo(id) {
+    await api.delete(`/v1/designs/${id}`);
+    tattoos.value = tattoos.value.filter((t) => t._id !== id);
+  }
+
+  async function getTattooById(id) {
+    const response = await api.get(`/v1/designs/${id}`);
+    return response.data;
+  }
+
+  // Fetch inicial
 
   return {
     tattoos,
@@ -39,7 +81,10 @@ export const useTattooStore = defineStore('tattoos', () => {
     cityFilter,
     searchQuery,
     filteredTattoos,
-    getTattooById
-  }
-}
-)
+    fetchTattoos,
+    fetchARTattoos,
+    createTattoo,
+    updateTattoo,
+    deleteTattoo,
+  };
+});
