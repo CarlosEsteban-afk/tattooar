@@ -55,9 +55,18 @@
               </div>
             </div>
             <!-- Grid de tarjetas -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-              <TattooCard v-for="tattoo in filteredTattoos" :key="tattoo.id" :title="tattoo.title"
-                :author="tattoo.author" :filters="tattoo.filters" :date="tattoo.date">
+            <div class="grid grid-cols-6 gap-1">
+              <TattooCard
+                v-for="tattoo in filteredTattoos"
+                :key="tattoo.id"
+                :name="tattoo.name"
+                :author="tattoo.author"
+                :styles="tattoo.styles"
+                :updatedAt="tattoo.updatedAt"
+                :type="tattoo.type"
+                :designURL="tattoo.designURL"
+                :state="tattoo.state"
+              >
                 <template #actions>
                   <button
                     class="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200 w-full"
@@ -95,6 +104,7 @@ import TattooCard from "../../components/TattooCard.vue";
 import Topbar from "../../components/TopBar.vue";
 import AdminSidebar from "../../components/AdminSidebar.vue";
 import { ref, computed } from "vue";
+import TatuIMG from "../../assets/tatu.jpg";
 
 const search = ref("");
 
@@ -114,83 +124,103 @@ const suspendTattoo = (id) => {
 const tattoos = ref([
   {
     id: 1,
-    title: "Flor de loto.png",
+    name: "Flor de loto.png",
     author: "María González",
-    filters: ["floral", "colorido"],
-    date: "2023-10-01",
+    styles: ["floral", "colorido"],
+    updatedAt: "2023-10-01",
     type: "userReport",
+    designURL: TatuIMG,
+    state: "activo"
   },
   {
     id: 2,
-    title: "Dragón tribal.png",
+    name: "Dragón tribal.png",
     author: "Carlos Mendoza",
-    filters: ["Tribal", "Dragón"],
-    date: "2023-10-03",
+    styles: ["Tribal", "Dragón"],
+    updatedAt: "2023-10-03",
     type: "contact",
+    designURL: TatuIMG,
+    state: "activo"
   },
   {
     id: 3,
-    title: "Mandala mano.png",
+    name: "Mandala mano.png",
     author: "Laura Pérez",
-    filters: ["mandala", "mano"],
-    date: "2023-10-02",
+    styles: ["mandala", "mano"],
+    updatedAt: "2023-10-02",
     type: "reclaim",
+    designURL: TatuIMG,
+    state: "activo"
   },
   {
     id: 4,
-    title: "Lobo realista.png",
+    name: "Lobo realista.png",
     author: "Javier Ruiz",
-    filters: ["realista", "lobo"],
-    date: "2023-10-04",
+    styles: ["realista", "lobo"],
+    updatedAt: "2023-10-04",
     type: "userReport",
+    designURL: TatuIMG,
+    state: "activo"
   },
   {
     id: 5,
-    title: "Brújula viajera.png",
+    name: "Brújula viajera.png",
     author: "Ana Torres",
-    filters: ["brújula", "viaje"],
-    date: "2023-10-05",
+    styles: ["brújula", "viaje"],
+    updatedAt: "2023-10-05",
     type: "tattooReport",
+    designURL: TatuIMG,
+    state: "activo"
   },
   {
     id: 6,
-    title: "Tigre japonés.png",
+    name: "Tigre japonés.png",
     author: "Luis Soto",
-    filters: ["japonés", "tigre"],
-    date: "2023-10-06",
+    styles: ["japonés", "tigre"],
+    updatedAt: "2023-10-06",
     type: "reclaim",
+    designURL: TatuIMG,
+    state: "activo"
   },
   {
     id: 7,
-    title: "Ojo de Horus.png",
+    name: "Ojo de Horus.png",
     author: "Cecilia Díaz",
-    filters: ["egipcio", "ojo"],
-    date: "2023-10-07",
+    styles: ["egipcio", "ojo"],
+    updatedAt: "2023-10-07",
     type: "report",
+    designURL: TatuIMG,
+    state: "activo"
   },
   {
     id: 8,
-    title: "Mariposa acuática.png",
+    name: "Mariposa acuática.png",
     author: "Pedro Jiménez",
-    filters: ["acuático", "mariposa"],
-    date: "2023-10-08",
+    styles: ["acuático", "mariposa"],
+    updatedAt: "2023-10-08",
     type: "userReport",
+    designURL: TatuIMG,
+    state: "activo"
   },
   {
     id: 9,
-    title: "Cráneo mexicano.png",
+    name: "Cráneo mexicano.png",
     author: "Sofía López",
-    filters: ["mexicano", "cráneo"],
-    date: "2023-10-09",
+    styles: ["mexicano", "cráneo"],
+    updatedAt: "2023-10-09",
     type: "userReport",
+    designURL: TatuIMG,
+    state: "activo"
   },
   {
     id: 10,
-    title: "Ángel guardián.png",
+    name: "Ángel guardián.png",
     author: "Andrés García",
-    filters: ["ángel", "guardián"],
-    date: "2023-10-10",
+    styles: ["ángel", "guardián"],
+    updatedAt: "2023-10-10",
     type: "tattooReport",
+    designURL: TatuIMG,
+    state: "activo"
   },
 ]);
 const filterType = ref("");
@@ -199,7 +229,7 @@ const selectedFilters = ref([]);
 
 // Obtener todos los filtros únicos
 const allAvailableFilters = computed(() => {
-  const all = tattoos.value.flatMap((t) => t.filters || []);
+  const all = tattoos.value.flatMap((t) => t.styles || []);
   return [...new Set(all)];
 });
 
@@ -207,10 +237,10 @@ const allAvailableFilters = computed(() => {
 const filteredTattoos = computed(() =>
   tattoos.value.filter(
     (t) =>
-      t.title.toLowerCase().includes(search.value.toLowerCase()) &&
+      t.name.toLowerCase().includes(search.value.toLowerCase()) &&
       (filterType.value === "" || t.type === filterType.value) &&
       (selectedFilters.value.length === 0 ||
-        selectedFilters.value.every((f) => t.filters.includes(f)))
+        selectedFilters.value.every((f) => t.styles.includes(f)))
   )
 );
 
