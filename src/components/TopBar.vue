@@ -116,7 +116,7 @@ const notifications = [
     id: 3,
     user: 1,
     type: "claim",
-    description: "Se reportó un diseño por derechos de autor",
+    description: "Se reportó un diseño por derechos de autor",    
     image: "../assets/tatu.jpg",
     title: "Reporte de copyright",
     link: "/admin/reports",
