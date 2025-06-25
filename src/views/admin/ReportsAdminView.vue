@@ -49,27 +49,28 @@
 
       <!-- Grid de tarjetas -->
       <div class="overflow-x-auto">
-        <div class="grid grid-cols-4 gap-1">
+        <div class="grid grid-cols-4 gap-6">
           <TattooCard
-            v-for="tattoo in filteredTattoos"
-            :key="tattoo.id"
-            :name="tattoo.name"
-            :author="tattoo.author"
-            :description="tattoo.description"
-            :styles="tattoo.styles"
-            :updatedAt="tattoo.updatedAt"
-            :type="tattoo.type"
-            :designURL="tattoo.designURL"
-            :reportCount="tattoo.reportCount"
-            :state="tattoo.state"
+            v-for="report in filteredReports"
+            :key="report.id"
+            :name="report.reason"
+            :author="report.author"
+            :description="report.description"
+            :styles="report.styles"
+            :updatedAt="report.updatedAt"
+            :type="report.type"
+            :designURL="report.designURL"
+            :reportCount="report.reportCount"
+            :state="report.state"
+            class="max-w-xs w-full"
           >
             <template #actions>
               <div class="flex flex-col items-start mb-2">
-                <div v-if="tattoo.type === 'tattooReport'">
+                <div v-if="report.type === 'design'">
                   <!-- Botones de acción  Tatuaje-->
-                  <div class="flex gap-2 mt-auto">
+                  <div class="flex gap-1 mt-auto">
                     <button
-                      class="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded text-xs hover:bg-red-200"
+                      class="flex items-center gap-1 px-1 py-0.5 bg-red-100 text-red-700 rounded text-[10px] hover:bg-red-200"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +87,7 @@
                       Rechazar reporte
                     </button>
                     <button
-                      class="flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs hover:bg-yellow-200"
+                      class="flex items-center gap-1 px-1 py-0.5 bg-yellow-100 text-yellow-700 rounded text-[10px] hover:bg-yellow-200"
                       @click="$emit('delete')"
                     >
                       <svg
@@ -104,8 +105,8 @@
                       Suspender tatuaje
                     </button>
                     <button
-                    class="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200 w-full"
-                    @click="goToProfile(tattoo.author)">
+                    class="flex items-center gap-1 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] hover:bg-blue-200 w-full"
+                    @click="goToProfile(report.author)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
                       stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10" />
@@ -115,11 +116,11 @@
                   </button>
                   </div>
                 </div>
-                <div v-else-if="tattoo.type === 'userReport'">
+                <div v-else-if="report.type === 'tattooer'">
                   <!-- Botones de acción Reporte Usuario -->
-                  <div class="flex gap-2 mt-auto">
+                  <div class="flex gap-1 mt-auto">
                     <button
-                      class="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded text-xs hover:bg-red-200"
+                      class="flex items-center gap-1 px-1 py-0.5 bg-red-100 text-red-700 rounded text-[10px] hover:bg-red-200"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -136,7 +137,7 @@
                       Rechazar reporte
                     </button>
                     <button
-                      class="flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs hover:bg-yellow-200"
+                      class="flex items-center gap-1 px-1 py-0.5 bg-yellow-100 text-yellow-700 rounded text-[10px] hover:bg-yellow-200"
                       @click="$emit('delete')"
                     >
                       <svg
@@ -154,8 +155,8 @@
                       Suspender tatuador
                     </button>
                     <button
-                    class="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200 w-full"
-                    @click="goToProfile(tattoo.author)">
+                    class="flex items-center gap-1 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] hover:bg-blue-200 w-full"
+                    @click="goToProfile(report.author)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
                       stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10" />
@@ -182,52 +183,47 @@ import { ref, computed } from "vue";
 import tatuadoraImg from "../../assets/tatuadora.jpg";
 import doc from "../../assets/tatu.jpg";
 import reclamo from "../../assets/reclamo.webp";
-const search = ref("");
-
-const deleteTattoo = (id) => {
-  tattoos.value = tattoos.value.filter((t) => t.id !== id);
-};
-
-const tattoos = ref([
+const reports = ref([
   {
     id: 1,
-    name: "Flor de loto.png",
+    reason: "Flor de loto.png",
     author: "María González",
     description: "Tuvimos problemas con el contenido de esta imagen porque soy catolica",
     styles: ["Religioso", "Flor"],
     updatedAt: "2023-10-01",
-    type: "tattooReport",
+    type: "design",
     designURL: doc,
     reportCount: 2,
-    state: "pendiente"
+    state: "pending",
+    
   },
   {
     id: 2,
-    name: "Raquelota125",
+    reason: "Raquelota125",
     author: "Carlos Mendoza",
     description: "Esta tatuadora infringe las normas de la comunidad por su simbolismo",
     styles: [],
     updatedAt: "2023-10-02",
-    type: "userReport",
+    type: "tattooer",
     designURL: tatuadoraImg,
     reportCount: 1,
-    state: "pendiente"
+    state: "pending"
   },
   {
     id: 3,
-    name: "Busco empleo con ustedes",
+    reason: "Busco empleo con ustedes",
     author: "Laura Pérez",
     description: "Hola, me gustaría trabajar con ustedes como tatuadora",
     styles: [],
     updatedAt: "2023-10-03",
-    type: "tattooReport",
+    type: "claim",
     designURL: doc,
     reportCount: 3,
-    state: "pendiente"
+    state: "resolved",
   },
   {
     id: 4,
-    name: "Bug Encontrado",
+    reason: "Bug Encontrado",
     author: "Javier Ruiz",
     description: "Se ha encontrado un bug en la aplicación",
     styles: [],
@@ -235,7 +231,7 @@ const tattoos = ref([
     type: "reclaim",
     designURL: reclamo,
     reportCount: 1,
-    state: "pendiente"
+    state: "rejected"
   },
   {
     id: 5,
@@ -247,7 +243,7 @@ const tattoos = ref([
     type: "tattooReport",
     designURL: doc,
     reportCount: 2,
-    state: "pendiente"
+    state: "rejected"
   },
   {
     id: 6,
@@ -259,7 +255,7 @@ const tattoos = ref([
     type: "tattooReport",
     designURL: doc,
     reportCount: 1,
-    state: "pendiente"
+    state: "resolved"
   },
   {
     id: 7,
@@ -271,18 +267,36 @@ const tattoos = ref([
     type: "tattooReport",
     designURL: doc,
     reportCount: 4,
-    state: "pendiente"
+    state: "pending"
   },
 ]);
 
 const filterType = ref("");
-const filteredTattoos = computed(() =>
-  tattoos.value.filter(
-    (t) =>
-      t.name.toLowerCase().includes(search.value.toLowerCase()) &&
-      (filterType.value === "" || t.type === filterType.value)
+const search = ref("");
+const selectedFilters = ref([]);
+
+const allAvailableFilters = computed(() => {
+  const all = reports.value.flatMap((r) => r.styles || []);
+  return [...new Set(all)];
+});
+
+const filteredReports = computed(() =>
+  reports.value.filter(
+    (r) =>
+      (r.reason && r.reason.toLowerCase().includes(search.value.toLowerCase())) &&
+      (filterType.value === "" || r.type === filterType.value) &&
+      (selectedFilters.value.length === 0 ||
+        selectedFilters.value.every((f) => r.styles.includes(f)))
   )
 );
+
+const toggleFilter = (filter) => {
+  if (selectedFilters.value.includes(filter)) {
+    selectedFilters.value = selectedFilters.value.filter((f) => f !== filter);
+  } else {
+    selectedFilters.value = [...selectedFilters.value, filter];
+  }
+};
 
 const acceptReport = (id) => {
   // Lógica para aceptar el reporte

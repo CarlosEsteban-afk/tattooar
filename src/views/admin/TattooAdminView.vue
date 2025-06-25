@@ -55,7 +55,7 @@
               </div>
             </div>
             <!-- Grid de tarjetas -->
-            <div class="grid grid-cols-6 gap-1">
+            <div class="grid grid-cols-4 gap-1">
               <TattooCard
                 v-for="tattoo in filteredTattoos"
                 :key="tattoo.id"
