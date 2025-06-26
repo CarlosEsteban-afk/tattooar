@@ -97,12 +97,11 @@ const routes = [
     meta: { requiresAuth: true, roles: ["admin"] }
   },
 
-  // Tatuador (solo rol 'tattooer')
+  // Acceso libre (todos) y perfil de tatuador
   {
     path: "/tattoo-profile/:id",
     name: "TattooProfile",
     component: TatooArtistProfileView,
-    meta: { requiresAuth: true, roles: ["tattooer"] }
   },
 
   // Usuarios registrados (rol 'client' o 'tattooer')

@@ -19,7 +19,6 @@
       :desc="tattoo.description"
       :image="tattoo.designURL"
       />
-    
     </div>
   
   
