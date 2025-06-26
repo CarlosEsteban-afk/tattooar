@@ -65,7 +65,6 @@ import ARButton from './ARButton.vue';
 
 const favoritesStore = useFavoritesStore()
 const router = useRouter()
-const url = 'https://carlosesteban-afk.github.io/ar-test/'
 
 const isLiked = computed(() => favoritesStore.isFavorite(props.id))
 

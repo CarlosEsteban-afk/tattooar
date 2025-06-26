@@ -1,10 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import axios from "axios";
-
-const api = axios.create({
-  baseURL: "http://localhost:4000",
-});
+import api from "../services/api";
 
 export const useTattooStore = defineStore("tattoos", () => {
   // Estado
@@ -31,7 +27,7 @@ export const useTattooStore = defineStore("tattoos", () => {
   // Acciones para integrar con backend
   async function fetchTattoos(params = {}) {
     try {
-      const response = await api.get("/v1/designs", { params });
+      const response = await api.get("/designs", { params });
       tattoos.value = response.data;
 
       console.log(tattoos.value);
@@ -43,7 +39,7 @@ export const useTattooStore = defineStore("tattoos", () => {
   }
 
   async function fetchARTattoos() {
-    const response = await api.get("/v1/designs", {
+    const response = await api.get("/designs", {
       params: { booleanAR: true },
     });
     tattoos.value = response.data;
@@ -51,25 +47,25 @@ export const useTattooStore = defineStore("tattoos", () => {
 
   async function createTattoo(formData) {
     // formData: instancia de FormData con campos name, description, styles[], booleanAR y file 'image'
-    const response = await api.post("/v1/designs", formData, {
+    const response = await api.post("/designs", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     tattoos.value.unshift(response.data);
   }
 
   async function updateTattoo(id, payload) {
-    const response = await api.patch(`/v1/designs/${id}`, payload);
+    const response = await api.patch(`/designs/${id}`, payload);
     const idx = tattoos.value.findIndex((t) => t._id === id);
     if (idx !== -1) tattoos.value[idx] = response.data;
   }
 
   async function deleteTattoo(id) {
-    await api.delete(`/v1/designs/${id}`);
+    await api.delete(`/designs/${id}`);
     tattoos.value = tattoos.value.filter((t) => t._id !== id);
   }
 
   async function getTattooById(id) {
-    const response = await api.get(`/v1/designs/${id}`);
+    const response = await api.get(`/designs/${id}`);
     return response.data;
   }
 
