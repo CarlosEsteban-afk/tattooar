@@ -15,7 +15,7 @@
       :key="tattoo.id"
       :id="tattoo._id"
       :title="tattoo.title"
-      :author="tattoo.author.fullName"
+      :author="tattoo.author"
       :desc="tattoo.description"
       :image="tattoo.designURL"
       />

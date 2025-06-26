@@ -74,7 +74,7 @@ defineProps({
 const router = useRouter()
 
 const goToHome = () => router.push({ name: 'Home' })
-const goToMyTattoos = () => router.push({ name: 'TattooProfile' })
+const goToMyTattoos = () => router.push({ name: 'TattooProfile', params: { id: userStore.user.id } })
 const goToTattooArtists = () => router.push({ name: 'TattooArtists' })
 const goToLogin = () => router.push({ name: 'Login' })
 const goToProfile = () => router.push({ name: 'UserProfile' })

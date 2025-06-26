@@ -3,7 +3,7 @@
         <div class="p-3 justify-between flex items-center">
             <button @click="goToProfile" class="flex items-center">
                 <img src="/assets/avatar.png" alt="Avatar" class="rounded-full w-6 h-6" />
-                <h2 class="text-xs text-gray-600 pl-2">{{ author }}</h2>
+                <h2 class="text-xs text-gray-600 pl-2">{{ author?.username }}</h2>
             </button>
             <div class="flex items-center pl-1 gap-1 rounded-full">
                 <button @click="showReportModal = true"
@@ -94,7 +94,7 @@ const props = defineProps({
         required: true
     },
     title: String,
-    author: String,
+    author: Object,
     desc: {
         type: String,
         default: 'Descripción del tatuaje'
