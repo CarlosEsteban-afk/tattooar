@@ -143,6 +143,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import TopBar from '../../components/TopBar.vue'
+import api from '../../services/api'
 
 const router = useRouter()
 const showConfirmModal = ref(false)
@@ -166,9 +167,9 @@ const userId = router.currentRoute.value.params.id
 
 // Fetch user data (this should be replaced with actual API call)
 async function fetchUser() {
-    const response = await fetch(`http://localhost:3002/users/${userId}`)
-    if (response.ok) {
-        const data = await response.json()
+    try {
+        const response = await api.get(`admin/users/${userId}`)
+        const data = response.data
         user.value = {
             alias: data.alias || '',
             correo: data.correo || '',
@@ -182,21 +183,20 @@ async function fetchUser() {
             whatsapp: data.whatsapp || '',
             instagram: data.instagram || ''
         }
+    } catch (error) {
+        console.error('Error al cargar usuario:', error)
     }
 }
 
 fetchUser()
 
-function updateUser() {
-    fetch(`http://localhost:3002/users/${userId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user.value)
-    }).then(() => {
+async function updateUser() {
+    try {
+        await api.put(`admin/users/${userId}`, user.value)
         showSuccessModal.value = true
-    })
+    } catch (error) {
+        console.error('Error al actualizar usuario:', error)
+    }
 }
 
 function onSubmit() {

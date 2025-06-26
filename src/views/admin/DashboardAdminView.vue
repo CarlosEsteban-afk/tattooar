@@ -84,6 +84,7 @@ import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import TopBar from '../../components/TopBar.vue'
+import api from '../../services/api'
 
 const totalUsers = ref(0)
 const totalTattoos = ref(0)
@@ -96,8 +97,8 @@ const router = useRouter()
 
 async function fetchDashboardData() {
     // Fetch users
-    const usersRes = await fetch('http://localhost:3002/users')
-    const users = await usersRes.json()
+    const usersRes = await api.get('admin/users')
+    const users = usersRes.data
     totalUsers.value = users.length
 
     // Contar roles
@@ -114,8 +115,8 @@ async function fetchDashboardData() {
         .slice(0, 3)
 
     // Fetch tattoos
-    const tattoosRes = await fetch('http://localhost:3002/tattoos')
-    const tattoos = await tattoosRes.json()
+    const tattoosRes = await api.get('/tattoos')
+    const tattoos = tattoosRes.data
     totalTattoos.value = tattoos.length
 
     // Contar estilos de tatuajes

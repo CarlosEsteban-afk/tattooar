@@ -163,6 +163,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import TopBar from '../../components/TopBar.vue'
+import api from '../../services/api'
 
 const defaultImg = 'https://ui-avatars.com/api/?name=User&background=7B6EAD&color=fff'
 
@@ -172,9 +173,8 @@ const user = ref(null)
 
 onMounted(async () => {
     try {
-        const res = await fetch(`http://localhost:3002/users/${route.params.id}`)
-        if (!res.ok) throw new Error('No se pudo cargar el usuario')
-        user.value = await res.json()
+        const res = await api.get(`admin/users/${route.params.id}`)
+        user.value = res.data
     } catch (e) {
         user.value = null
     }
@@ -189,12 +189,9 @@ async function toggleUserStatus() {
 
     try {
         // PATCH o PUT según tu API
-        const res = await fetch(`http://localhost:3002/users/${user.value.id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ estado: nuevoEstado })
+        const res = await api.patch(`admin/users/${user.value.id}`, {
+            estado: nuevoEstado
         })
-        if (!res.ok) throw new Error('No se pudo actualizar el estado')
         // Actualiza el estado localmente
         user.value.estado = nuevoEstado
         alert(`Usuario ${nuevoEstado === 'Activo' ? 'activado' : 'desactivado'} correctamente.`)
