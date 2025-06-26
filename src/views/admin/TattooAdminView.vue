@@ -55,7 +55,7 @@
               </div>
             </div>
             <!-- Grid de tarjetas -->
-            <div class="grid grid-cols-4 gap-1">
+            <div class="grid grid-cols-4 gap-6">
               <TattooCard
                 v-for="tattoo in filteredTattoos"
                 :key="tattoo.id"
@@ -99,14 +99,29 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import { useRouter } from "vue-router";
 import TattooCard from "../../components/TattooCard.vue";
 import Topbar from "../../components/TopBar.vue";
 import AdminSidebar from "../../components/AdminSidebar.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import TatuIMG from "../../assets/tatu.jpg";
 
 const search = ref("");
+
+const tattoos = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/v1/admin/designs");
+    tattoos.value = response.data;
+    console.log("Tatuajes obtenidos:", tattoos.value);
+  } catch (error) {
+    console.error("Error al obtener los tatuajes:", error);
+  }
+});
+
+
 
 const deleteTattoo = (id) => {
   tattoos.value = tattoos.value.filter((t) => t.id !== id);
@@ -121,7 +136,7 @@ const suspendTattoo = (id) => {
   deleteTattoo(id);
   alert(`Tatuaje ${id} suspendido`);
 };
-const tattoos = ref([
+/*const tattoos = ref([
   {
     id: 1,
     name: "Flor de loto.png",
@@ -223,6 +238,7 @@ const tattoos = ref([
     state: "activo"
   },
 ]);
+*/
 const filterType = ref("");
 
 const selectedFilters = ref([]);

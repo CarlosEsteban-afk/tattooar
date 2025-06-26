@@ -123,7 +123,20 @@ const notifications = [
     isRead: true,
     createdAt: "2025-05-22 14:15",
   },
+    {
+    id: 4,
+    user: 1,
+    type: "claim",
+    description: "Se reportó un diseño por derechos de autor",    
+    image: "../assets/tatu.jpg",
+    title: "Reporte de copyright",
+    link: "/admin/reports",
+    isRead: true,
+    createdAt: "2025-05-22 14:15",
+  },
+  
 ];
+const notificationCount = notifications.length; // Número de notificaciones
 function getImgUrl(path) {
   return new URL(path, import.meta.url).href;
 }
@@ -138,9 +151,5 @@ function goToNotification(notification) {
 
 defineProps({
   title: String,
-  notificationCount: {
-    type: Number,
-    default: 0,
-  },
 });
 </script>

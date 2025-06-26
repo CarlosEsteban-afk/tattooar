@@ -50,7 +50,11 @@
     <div
       class="w-full aspect-video bg-gray-100 flex items-center justify-center overflow-hidden"
     >
-      <img :src="designURL" alt="tatuaje" class="object-contain w-full h-full" />
+      <img
+        :src="designURL"
+        alt="tatuaje"
+        class="object-contain w-full h-full"
+      />
     </div>
     <!-- Descripción -->
     <div class="p-4 flex-1 flex flex-col">
@@ -64,9 +68,10 @@
         <span class="text-sm text-gray-700">{{ description }}</span>
       </div>
       <div class="flex items-center text-xs text-gray-500 gap-2 mb-4">
-        <span>Propietario: {{ author }}</span>
+        <span>Propietario: {{ author?.fullName || "Desconocido" }}</span>
         <span>•</span>
-        <span>{{ updatedAt }}</span>
+        <span>{{ formatDate(updatedAt) }}</span>
+
       </div>
       <div class="flex gap-2 mt-auto">
         <slot name="actions"></slot>
@@ -90,4 +95,13 @@ defineProps({
   reportCount: Number,
   state: String,
 });
+
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('es-CL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
 </script>

@@ -36,10 +36,12 @@
                 {{ log.description }}
               </td>
               <td class="px-6 py-4 text-gray-800">
-                {{ log.user }}
+                
+                {{ log.user?.fullName }}
               </td>
+              
               <td class="px-6 py-4 text-gray-800">
-                {{ log.timestamp }}
+                {{ formatDate(log.timestamp) }}
               </td>
             </tr>
           </tbody>
@@ -50,12 +52,36 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import Topbar from '../../components/TopBar.vue'
 import AdminSidebar from '../../components/AdminSidebar.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const search = ref("")
 
+const logs = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/v1/logs/");
+    logs.value = response.data;
+    console.log("Logs obtenidos:", logs.value);
+  } catch (error) {
+    console.error("Error al obtener logs:", error);
+  }
+});
+
+
+
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('es-CL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
+/*
 const logs = ref([
   { id: 1, description: "Inicio de sesión exitoso", user: "admin@tattooar.cl", timestamp: "2025-05-20 10:00" },
   { id: 2, description: "Usuario 'tattoo_juan' creado", user: "superadmin", timestamp: "2025-05-20 10:30" },
@@ -68,7 +94,7 @@ const logs = ref([
   { id: 9, description: "Usuario 'cliente_pepe' desactivado", user: "admin_lucia", timestamp: "2025-05-20 14:00" },
   { id: 10, description: "Inicio de sesión exitoso", user: "tattoo_camila", timestamp: "2025-05-20 14:30" }
 ])
-
+*/
 
 // Busqueda de logs
 const filteredLogs = computed(() =>

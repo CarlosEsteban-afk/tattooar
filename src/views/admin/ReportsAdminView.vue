@@ -176,13 +176,27 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import TattooCard from "../../components/TattooCard.vue";
 import Topbar from "../../components/TopBar.vue";
 import AdminSidebar from "../../components/AdminSidebar.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import tatuadoraImg from "../../assets/tatuadora.jpg";
 import doc from "../../assets/tatu.jpg";
 import reclamo from "../../assets/reclamo.webp";
+
+const reports = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/v1/reports/");
+    reports.value = response.data;
+    console.log("reportes obtenidos:", reports.value);
+  } catch (error) {
+    console.error("Error al obtener reportes:", error);
+  }
+});
+/*
 const reports = ref([
   {
     id: 1,
@@ -270,7 +284,7 @@ const reports = ref([
     state: "pending"
   },
 ]);
-
+*/
 const filterType = ref("");
 const search = ref("");
 const selectedFilters = ref([]);
