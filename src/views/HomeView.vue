@@ -13,13 +13,15 @@
     <CardFeed
       v-for="tattoo in tattooStore.filteredTattoos"
       :key="tattoo.id"
-      :id="tattoo.id"
+      :id="tattoo._id"
       :title="tattoo.title"
-      :author="tattoo.author"
-      :desc="tattoo.desc"
-      :image="tattoo.image"
+      :author="tattoo.author.fullName"
+      :desc="tattoo.description"
+      :image="tattoo.designURL"
       />
-  </div>
+    
+    </div>
+  
   
 </template>
 
@@ -60,6 +62,7 @@ const handleClickOutside = (event) => {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  tattooStore.fetchTattoos() // Fetch tattoos when component mounts
 })
 
 onBeforeUnmount(() => {

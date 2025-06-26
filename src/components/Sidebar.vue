@@ -11,25 +11,39 @@
         <div class="relative z-20 p-4">
           <div class="border-b font-bold text-purple-800">Menú</div>
           <div class="flex flex-col mt-4 space-y-4">
+            <!-- Inicio: todos lo ven -->
             <button @click="goToHome" class="w-full text-left text-white hover:text-purple-300">Inicio</button>
 
-            <button @click="goToMyTattoos" class="w-full text-left text-white hover:text-purple-300">Mis tatuajes</button>
+            <!-- Mis Tatuajes: solo tatuadores -->
+            <button v-if="userStore.isTattooer" @click="goToMyTattoos"
+              class="w-full text-left text-white hover:text-purple-300">Mis tatuajes</button>
+            
+            <!-- Tatuadores: todos lo ven -->
+            <button @click="goToTattooArtists"
+              class="w-full text-left text-white hover:text-purple-300">Tatuadores</button>
 
-            <button @click="goToTattooArtists" class="w-full text-left text-white hover:text-purple-300">Tatuadores</button>
+            <!-- Iniciar sesión: solo invitados -->
+            <button v-if="userStore.isGuest" @click="goToLogin"
+              class="w-full text-left text-white hover:text-purple-300">Iniciar sesión</button>
 
-            <button @click="goToLogin" class="w-full text-left text-white hover:text-purple-300">Iniciar sesión</button>
+            <!-- Perfil: solo usuarios autenticados (clientes o tatuadores o admin si quieres) -->
+            <button v-if="userStore.isClient || userStore.isTattooer || userStore.isAdmin" @click="goToProfile"
+              class="w-full text-left text-white hover:text-purple-300">Perfil</button>
 
-            <button @click="goToProfile" class="w-full text-left text-white hover:text-purple-300">Perfil</button>
+            <!-- Favoritos: solo usuarios autenticados (clientes o tatuadores) -->
+            <button v-if="userStore.isClient || userStore.isTattooer" @click="goToFavorites"
+              class="w-full text-left text-white hover:text-purple-300">Favoritos</button>
 
-            <button @click="goToFavorites" class="w-full text-left text-white hover:text-purple-300">Favoritos</button>
+            <!-- Registrarse: solo invitados -->
+            <button v-if="userStore.isGuest" @click="goToRegister"
+              class="w-full text-left text-white hover:text-purple-300">Registrarse</button>
 
-            <button @click="goToRegister" class="w-full text-left text-white hover:text-purple-300">Registrarse</button>
 
           </div>
 
         </div>
         <div class="absolute bottom-0 left-0 w-full p-4 justify-between flex items-center">
-          <button class="color-red-500 text-red-500 ml-2">Cerrar Sesión</button>
+          <button v-if="userStore.isAuthenticated" @click="logout" class="text-red-500 ml-2 hover:underline">Cerrar Sesión</button>
           <button @click="gotoAbout" class="text-white m-2 mr-4 bg-purple-900 h-8 w-8 rounded-full">?</button>
         </div>
       </div>
@@ -39,6 +53,16 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/UserStore'
+
+const userStore = useUserStore()
+
+
+const logout = () => {
+  userStore.logout()
+  router.push({ name: 'Home' })
+}
+
 
 defineProps({
   visible: {

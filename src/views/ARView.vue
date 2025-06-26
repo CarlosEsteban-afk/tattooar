@@ -5,30 +5,31 @@
         Volver
       </a>
     </div>
-    <iframe
-      v-if="tattoo?.image"
-      :src="iframeSrc"
-      class="w-full h-screen border-0"
-    ></iframe>
+    <iframe v-if="tattoo?.designURL" :src="iframeSrc" class="w-full h-screen border-0"></iframe>
   </div>
 </template>
-
 <script setup>
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTattooStore } from '../stores/DesignStore'
-import { computed } from 'vue'
 
 const route = useRoute()
-const tattooId = Number(route.params.id)
+const tattooId = route.params.id
 const tattooStore = useTattooStore()
-const tattoo = computed(() => tattooStore.getTattooById(tattooId))
+
+const tattoo = ref(null)
+
+onMounted(() => {
+  tattoo.value = tattooStore.tattoos.find(t => t._id === tattooId)
+})
 
 const iframeSrc = computed(() => {
   const base = import.meta.env.BASE_URL
-  const img = tattoo.value?.image || ''
+  const img = tattoo.value?.designURL || ''
   return `${base}ar.html?img=${encodeURIComponent(img)}`
 })
 </script>
+
 
 <style>
 .ar-view {
@@ -37,6 +38,7 @@ const iframeSrc = computed(() => {
   position: relative;
   overflow: hidden;
 }
+
 iframe {
   display: block;
 }

@@ -1,6 +1,7 @@
 // stores/UserStore.js
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import api from '../services/api'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref(null)
@@ -13,7 +14,7 @@ export const useUserStore = defineStore('user', () => {
 
   const isGuest = computed(() => !isAuthenticated.value)
   const isAdmin = computed(() => userRole.value === 'admin')
-  const isArtist = computed(() => userRole.value === 'artist')
+  const isTattooer = computed(() => userRole.value === 'tattooer')
   const isClient = computed(() => userRole.value === 'user' || userRole.value === 'client')
 
   const isTokenExpired = () => {
@@ -23,27 +24,29 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // === Actions ===
-  const login = async (email, password) => {
-    // Simula un usuario autenticado (debería ser un fetch a backend)
-    const mockUser = {
-      id: 1,
-      name: 'Carlos',
-      email,
-      role: 'artist', // o 'admin' o 'user'
+ const login = async (email, password) => {
+    try {
+      const response = await api.post('/auth/login', { email, password })
+      const { token: receivedToken, user: receivedUser } = response.data
+
+      user.value = receivedUser
+      token.value = receivedToken
+      tokenExpiration.value = Date.now() + 60 * 60 * 1000 // 1 hora
+
+      api.defaults.headers.common['Authorization'] = `Bearer ${receivedToken}`
+      console.log('Usuario autenticado:', user.value)
+      return user.value
+    } catch (err) {
+      console.error('Error al iniciar sesión:', err)
+      throw err
     }
-
-    const fakeToken = 'fake-jwt-token'
-    const expiresInMs = 1000 * 60 * 60 // 1 hora
-
-    user.value = mockUser
-    token.value = fakeToken
-    tokenExpiration.value = Date.now() + expiresInMs
   }
 
-  const logout = () => {
+   const logout = () => {
     user.value = null
     token.value = null
     tokenExpiration.value = null
+    delete api.defaults.headers.common['Authorization']
   }
 
   const refreshToken = async () => {
@@ -64,7 +67,7 @@ export const useUserStore = defineStore('user', () => {
     isAuthenticated,
     userRole,
     isAdmin,
-    isArtist,
+    isTattooer,
     isClient,
     isGuest,
 

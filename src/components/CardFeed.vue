@@ -65,7 +65,6 @@ import ARButton from './ARButton.vue';
 
 const favoritesStore = useFavoritesStore()
 const router = useRouter()
-const url = 'https://carlosesteban-afk.github.io/ar-test/'
 
 const isLiked = computed(() => favoritesStore.isFavorite(props.id))
 
@@ -91,7 +90,7 @@ const openARView = () => {
 }
 const props = defineProps({
     id: {
-        type: Number,
+        type: String,
         required: true
     },
     title: String,
@@ -105,7 +104,6 @@ const props = defineProps({
         default: '/assets/default-tattoo.jpg'
     }
 })
-
 </script>
 
 <style scoped>
