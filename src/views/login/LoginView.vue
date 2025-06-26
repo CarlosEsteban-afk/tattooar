@@ -63,7 +63,11 @@ const showAlert = ref(false)
 
 const handleRedirect = () => {
   showModal.value = false
-  router.push({ name: 'Home' })
+  if (userStore.isAdmin) {
+    router.push({ name: 'DashboardAdminView' })
+  } else {
+    router.push({ name: 'Home' })
+  }
 }
 
 const router = useRouter()
