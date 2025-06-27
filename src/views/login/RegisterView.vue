@@ -30,7 +30,8 @@
                 </div>
                 <FormButton type="submit">Registrarse</FormButton>
             </form>
-            <SuccessModal :show="showModal" message="¡Registro exitoso!" subMessage="Revisa tu correo para confirmar tu cuenta." :onConfirm="handleRedirect" />
+            <SuccessModal :show="showModal" message="¡Registro exitoso!"
+                subMessage="Revisa tu correo para confirmar tu cuenta." :onConfirm="handleRedirect" />
 
         </div>
     </div>
@@ -46,7 +47,7 @@ import FormButton from '../../components/FormButton.vue'
 import SuccessModal from '../../components/SuccessModal.vue'
 import AlertPop from '../../components/AlertPop.vue'
 import { ref } from 'vue'
-import axios from 'axios'
+import api from '../../services/api'
 
 const showModal = ref(false)
 
@@ -71,21 +72,21 @@ const showRepeatPasswordWarning = computed(() => {
 const router = useRouter()
 
 async function register() {
-  if (showPasswordWarning.value || showRepeatPasswordWarning.value) return
+    if (showPasswordWarning.value || showRepeatPasswordWarning.value) return
 
-  try {
-    const response = await axios.post('http://localhost:4000/v1/auth/register', {
-      fullName: form.fullName,
-      email: form.email,
-      password: form.password,
-      isTattooer: form.isTattooer,
-    })
+    try {
+        const response = await api.post('/auth/register', {
+            fullName: form.fullName,
+            email: form.email,
+            password: form.password,
+            isTattooer: form.isTattooer,
+        })
 
-    console.log('Success:', response.data)
-    showModal.value = true
-  } catch (error) {
-    console.error('Error during registration:', error.response?.data || error.message)
-    // You can show another AlertPop for error
-  }
+        console.log('Success:', response.data)
+        showModal.value = true
+    } catch (error) {
+        console.error('Error during registration:', error.response?.data || error.message)
+        // You can show another AlertPop for error
+    }
 }
 </script>
