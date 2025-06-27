@@ -36,8 +36,7 @@
                 {{ log.description }}
               </td>
               <td class="px-6 py-4 text-gray-800">
-                
-                {{ log.user?.fullName }}
+                {{ log.user?.fullName || 'Desconocido' }}
               </td>
               
               <td class="px-6 py-4 text-gray-800">

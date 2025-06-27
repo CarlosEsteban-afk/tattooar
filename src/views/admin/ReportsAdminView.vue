@@ -55,9 +55,10 @@
             :key="report.id"
             :name="report.reason"
             :author="report.author"
+            :user_id="report.reports_id"
             :description="report.description"
             :styles="report.styles"
-            :updatedAt="report.updatedAt"
+            :updatedAt="formatDate(report.date)"
             :type="report.type"
             :designURL="report.designURL"
             :reportCount="report.reportCount"
@@ -70,25 +71,53 @@
                   <!-- Botones de acción  Tatuaje-->
                   <div class="flex gap-1 mt-auto">
                     <button
-                      class="flex items-center gap-1 px-1 py-0.5 bg-red-100 text-red-700 rounded text-[10px] hover:bg-red-200"
+                      v-if="report.state !== 'resuelto'"
+                      class="flex items-center gap-1 px-1 py-0.5 bg-green-100 text-green-700 rounded text-[10px] hover:bg-green-200"
+                      @click="resolveReport(report._id)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-check-icon lucide-check"
+                      >
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                      Resolver reporte
+                    </button>
+                    <button
+                      v-else-if="report.state === 'resuelto'"
+                      class="flex items-center gap-1 px-1 py-0.5 bg-gray-100 text-gray-700 rounded text-[10px] hover:bg-green-200"
+                      @click="resolveReport(report._id)"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
-                        fill="none"
                         viewBox="0 0 24 24"
+                        fill="none"
                         stroke="currentColor"
                         stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-pencil-icon lucide-pencil"
                       >
-                        <path d="M18 6L6 18" />
-                        <path d="M6 6l12 12" />
+                        <path
+                          d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+                        />
+                        <path d="m15 5 4 4" />
                       </svg>
-                      Rechazar reporte
+                      Marcar pendiente
                     </button>
                     <button
                       class="flex items-center gap-1 px-1 py-0.5 bg-yellow-100 text-yellow-700 rounded text-[10px] hover:bg-yellow-200"
-                      @click="$emit('delete')"
+                      @click="suspendTattoo(report.reports_id)"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -105,22 +134,8 @@
                       Suspender tatuaje
                     </button>
                     <button
-                    class="flex items-center gap-1 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] hover:bg-blue-200 w-full"
-                    @click="goToProfile(report.author)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 14c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" />
-                    </svg>
-                    Ir a perfil tatuador
-                  </button>
-                  </div>
-                </div>
-                <div v-else-if="report.type === 'tattooer'">
-                  <!-- Botones de acción Reporte Usuario -->
-                  <div class="flex gap-1 mt-auto">
-                    <button
-                      class="flex items-center gap-1 px-1 py-0.5 bg-red-100 text-red-700 rounded text-[10px] hover:bg-red-200"
+                      class="flex items-center gap-1 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] hover:bg-blue-200 w-full"
+                      @click="goToProfile(report.reports_id)"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -131,14 +146,69 @@
                         stroke="currentColor"
                         stroke-width="2"
                       >
-                        <path d="M18 6L6 18" />
-                        <path d="M6 6l12 12" />
+                        <circle cx="12" cy="12" r="10" />
+                        <path
+                          d="M12 14c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"
+                        />
                       </svg>
-                      Rechazar reporte
+                      Ir a perfil tatuador
                     </button>
+                  </div>
+                </div>
+
+                <div v-else-if="report.type === 'tattooer'">
+                  <!-- Botones de acción Reporte Usuario -->
+                  <div class="flex gap-1 mt-auto">
+                    <button
+                      v-if="report.state !== 'resuelto'"
+                      class="flex items-center gap-1 px-1 py-0.5 bg-green-100 text-green-700 rounded text-[10px] hover:bg-green-200"
+                      @click="resolveReport(report._id)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-check-icon lucide-check"
+                      >
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                      Resolver reporte
+                    </button>
+
+                    <button
+                      v-else-if="report.state === 'resuelto'"
+                      class="flex items-center gap-1 px-1 py-0.5 bg-gray-100 text-gray-700 rounded text-[10px] hover:bg-green-200"
+                      @click="resolveReport(report._id)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-pencil-icon lucide-pencil"
+                      >
+                        <path
+                          d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+                        />
+                        <path d="m15 5 4 4" />
+                      </svg>
+                      Marcar pendiente
+                    </button>
+
                     <button
                       class="flex items-center gap-1 px-1 py-0.5 bg-yellow-100 text-yellow-700 rounded text-[10px] hover:bg-yellow-200"
-                      @click="$emit('delete')"
+                      @click="suspendTattooer(report.reports_id)"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -155,15 +225,25 @@
                       Suspender tatuador
                     </button>
                     <button
-                    class="flex items-center gap-1 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] hover:bg-blue-200 w-full"
-                    @click="goToProfile(report.author)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 14c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" />
-                    </svg>
-                    Ir a perfil tatuador
-                  </button>
+                      class="flex items-center gap-1 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] hover:bg-blue-200 w-full"
+                      @click="goToProfile(report.reports_id)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path
+                          d="M12 14c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"
+                        />
+                      </svg>
+                      Ir a perfil tatuador
+                    </button>
                   </div>
                 </div>
               </div>
@@ -176,6 +256,7 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router";
 import axios from "axios";
 import TattooCard from "../../components/TattooCard.vue";
 import Topbar from "../../components/TopBar.vue";
@@ -186,16 +267,83 @@ import doc from "../../assets/tatu.jpg";
 import reclamo from "../../assets/reclamo.webp";
 
 const reports = ref([]);
+const router = useRouter();
 
 onMounted(async () => {
   try {
     const response = await axios.get("http://localhost:4000/v1/reports/");
-    reports.value = response.data;
+    const reportsData = response.data;
+    // Para cada reporte, busca el nombre del usuario si hay user_id
+    const reportsWithNames = await Promise.all(
+      reportsData.map(async (report) => {
+        if (report.user_id) {
+          try {
+            const userRes = await axios.get(`http://localhost:4000/v1/users/${report.user_id}`);
+            return { ...report, author: userRes.data.fullName };
+          } catch (e) {
+            return { ...report, author: "Desconocido" };
+          }
+        } else {
+          return { ...report, author: "Desconocido" };
+        }
+      })
+    );
+    reports.value = reportsWithNames;
     console.log("reportes obtenidos:", reports.value);
   } catch (error) {
     console.error("Error al obtener reportes:", error);
   }
 });
+
+const goToProfile = (author) => {
+  // Aquí puedes poner el id que desees, en este caso 1
+  console.log("Ir   al perfil del tatuador:", author);
+  router.push({ name: "UserDetail", params: { id: author } });
+};
+
+const suspendTattoo = async (id) => {
+  try {
+    await axios.put("http://localhost:4000/v1/admin/designs/bantattoo/" + id);
+    // Vuelve a pedir la lista de reportes
+    console.log("Tatuaje suspendido con éxito:", id);
+    const response = await axios.get("http://localhost:4000/v1/reports/");
+    reports.value = response.data;
+    alert("Cambio de estado de tatuaje realizado con éxito");
+  } catch (error) {
+    console.error("Error al suspender el tatuaje:", error);
+    alert("Error al suspender el tatuaje");
+  }
+};
+
+const suspendTattooer = async (id) => {
+  try {
+    await axios.put("http://localhost:4000/v1/admin/users/toggle-state/" + id);
+    // Vuelve a pedir la lista de reportes
+    console.log("Tatuador suspendido con éxito:", id);
+    const response = await axios.get("http://localhost:4000/v1/reports/");
+    reports.value = response.data;
+    alert("Cambio de estado de tatuador realizado con éxito");
+  } catch (error) {
+    console.error("Error al suspender el tatuador:", error);
+    alert("Error al suspender el tatuador");
+  }
+};
+
+
+const resolveReport = async (id) => {
+  try {
+    await axios.put("http://localhost:4000/v1/reports/updateReport/" + id);
+    console.log("estado reporte cambiado con éxito:", id);
+    // Vuelve a pedir la lista de reportes
+    const response = await axios.get("http://localhost:4000/v1/reports/");
+    reports.value = response.data;
+    alert("Cambio de estado de reporte realizado con éxito");
+  } catch (error) {
+    console.error("Error al resolver el reporte:", error);
+    alert("Error al resolver el reporte");
+  }
+};
+
 /*
 const reports = ref([
   {
@@ -297,7 +445,8 @@ const allAvailableFilters = computed(() => {
 const filteredReports = computed(() =>
   reports.value.filter(
     (r) =>
-      (r.reason && r.reason.toLowerCase().includes(search.value.toLowerCase())) &&
+      r.reason &&
+      r.reason.toLowerCase().includes(search.value.toLowerCase()) &&
       (filterType.value === "" || r.type === filterType.value) &&
       (selectedFilters.value.length === 0 ||
         selectedFilters.value.every((f) => r.styles.includes(f)))
@@ -321,4 +470,14 @@ const rejectReport = (id) => {
   tattoos.value = tattoos.value.filter((t) => t.id !== id);
   alert(`Reporte ${id} rechazado y eliminado`);
 };
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('es-CL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
 </script>

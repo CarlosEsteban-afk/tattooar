@@ -68,10 +68,22 @@
         <span class="text-sm text-gray-700">{{ description }}</span>
       </div>
       <div class="flex items-center text-xs text-gray-500 gap-2 mb-4">
-        <span>Propietario: {{ author?.fullName || "Desconocido" }}</span>
-        <span>•</span>
-        <span>{{ formatDate(updatedAt) }}</span>
-
+        <span>
+          Propietario:
+          <template
+            v-if="author && typeof author === 'object' && author.fullName"
+          >
+            {{ author.fullName }}
+          </template>
+          <template
+            v-else-if="author && typeof author === 'string' && author !== ''"
+          >
+            {{ author }}
+          </template>
+          <template v-else-if="user_id">{{ user_id }}</template>
+          <template v-else>Desconocido</template>
+        </span>
+        <span>{{ updatedAt }}</span>
       </div>
       <div class="flex gap-2 mt-auto">
         <slot name="actions"></slot>
@@ -83,7 +95,8 @@
 <script setup>
 defineProps({
   name: String,
-  author: String,
+  author: [String, Object],
+  user_id: String,
   description: String,
   styles: {
     type: Array,
