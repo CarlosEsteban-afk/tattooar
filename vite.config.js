@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  base: 'https://carlosesteban-afk.github.io/tattooar/',
+  base: '/tattooar/',
   plugins: [vue(), tailwindcss(), VitePWA({
     registerType: 'autoUpdate',
     injectRegister: false,
