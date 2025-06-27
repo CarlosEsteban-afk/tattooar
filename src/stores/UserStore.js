@@ -1,6 +1,6 @@
 // stores/UserStore.js
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import api from '../services/api'
 
 export const useUserStore = defineStore('user', () => {
@@ -23,6 +23,15 @@ export const useUserStore = defineStore('user', () => {
     return now > tokenExpiration.value
   }
 
+  // Función para configurar el token en los headers de axios
+  const setupAuthHeaders = () => {
+    if (token.value && !isTokenExpired()) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
+    } else {
+      delete api.defaults.headers.common['Authorization']
+    }
+  }
+
   // === Actions ===
  const login = async (email, password) => {
     try {
@@ -33,8 +42,7 @@ export const useUserStore = defineStore('user', () => {
       token.value = receivedToken
       tokenExpiration.value = Date.now() + 60 * 60 * 1000 // 1 hora
 
-      api.defaults.headers.common['Authorization'] = `Bearer ${receivedToken}`
-      console.log('Usuario autenticado:', user.value)
+      setupAuthHeaders()
       return user.value
     } catch (err) {
       console.error('Error al iniciar sesión:', err)
@@ -46,7 +54,7 @@ export const useUserStore = defineStore('user', () => {
     user.value = null
     token.value = null
     tokenExpiration.value = null
-    delete api.defaults.headers.common['Authorization']
+    setupAuthHeaders()
   }
 
   const refreshToken = async () => {
@@ -58,6 +66,15 @@ export const useUserStore = defineStore('user', () => {
     // tokenExpiration.value = Date.now() + data.expiresIn
     console.log('Token refreshed (simulado)')
   }
+
+  // Configurar headers después de que se haya restaurado el estado
+  const initializeStore = async () => {
+    await nextTick()
+    setupAuthHeaders()
+  }
+
+  // Inicializar el store
+  initializeStore()
 
   return {
     user,
@@ -73,7 +90,9 @@ export const useUserStore = defineStore('user', () => {
 
     login,
     logout,
-    refreshToken
+    refreshToken,
+    setupAuthHeaders,
+    initializeStore
   }
 }, {
   persist: {
