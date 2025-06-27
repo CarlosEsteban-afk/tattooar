@@ -4,19 +4,23 @@ import SearchbarMultiselect from '../components/SearchbarMultiselect.vue'
 
 const props = defineProps({
   visible: Boolean,
-  modelValue: Array
+  modelValue: {
+    type: Array,
+    default: () => []  // Valor por defecto para evitar undefined
+  }
 })
 
-const emit = defineEmits(['close', 'update:modelValue'])
+const emit = defineEmits(['close', 'confirm'])
 
-const selected = ref([])
+const styles = ref([...props.modelValue || []])  // Protegemos el spread contra undefined
 
-watch(() => props.modelValue, (val) => {
-  selected.value = [...val]
+watch(() => props.initial, (val) => {
+  styles.value = [...(val || [])]  // Protegemos el spread contra undefined
 }, { immediate: true })
 
-function confirm() {
-  emit('update:modelValue', selected.value)
+
+function confirmSelection() {
+  emit('confirm', styles.value)
   emit('close')
 }
 </script>
@@ -56,15 +60,15 @@ function confirm() {
                 'Geométrico', 'Acuarela', 'Blackwork', 'Minimalista',
                 'Fineline', 'Lettering'
               ]"
-              v-model="selected"
+              v-model="styles"
               placeholder="Buscar estilo..."
-              accent="blue"
+              accent="purple"
               empty-message="Los estilos seleccionados aparecerán aquí"
             />
           </div>
 
           <button
-            @click="confirm"
+            @click="confirmSelection"
             class="w-full bg-purple-900 text-white py-2 rounded-lg mt-4 hover:bg-purple-700"
           >
             Confirmar

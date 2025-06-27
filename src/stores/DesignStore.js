@@ -82,5 +82,6 @@ export const useTattooStore = defineStore("tattoos", () => {
     createTattoo,
     updateTattoo,
     deleteTattoo,
+    getTattooById,
   };
 });

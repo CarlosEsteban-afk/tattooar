@@ -7,6 +7,10 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import 'flowbite';
 
 const app = createApp(App)
+const token = localStorage.getItem('token');
+if (token) {
+  api.defaults.headers.common.Authorization = `Bearer ${token}`;
+}
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)

@@ -85,7 +85,7 @@
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 
 const props = defineProps({
-  modelValue: { type: Array, required: true },
+  modelValue: { type: Array, required: true, default: () => [] },
   options: { type: Array, required: true },
   placeholderInput: { type: String, default: 'Buscar...' },
   placeholderBadges: { type: String, default: 'Seleccionados aparecerán aquí' },

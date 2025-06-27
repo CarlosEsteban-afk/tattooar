@@ -9,26 +9,26 @@
       <!-- Tatuadores Section -->
       <div class="flex flex-col justify-center">
         <p class="font-bold text-center">Tatuadores</p>
-        <Searchbar class="p-4" />
+        <Searchbar class="p-4" @search="fetchTattooers" />
       </div>
       <!-- Grid Section -->
       <div>
-        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-2">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
           <div
             v-for="(item, index) in tattooArtists"
             :key="'tatuador-' + index"
             class="relative cursor-pointer"
-            @click="gotoArtistProfile(item.id)"
+            @click="gotoArtistProfile(item._id)"
           >
             <img
-              :src="item.image"
-              :alt="item.title"
+              :src="item.profileImageUrl || '/assets/avatar.png'"
+              :alt="item.username"
               class="object-cover w-full h-32 shadow-sm"
             />
             <p
               class="absolute bottom-1 left-1 text-white bg-black bg-opacity-50 px-2 rounded text-xs"
             >
-              {{ item.title }}
+              {{ item.username }}
             </p>
           </div>
         </div>
@@ -38,31 +38,36 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import TopBanner from '../components/TopBanner.vue'
 import Searchbar from '../components/Searchbar.vue'
+import api from '../services/api'
 
 const router = useRouter()
+const tattooArtists = ref([])
 
 const gotoArtistProfile = (id) => {
   router.push({ name: 'TattooProfile', params: { id } })
 }
 
-//Imágenes de ejemplo para el perfil del tatuador
-const tattooArtists = [
-  { id: 1, title: 'Tatuador 1', image: '/assets/artist1.jpg' },
-  { id: 2, title: 'Tatuador 2', image: '/assets/artist2.jpg' },
-  { id: 3, title: 'Tatuador 3', image: '/assets/artist3.jpg' },
-  { id: 4, title: 'Tatuador 4', image: '/assets/artist4.jpg' },
-  { id: 5, title: 'Tatuador 5', image: '/assets/artist5.jpg' },
-  { id: 6, title: 'Tatuador 6', image: '/assets/artist6.jpg' },
-  { id: 7, title: 'Tatuador 7', image: '/assets/artist7.jpg' },
-  { id: 8, title: 'Tatuador 8', image: '/assets/artist8.jpg' },
-  { id: 9, title: 'Tatuador 9', image: '/assets/artist9.jpg' },
-  { id: 10, title: 'Tatuador 10', image: '/assets/artist10.jpg' },
-  { id: 11, title: 'Tatuador 11', image: '/assets/artist11.jpg' },
-  { id: 12, title: 'Tatuador 12', image: '/assets/artist12.jpg' },
-]
+const fetchTattooers = async (search = '') => {
+  try {
+    const { data } = await api.get('/users/tattooers', {
+      params: { search }
+    })
+    tattooArtists.value = data
+  } catch (error) {
+    console.error('Error al cargar tatuadores:', error)
+  }
+}
+
+onMounted(() => {
+  fetchTattooers()
+})
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Puedes agregar estilos para la grid si deseas */
+</style>
+Z

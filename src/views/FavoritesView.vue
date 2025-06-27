@@ -13,9 +13,9 @@
         <div class="grid grid-cols-3 gap-2 max-w-md mx-auto">
           <div v-for="(tattoo, index) in favoriteTattoos" :key="'favorite-' + index" class="relative cursor-pointer"
             @click="gotoArtistProfile(tattoo.id)">
-            <img :src="tattoo.image" :alt="tattoo.title" class="object-cover aspect-square w-full shadow-sm" />
+            <img :src="tattoo.designURL" :alt="tattoo.name" class="object-cover aspect-square w-full shadow-sm" />
             <p class="absolute bottom-1 left-1 text-white bg-black bg-opacity-50 px-2 rounded text-xs">
-              {{ tattoo.title }}
+              {{ tattoo.name }}
             </p>
           </div>
 

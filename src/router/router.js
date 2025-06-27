@@ -31,7 +31,7 @@ const routes = [
   { path: "/", name: "Home", component: HomeView },
 
   // Solo para usuarios invitados
-  { path: "/login", name: "Login", component: LoginView, meta: { guestOnly: true } },
+  { path: "/login", name: "Login", component: LoginView },
   { path: "/register", name: "Register", component: RegisterView, meta: { guestOnly: true } },
 
   {

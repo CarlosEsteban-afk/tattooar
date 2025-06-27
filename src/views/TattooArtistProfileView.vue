@@ -60,21 +60,20 @@
                 <div class="mt-2">
                   <p class="text-sm pb-1">Contacto</p>
                   <div class="flex items-center gap-1 flex-wrap">
-                    <div class="flex items-center gap-1 text-sm bg-purple-800 text-white pb-0.5 px-2 rounded-full">
+                    <a v-if="profileUser?.socialMedia?.whatsapp" :href="`https://${profileUser.socialMedia.whatsapp}`"
+                      target="_blank"
+                      class="flex items-center gap-1 text-sm bg-purple-800 text-white pb-0.5 px-2 rounded-full">
                       <MessageCircle class="w-4 h-4" />
                       <span>WhatsApp</span>
-                    </div>
-                    <div class="flex items-center gap-1 text-sm bg-purple-800 text-white pb-0.5 px-2 rounded-full">
+                    </a>
+
+                    <a v-if="profileUser?.socialMedia?.instagram"
+                      :href="`https://${profileUser.socialMedia.instagram}`"
+                      target="_blank"
+                      class="flex items-center gap-1 text-sm bg-purple-800 text-white pb-0.5 px-2 rounded-full">
                       <Instagram class="w-4 h-4" />
                       <span>Instagram</span>
-                    </div>
-                    <div class="flex items-center pl-1 gap-1 rounded-full">
-                      <button v-if="canReport" @click="showReportModal = true"
-                        class="flex z-10 bottom-0 right-0 hover:bg-red-500 text-red-500 items-center justify-center transition"
-                        title="Reportar usuario">
-                        <Flag class="w-4 h-4" />
-                      </button>
-                    </div>
+                    </a>
                   </div>
                 </div>
 
@@ -101,7 +100,7 @@
                 <div v-for="(item, index) in disponibles" :key="'disponible-' + index" class="relative">
                   <img :src="item.designURL" :alt="item.name" class="object-cover w-full h-32 rounded-lg shadow-md" />
                   <p class="absolute bottom-1 left-1 text-white bg-black bg-opacity-50 px-2 rounded text-xs">
-                    {{ item.title }}
+                    {{ item.name }}
                   </p>
                 </div>
               </div>
@@ -115,9 +114,9 @@
               </div>
               <div class="grid grid-cols-1 min-[360px]:grid-cols-3 gap-4 max-h-[18rem] overflow-y-auto scrollbar-hide">
                 <div v-for="(item, index) in portafolio" :key="'portafolio-' + index" class="relative">
-                  <img :src="item.image" :alt="item.title" class="object-cover w-full h-32 rounded-lg shadow-md" />
+                  <img :src="item.designURL" :alt="item.name" class="object-cover w-full h-32 rounded-lg shadow-md" />
                   <p class="absolute bottom-1 left-1 text-white bg-black bg-opacity-50 px-2 rounded text-xs">
-                    {{ item.title }}
+                    {{ item.name }}
                   </p>
                 </div>
               </div>
@@ -129,10 +128,11 @@
   </div>
   <!-- Componentes -->
   <TopBanner />
-  <AddDesignDrawer :visible="showDrawer" @close="showDrawer = false" @save="addNewDesign" />
+  <AddDesignDrawer :visible="showDrawer" :section="currentSection" @close="showDrawer = false" />
   <AddCityDrawer :visible="showCityDrawer" :initial="selectedCities" @close="showCityDrawer = false"
     @confirm="updateSelectedCities" />
-  <AddStyleDrawer :visible="showStyleDrawer" v-model="selectedStyles" @close="showStyleDrawer = false" />
+  <AddStyleDrawer :visible="showStyleDrawer" :initial="selectedStyles" @close="showStyleDrawer = false"
+    @confirm="updateSelectedStyles" />
 
   <!-- Modal desactivación -->
   <div v-if="showDeactivateModal"
@@ -200,7 +200,16 @@ const showCityDrawer = ref(false)
 const showDeactivateModal = ref(false)
 const showReportModal = ref(false)
 
-const currentSection = ref('disponibles')
+const currentSection = ref('')
+
+function handleApiError(err) {
+  if (err.isAuthError) {
+    console.warn('Sesión expirada, redirigiendo al login');
+    router.push({ name: 'Login' });
+  } else {
+    console.error('Error de API:', err);
+  }
+}
 
 function openDrawerFor(section) {
   currentSection.value = section
@@ -215,11 +224,34 @@ function updateSelectedCities(newCities) {
       cities: selectedCities.value,
     }).then(() => {
       console.log('Ciudades actualizadas')
-      userStore.user.cities = selectedCities.value // 🔁 actualiza también el store
-    }).catch(err => {
-      console.log(api.defaults.headers)
-      console.error('Error al actualizar ciudades', err)
-    })
+      userStore.user.cities = selectedCities.value
+    }).catch(handleApiError)
+  }
+}
+
+
+function updateSelectedStyles(newStyles) {
+  selectedStyles.value = [...newStyles]
+
+  if (userStore.user?.id) {
+    api.put(`/users/me`, {
+      styles: selectedStyles.value,
+    }).then(() => {
+      console.log('Estilos actualizados')
+      userStore.user.styles = selectedStyles.value
+    }).catch(handleApiError)
+  }
+}
+function toggleEditAlias() {
+  if (editingAlias.value) {
+    api.put('/users/me', { username: editableUsername.value })
+      .then(() => {
+        userStore.user.username = editableUsername.value
+        editingAlias.value = false
+      })
+      .catch(handleApiError)
+  } else {
+    editingAlias.value = true
   }
 }
 
@@ -237,32 +269,17 @@ function confirmReport() {
   // Acción para reportar usuario
 }
 
-function addNewDesign(design) {
+/* function addNewDesign(design) {
   if (currentSection.value === 'disponibles') {
     disponibles.push(design)
   } else if (currentSection.value === 'portafolio') {
     portafolio.push(design)
   }
 }
+*/
 const editingAlias = ref(false)
 const editableUsername = ref(userStore.user?.username || "Alias");
 
-function toggleEditAlias() {
-  if (editingAlias.value) {
-    // Guardar alias en API
-    api.put('/users/me', { username: editableUsername.value })
-      .then(() => {
-        userStore.user.username = editableUsername.value
-        editingAlias.value = false
-      })
-      .catch(err => {
-        console.error('Error al actualizar alias', err)
-        alert('No se pudo guardar el alias')
-      })
-  } else {
-    editingAlias.value = true
-  }
-}
 
 const isOwnProfile = computed(() =>
   userStore.isTattooer &&
@@ -272,22 +289,13 @@ const canReport = computed(() => userStore.isAuthenticated && !userStore.isAdmin
 const user = computed(() => userStore.user)
 
 const disponibles = ref([]);
-
-const portafolio = [
-  { title: 'Portafolio 1', image: '/assets/portafolio1.jpg' },
-  { title: 'Portafolio 2', image: '/assets/portafolio2.jpg' },
-  { title: 'Portafolio 3', image: '/assets/portafolio3.jpg' },
-  { title: 'Portafolio 4', image: '/assets/portafolio4.jpg' },
-  { title: 'Portafolio 5', image: '/assets/portafolio5.jpg' },
-  { title: 'Portafolio 6', image: '/assets/portafolio6.jpg' },
-  { title: 'Portafolio 7', image: '/assets/portafolio7.jpg' },
-  { title: 'Portafolio 8', image: '/assets/portafolio8.jpg' }
-]
+const portafolio = ref([])
 
 onMounted(async () => {
   try {
     const { data } = await api.get(`/users/${route.params.id}`)
     profileUser.value = data
+    console.log('Perfil cargado:', profileUser.value)
     editableUsername.value = data.username // para mostrar el username correcto
     selectedCities.value = [...(data.cities || [])]
     selectedStyles.value = [...(data.styles || [])]
@@ -298,11 +306,19 @@ onMounted(async () => {
       disponibles.value = designData
     }
     console.log("disponibles", disponibles.value)
+
+    if (data.portfolio?.length) {
+      const ids = data.portfolio.join(',');
+      const { data: portfolioData } = await api.get(`/designs/author/${data._id}/filter?ids=${ids}`);
+      portafolio.value = portfolioData;
+    }
+    console.log("portafolio", portafolio.value);
+
   } catch (error) {
     console.error('Error al cargar perfil o diseños:', error)
   }
   console.log('ID del perfil:', profileUser.value?._id)
-console.log('ID del usuario en sesión:', userStore.user?.id)
+  console.log('ID del usuario en sesión:', userStore.user?.id)
 })
 </script>
 
