@@ -4,73 +4,71 @@
             <!-- Main Content -->
             <div class="flex-1 overflow-auto w-full">
                 <div class="p-4 md:p-4 pt-6 md:pt-6 sm:pt-6">
-                    <!-- Sidebar -->
                     <AdminSidebar @logout="logout" />
                     <TopBar title="Visualización de Estadísticas Generales" :notificationCount="3" />
                     <br />
-                    <div class="">
-                        <!-- Gráficos -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                            <div
-                                class="bg-white rounded-lg p-4 shadow-md flex flex-col items-center border border-gray-200">
-                                <h2 class="text-lg font-semibold mb-2 text-purple-900">Usuarios por Rol</h2>
-                                <canvas ref="usersByRoleChartRef" width="300" height="200"></canvas>
-                            </div>
-                            <div
-                                class="bg-white rounded-lg p-4 shadow-md flex flex-col items-center border border-gray-200">
-                                <h2 class="text-lg font-semibold mb-2 text-purple-900">Tatuajes por Estilo</h2>
-                                <canvas ref="tattoosByStyleChartRef" width="300" height="200"></canvas>
-                            </div>
+
+                    <!-- Ranking de Tatuajes -->
+                    <div class="bg-white rounded-lg p-4 shadow-md border border-gray-200">
+                        <h2 class="text-lg font-semibold mb-4 text-purple-900">Tatuajes con más likes</h2>
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="text-purple-800">
+                                    <th class="px-4 py-2 text-left">Tatuaje</th>
+                                    <th class="px-4 py-2 text-left">Estilo</th>
+                                    <th class="px-4 py-2 text-left">Likes</th>
+                                    <th class="px-4 py-2 text-left">Autor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="tattoo in topTattoos" :key="tattoo.nombre" class="hover:bg-purple-100">
+                                    <td class="px-4 py-2">{{ tattoo.nombre }}</td>
+                                    <td class="px-4 py-2">{{ tattoo.estilos }}</td>
+                                    <td class="px-4 py-2 font-bold text-purple-700">{{ tattoo.likes }}</td>
+                                    <td class="px-4 py-2 flex items-center gap-2">
+                                        <button v-if="tattoo.autorId" @click="goToUserDetail(tattoo.autorId)"
+                                            class="flex items-center gap-2 hover:underline focus:outline-none"
+                                            title="Ver detalle del usuario">
+                                            <img v-if="tattoo.autorImagen" :src="tattoo.autorImagen"
+                                                class="w-8 h-8 rounded-full border" :alt="tattoo.autorNombre" />
+                                            <span>{{ tattoo.autorNombre || 'Sin autor' }}</span>
+                                        </button>
+                                        <span v-else>{{ tattoo.autorNombre || 'Sin autor' }}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Métricas resumen -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                        <div
+                            class="bg-white rounded-lg p-4 shadow-md border border-gray-200 flex flex-col items-center">
+                            <span class="text-2xl font-bold text-purple-800">{{ totalUsers }}</span>
+                            <span class="text-gray-600">Usuarios registrados</span>
                         </div>
-                        <!-- Ranking de Tatuadores -->
-                        <div class="bg-white rounded-lg p-4 shadow-md border border-gray-200">
-                            <h2 class="text-lg font-semibold mb-4 text-purple-900">Tatuajes con más likes</h2>
-                            <table class="min-w-full">
-                                <thead>
-                                    <tr class="text-purple-800">
-                                        <th class="px-4 py-2 text-left">Tatuaje</th>
-                                        <th class="px-4 py-2 text-left">Estilo</th>
-                                        <th class="px-4 py-2 text-left">Likes</th>
-                                        <th class="px-4 py-2 text-left">Autor</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="tattoo in topTattoos" :key="tattoo.id" class="hover:bg-purple-100">
-                                        <td class="px-4 py-2">{{ tattoo.nombre }}</td>
-                                        <td class="px-4 py-2">{{ tattoo.estilos }}</td>
-                                        <td class="px-4 py-2 font-bold text-purple-700">{{ tattoo.likes }}</td>
-                                        <td class="px-4 py-2 flex items-center gap-2">
-                                            <button v-if="tattoo.autorId" @click="goToUserDetail(tattoo.autorId)"
-                                                class="flex items-center gap-2 hover:underline focus:outline-none"
-                                                title="Ver detalle del usuario">
-                                                <img v-if="tattoo.autorImagen" :src="tattoo.autorImagen"
-                                                    class="w-8 h-8 rounded-full border" :alt="tattoo.autorNombre" />
-                                                <span>{{ tattoo.autorNombre || 'Desconocido' }}</span>
-                                            </button>
-                                            <span v-else>{{ tattoo.autorNombre || 'Desconocido' }}</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div
+                            class="bg-white rounded-lg p-4 shadow-md border border-gray-200 flex flex-col items-center">
+                            <span class="text-2xl font-bold text-purple-800">{{ totalTattoos }}</span>
+                            <span class="text-gray-600">Tatuajes publicados</span>
                         </div>
-                        <!-- Otras métricas relevantes -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                            <div
-                                class="bg-white rounded-lg p-4 shadow-md border border-gray-200 flex flex-col items-center">
-                                <span class="text-2xl font-bold text-purple-800">{{ totalUsers }}</span>
-                                <span class="text-gray-600">Usuarios registrados</span>
-                            </div>
-                            <div
-                                class="bg-white rounded-lg p-4 shadow-md border border-gray-200 flex flex-col items-center">
-                                <span class="text-2xl font-bold text-purple-800">{{ totalTattoos }}</span>
-                                <span class="text-gray-600">Tatuajes publicados</span>
-                            </div>
-                            <div
-                                class="bg-white rounded-lg p-4 shadow-md border border-gray-200 flex flex-col items-center">
-                                <span class="text-2xl font-bold text-purple-800">{{ totalLikes }}</span>
-                                <span class="text-gray-600">Likes totales</span>
-                            </div>
+                        <div
+                            class="bg-white rounded-lg p-4 shadow-md border border-gray-200 flex flex-col items-center">
+                            <span class="text-2xl font-bold text-purple-800">{{ totalLikes }}</span>
+                            <span class="text-gray-600">Likes totales</span>
                         </div>
+                    </div>
+
+                    <!-- Gráficos -->
+                    <div class="flex flex-col md:flex-row justify-center items-center gap-8 mb-8 mt-8">
+                      <div class="bg-white rounded-lg p-4 shadow-md flex flex-col items-center border border-gray-200 max-w-sm w-full">
+                        <h2 class="text-lg font-semibold mb-2 text-purple-900">Usuarios por Rol</h2>
+                        <canvas ref="usersByRoleChartRef" width="580" height="480"></canvas>
+                      </div>
+                      <div class="bg-white rounded-lg p-4 shadow-md flex flex-col items-center border border-gray-200 max-w-sm w-full">
+                        <h2 class="text-lg font-semibold mb-2 text-purple-900">Tatuajes por Estilo</h2>
+                        <canvas ref="tattoosByStyleChartRef" width="580" height="480"></canvas>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -87,129 +85,125 @@ import TopBar from '../../components/TopBar.vue'
 import api from '../../services/api'
 import { useUserStore } from '../../stores/UserStore'
 
-const totalUsers = ref(0)
-const totalTattoos = ref(0)
-const totalLikes = ref(0)
-const topTattooers = ref([])
-const topTattoos = ref([])
-const usersByRoleChartRef = ref(null)
-const tattoosByStyleChartRef = ref(null)
 const router = useRouter()
 const userStore = useUserStore()
 const token = userStore.token
 
+const totalUsers = ref(0)
+const totalTattoos = ref(0)
+const totalLikes = ref(0)
+const topTattoos = ref([])
+const userRoles = ref([])
+const designStyles = ref([])
+
+const usersByRoleChartRef = ref(null)
+const tattoosByStyleChartRef = ref(null)
+
+// Traducción de roles
+const roleLabels = {
+  client: "Cliente",
+  tattooer: "Tatuador",
+  admin: "Administrador"
+};
+
+// Traducción de estilos
+const styleLabels = {
+  traditional: "Tradicional",
+  realism: "Realismo",
+  watercolor: "Acuarela",
+  geometric: "Geométrico",
+  minimalist: "Minimalista",
+  neo_traditional: "Neo-tradicional",
+  japanese: "Japonés",
+  blackwork: "Blackwork",
+  fineline: "Fineline",
+  lettering: "Lettering",
+  modern: "Moderno",
+  classic: "Clásico"
+};
+
+function goToUserDetail(id) {
+    router.push({ name: 'UserDetail', params: { id } })
+}
+
 async function fetchDashboardData() {
-    // Fetch users
-    const usersRes = await api.get('admin/users', {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    const users = usersRes.data
-    totalUsers.value = users.length
+    try {
+        const [usersByRoleRes, designsByStyleRes, topLikedDesignsRes, totalTattoosRes] = await Promise.all([
+            api.get('/metrics/users-by-role'),
+            api.get('/metrics/designs-by-style'),
+            api.get('/metrics/top-liked-designs'),
+            api.get('/metrics/total-tattoos')
+        ])
 
-    // Contar roles
-    const countByRole = { Tatuador: 0, Cliente: 0 }
-    users.forEach(u => {
-        if (u.rol === 'Tatuador') countByRole.Tatuador++
-        if (u.rol === 'Cliente') countByRole.Cliente++
-    })
+        userRoles.value = usersByRoleRes.data
+        designStyles.value = designsByStyleRes.data
 
-    // Ranking de tatuadores por likes (simulado desde campo likes)
-    const tattooers = users.filter(u => u.rol === 'Tatuador')
-    topTattooers.value = [...tattooers]
-        .sort((a, b) => (b.likes || 0) - (a.likes || 0))
-        .slice(0, 3)
+        // Calcular totales
+        totalUsers.value = userRoles.value.reduce((acc, r) => acc + r.count, 0)
+        totalTattoos.value = totalTattoosRes.data.total
 
-    // Fetch tattoos
-    const tattoosRes = await api.get('/tattoos', {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    const tattoos = tattoosRes.data
-    totalTattoos.value = tattoos.length
+        // Top tatuajes con autor
+        topTattoos.value = topLikedDesignsRes.data.map(d => ({
+            nombre: d.name,
+            estilos: Array.isArray(d.styles)
+                ? d.styles.map(s => styleLabels[s] || s).join(', ')
+                : (styleLabels[d.styles] || d.styles),
+            likes: d.likes,
+            autorNombre: d.author?.fullName || 'Sin autor',
+            autorImagen: d.author?.profileImageUrl || null,
+            autorId: d.author?._id || null
+        }))
 
-    // Contar estilos de tatuajes
-    const styleCount = {}
-    tattoos.forEach(t => {
-        const estilos = Array.isArray(t.estilos)
-            ? t.estilos
-            : (t.estilos || '').split(',').map(e => e.trim()).filter(Boolean)
-        estilos.forEach(estilo => {
-            styleCount[estilo] = (styleCount[estilo] || 0) + 1
-        })
-    })
+        totalLikes.value = topTattoos.value.reduce((acc, t) => acc + (t.likes || 0), 0)
 
-    // Likes totales
-    totalLikes.value = tattoos.reduce((sum, t) => sum + (t.likes || 0), 0)
+        await nextTick()
 
-    // Top tatuajes con más likes
-    topTattoos.value = [...tattoos]
-        .sort((a, b) => (b.likes || 0) - (a.likes || 0))
-        .slice(0, 5)
-        .map(tattoo => {
-            // Busca el autor por id o nombre (ajusta según tu estructura)
-            const autor = users.find(u =>
-                u.rol === 'Tatuador' && u.id === tattoo.autorId
-            )
-            return {
-                ...tattoo,
-                autorNombre: autor ? autor.nombre : 'Desconocido',
-                autorImagen: autor ? autor.imagen : null
-            }
-        })
+        // Import Chart.js y renderiza los gráficos
+        const { default: Chart } = await import('chart.js/auto')
 
-    // Render gráficos
-    await nextTick()
-    import('chart.js/auto').then(({ default: Chart }) => {
         // Usuarios por rol
         if (usersByRoleChartRef.value) {
             new Chart(usersByRoleChartRef.value, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Tatuadores', 'Clientes'],
+                    labels: userRoles.value.map(r => `${roleLabels[r._id] || r._id} (${r.count})`),
                     datasets: [{
-                        data: [countByRole.Tatuador, countByRole.Cliente],
-                        backgroundColor: ['#7B6EAD', '#2E076B'],
+                        data: userRoles.value.map(r => r.count),
+                        backgroundColor: ['#7B6EAD', '#2E076B', '#B1A9D1']
                     }]
                 },
-                options: {
-                    plugins: {
-                        legend: { display: true }
-                    }
-                }
+                options: { plugins: { legend: { display: true } } }
             })
         }
-        // Tatuajes por estilo
+
+        // Diseños por estilo
         if (tattoosByStyleChartRef.value) {
             new Chart(tattoosByStyleChartRef.value, {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(styleCount),
+                    labels: designStyles.value.map(s => `${styleLabels[s._id] || s._id} (${s.count})`),
                     datasets: [{
                         label: 'Cantidad',
-                        data: Object.values(styleCount),
-                        backgroundColor: [
-                            '#7B6EAD', '#2E076B', '#B1A9D1', '#A3E635', '#F472B6'
-                        ]
+                        data: designStyles.value.map(s => s.count),
+                        backgroundColor: ['#7B6EAD', '#2E076B', '#B1A9D1', '#A3E635', '#F472B6']
                     }]
                 },
                 options: {
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
                 }
             })
         }
-    })
-}
-
-function goToUserDetail(id) {
-    router.push({ name: 'UserDetail', params: { id } })
+    } catch (error) {
+        console.error('Error cargando métricas:', error)
+        if (error.response) {
+            console.error('Detalles del error:', {
+                status: error.response.status,
+                data: error.response.data,
+                headers: error.response.headers
+            })
+        }
+    }
 }
 
 onMounted(() => {
@@ -217,5 +211,7 @@ onMounted(() => {
     fetchDashboardData()
 })
 
-function logout() { }
+function logout() {
+    // lógica de logout
+}
 </script>
