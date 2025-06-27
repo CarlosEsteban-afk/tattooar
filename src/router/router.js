@@ -17,7 +17,6 @@ import FavoritesView from "../views/FavoritesView.vue";
 import UserProfileView from "../views/UserProfileView.vue";
 import TattooArtistsView from "../views/TattooArtistsView.vue";
 import AboutView from "../views/AboutView.vue";
-import ReportView from "../views/ReportView.vue";
 import CodeVerificationRegisterView from "../views/login/CodeVerificationRegisterView.vue";
 import SendCodeVerificationRegisterView from "../views/login/SendCodeVerificationRegisterView.vue";
 import FinishedRegisterView from "../views/login/FinishedRegisterView.vue";
@@ -128,11 +127,6 @@ const routes = [
     path: "/about",
     name: "About",
     component: AboutView
-  },
-  {
-    path: "/report/",
-    name: "Report",
-    component: ReportView
   },
 
   // Registro y verificación

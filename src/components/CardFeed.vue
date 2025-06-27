@@ -4,7 +4,7 @@
                 class="p-3 justify-between flex items-center cursor-pointer hover:bg-gray-100 transition">
                 <div class="flex items-center">
                     <img src="/assets/avatar.png" alt="Avatar" class="rounded-full w-6 h-6" />
-                    <h2 class="text-xs text-gray-600 pl-2">{{ author.username || author.fullName }}</h2>
+                    <h2 class="text-xs text-gray-600 pl-2">{{ author?.username || author?.fullName }}</h2>
                 </div>
                 <div class="flex items-center pl-1 gap-1 rounded-full">
                     <button @click.stop="showReportModal = true"
@@ -20,6 +20,12 @@
                     class="absolute top-2 right-2 bg-white border border-gray-300 rounded-full p-2 shadow hover:bg-gray-100 transition"
                     title="Ver en AR">
                     AR
+                </div>
+                <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                    <span v-for="(style, idx) in styles" :key="'style-' + idx"
+                        class="text-white bg-black/50 px-1 rounded text-[12px]">
+                        {{ style }}
+                    </span>
                 </div>
             </div>
             <div class="p-3 flex justify-between items-start">
@@ -43,8 +49,7 @@
                 <p class="text-sm text-gray-600 mb-2">
                     Ingresa el motivo del reporte. Esta acción enviará una notificación al administrador.
                 </p>
-                <textarea
-                    v-model="reportReason"
+                <textarea v-model="reportReason"
                     class="w-full h-24 p-2 mb-2 text-md border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500"
                     placeholder="Escribe tu motivo aquí..."></textarea>
                 <div class="flex justify-end space-x-4">
@@ -76,7 +81,8 @@ const props = defineProps({
     title: String,
     author: { type: Object },
     desc: { type: String, default: 'Descripción del tatuaje' },
-    image: { type: String, default: '/assets/default-tattoo.jpg' }
+    image: { type: String, default: '/assets/default-tattoo.jpg' },
+    styles: { type: Array, default: () => [] }
 })
 
 const showReportModal = ref(false)

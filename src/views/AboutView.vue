@@ -24,11 +24,6 @@
         <!-- Footer -->
         <div class="space-y-4">
             <button
-                @click="$router.push('/report')"
-                class="w-full h-10 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors">
-                Reportar incidente
-            </button>
-            <button
                 @click="showModal = true"
                 class="w-full h-10 bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
                 Eliminar cuenta

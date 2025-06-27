@@ -18,6 +18,7 @@
       :author="tattoo.author"
       :desc="tattoo.description"
       :image="tattoo.designURL"
+      :styles="tattoo.styles || []"
       />
     </div>
   
