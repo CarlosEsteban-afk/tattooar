@@ -265,13 +265,20 @@ import { ref, computed, onMounted } from "vue";
 import tatuadoraImg from "../../assets/tatuadora.jpg";
 import doc from "../../assets/tatu.jpg";
 import reclamo from "../../assets/reclamo.webp";
+import { useUserStore } from "../../stores/UserStore";
 
+const userStore = useUserStore();
+const token = userStore.token;
 const reports = ref([]);
 const router = useRouter();
 
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:4000/v1/reports/");
+    const response = await axios.get("http://localhost:4000/v1/reports/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const reportsData = response.data;
     // Para cada reporte, busca el nombre del usuario si hay user_id
     const reportsWithNames = await Promise.all(
