@@ -27,12 +27,15 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useTattooStore } from '../stores/DesignStore'
+import { useFavoritesStore } from '../stores/FavoritesStore'
 import Searchbar from '../components/Searchbar.vue'
 import SidebarButton from '../components/SidebarButton.vue'
 import Sidebar from '../components/Sidebar.vue'
 import CardFeed from '../components/CardFeed.vue'
 
 const tattooStore = useTattooStore()
+const favoritesStore = useFavoritesStore()
+
 const searchTerm = ref('')
 
 // Sincronizar búsqueda con el store
@@ -42,10 +45,9 @@ watch(searchTerm, (val) => {
 
 // Aplicar filtros desde el drawer
 function applyFilters({ cities, styles }) {
-  tattooStore.cityFilter = cities[0] || ''
-  tattooStore.styleFilter = styles[0] || ''
+  tattooStore.cityFilters = cities
+  tattooStore.styleFilters = styles
 }
-
 // Sidebar
 const showSidebar = ref(false)
 const sidebarRef = ref(null)
@@ -59,10 +61,12 @@ const handleClickOutside = (event) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener('click', handleClickOutside)
-  tattooStore.fetchTattoos() // Fetch tattoos when component mounts
+  await tattooStore.fetchTattoos()
+  await favoritesStore.fetchFavorites() // 💡 Asegúrate de cargar los favoritos al inicio
 })
+
 
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside)
