@@ -55,6 +55,7 @@
 
 <script setup>
 import { useUserStore } from "../../stores/UserStore";
+import api from "../../services/api";
 
 import axios from "axios";
 import Topbar from '../../components/TopBar.vue'
@@ -74,7 +75,7 @@ const itemsPerPage = 10
 
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:4000/v1/logs/",{
+    const response = await api.get("/logs/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -166,6 +166,7 @@ import AdminSidebar from "../../components/AdminSidebar.vue";
 import { ref, computed, onMounted } from "vue";
 import TatuIMG from "../../assets/tatu.jpg";
 import { useUserStore } from "../../stores/UserStore";
+import api from "../../services/api";
 
 const userStore = useUserStore();
 const token = userStore.token;
@@ -177,7 +178,7 @@ const tattoos = ref([]);
 onMounted(async () => {
   try {
     console.log("Token utilizado:", token);
-    const response = await axios.get("http://localhost:4000/v1/admin/designs", {
+    const response = await api.get("admin/designs", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -203,9 +204,9 @@ const goToProfile = (author) => {
 
 const suspendTattoo = async (id) => {
   try {
-    await axios.put("http://localhost:4000/v1/admin/designs/bantattoo/" + id);
+    await api.put(`/admin/designs/bantattoo/${id}`);
     // Vuelve a pedir la lista de tatuajes
-    const response = await axios.get("http://localhost:4000/v1/admin/designs");
+    const response = await api.get("/admin/designs");
     tattoos.value = response.data;
   } catch (error) {
     console.error("Error al suspender el tatuaje:", error);
