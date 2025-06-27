@@ -266,6 +266,7 @@ import tatuadoraImg from "../../assets/tatuadora.jpg";
 import doc from "../../assets/tatu.jpg";
 import reclamo from "../../assets/reclamo.webp";
 import { useUserStore } from "../../stores/UserStore";
+import api from "../../services/api";
 
 const userStore = useUserStore();
 const token = userStore.token;
@@ -274,7 +275,7 @@ const router = useRouter();
 
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:4000/v1/reports/", {
+    const response = await api.get("/reports/", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -285,7 +286,7 @@ onMounted(async () => {
       reportsData.map(async (report) => {
         if (report.user_id) {
           try {
-            const userRes = await axios.get(`http://localhost:4000/v1/users/${report.user_id}`);
+            const userRes = await api.get(`/users/${report.user_id}`);
             return { ...report, author: userRes.data.fullName };
           } catch (e) {
             return { ...report, author: "Desconocido" };
@@ -310,10 +311,10 @@ const goToProfile = (author) => {
 
 const suspendTattoo = async (id) => {
   try {
-    await axios.put("http://localhost:4000/v1/admin/designs/bantattoo/" + id);
+    await api.put(`/admin/designs/bantattoo/${id}`);
     // Vuelve a pedir la lista de reportes
     console.log("Tatuaje suspendido con éxito:", id);
-    const response = await axios.get("http://localhost:4000/v1/reports/");
+    const response = await api.get("/reports/");
     reports.value = response.data;
     alert("Cambio de estado de tatuaje realizado con éxito");
   } catch (error) {
@@ -324,10 +325,10 @@ const suspendTattoo = async (id) => {
 
 const suspendTattooer = async (id) => {
   try {
-    await axios.put("http://localhost:4000/v1/admin/users/toggle-state/" + id);
+    await api.put(`/admin/users/toggle-state/${id}`);
     // Vuelve a pedir la lista de reportes
     console.log("Tatuador suspendido con éxito:", id);
-    const response = await axios.get("http://localhost:4000/v1/reports/");
+    const response = await api.get("/reports/");
     reports.value = response.data;
     alert("Cambio de estado de tatuador realizado con éxito");
   } catch (error) {
@@ -336,13 +337,12 @@ const suspendTattooer = async (id) => {
   }
 };
 
-
 const resolveReport = async (id) => {
   try {
-    await axios.put("http://localhost:4000/v1/reports/updateReport/" + id);
+    await api.put(`/reports/updateReport/${id}`);
     console.log("estado reporte cambiado con éxito:", id);
     // Vuelve a pedir la lista de reportes
-    const response = await axios.get("http://localhost:4000/v1/reports/");
+    const response = await api.get("/reports/");
     reports.value = response.data;
     alert("Cambio de estado de reporte realizado con éxito");
   } catch (error) {
