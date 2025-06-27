@@ -20,14 +20,16 @@
 
             <div class="mb-4">
               <label for="city-select" class="block mb-1 text-sm font-medium text-gray-700">Ciudad</label>
-              <SearchbarMultiSelect id="city-select" :options="cityOptions" v-model="selectedCities" placeholder="Buscar ciudad..."
-                accent="purple" empty-message="Las ciudades seleccionadas aparecerán aquí" />
+              <SearchbarMultiSelect id="city-select" :options="cityOptions" v-model="selectedCities"
+                placeholder="Buscar ciudad..." accent="purple"
+                empty-message="Las ciudades seleccionadas aparecerán aquí" />
             </div>
 
             <div class="mb-4">
               <label for="style-select" class="block mb-1 text-sm font-medium text-gray-700">Estilo</label>
-              <SearchbarMultiSelect id="style-select" :options="styleOptions" v-model="selectedStyles" placeholder="Buscar estilo..."
-                accent="purple" empty-message="Los estilos seleccionados aparecerán aquí" />
+              <SearchbarMultiSelect id="style-select" :options="styleOptions" v-model="selectedStyles"
+                placeholder="Buscar estilo..." accent="purple"
+                empty-message="Los estilos seleccionados aparecerán aquí" />
             </div>
           </div>
 
@@ -60,8 +62,9 @@ const cityOptions = [
 ]
 
 const styleOptions = [
-  'Tradicional', 'Realista', 'Acuarela', 'Geométrico', 'Minimalista', 
-  'Neo-tradicional', 'Japonés', 'Blackwork', 'Fineline', 'Lettering'
+  'Realismo', 'Tradicional', 'Neo Tradicional', 'Tribal',
+  'Geométrico', 'Acuarela', 'Blackwork', 'Minimalista',
+  'Fineline', 'Lettering'
 ]
 
 function confirm() {

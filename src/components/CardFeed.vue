@@ -47,7 +47,8 @@
                     class="w-full h-24 p-2 mb-2 text-md border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500"
                     placeholder="Escribe tu motivo aquí..."></textarea>
                 <div class="flex justify-end space-x-4">
-                    <button @click="showReportModal = false" class="px-2 text-sm text-red-600 rounded hover:bg-gray-300">
+                    <button @click="showReportModal = false"
+                        class="px-2 text-sm text-red-600 rounded hover:bg-gray-300">
                         Cancelar
                     </button>
                     <button @click="confirmReport"
@@ -59,63 +60,59 @@
         </div>
     </template>
 
-    <script setup>
-    import { useRouter } from 'vue-router';
-    import { ref, computed } from 'vue';
-    import { Flag, Heart } from 'lucide-vue-next'
-    import { useFavoritesStore } from '../stores/FavoritesStore';
-    import ARButton from './ARButton.vue';
+<script setup>
+import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
+import { Flag, Heart } from 'lucide-vue-next'
+import { useFavoritesStore } from '../stores/FavoritesStore';
 
-    const favoritesStore = useFavoritesStore()
-    const router = useRouter()
+const favoritesStore = useFavoritesStore()
+const router = useRouter()
 
-    const isLiked = computed(() => favoritesStore.isFavorite(props.id))
+const props = defineProps({
+    id: { type: String, required: true },
+    title: String,
+    author: { type: Object },
+    desc: { type: String, default: 'Descripción del tatuaje' },
+    image: { type: String, default: '/assets/default-tattoo.jpg' }
+})
 
-    const toggleLike = () => {
-        favoritesStore.toggleFavorite(props.id)
+const showReportModal = ref(false)
+
+const isLiked = computed(() => favoritesStore.isFavorite(props.id))
+
+const toggleLike = () => {
+    favoritesStore.toggleFavorite(props.id)
+}
+
+const confirmReport = () => {
+    // enviar reporte al backend
+    console.log('Reporte enviado')
+    showReportModal.value = false
+}
+
+const goToProfile = () => {
+    router.push({ name: 'TattooProfile', params: { id: props.author._id } })
+}
+
+const openARView = () => {
+    router.push({ name: 'ARView', params: { id: props.id } })
+}
+
+onMounted(() => {
+    if (!favoritesStore.favorites.length) {
+        favoritesStore.fetchFavorites()
     }
+})
+</script>
 
-    const showReportModal = ref(false)
-    const confirmReport = () => {
-        // Aquí puedes agregar la lógica para enviar el reporte al administrador
-        console.log('Reporte enviado');
-        showReportModal.value = false;
-    }
-    const props = defineProps({
-        id: {
-            type: String,
-            required: true
-        },
-        title: String,
-        author: { type: Object },
-        desc: {
-            type: String,
-            default: 'Descripción del tatuaje'
-        },
-        image: {
-            type: String,
-            default: '/assets/default-tattoo.jpg'
-        }
-    })
-    const goToProfile = () => {
-        router.push({ name: 'TattooProfile', params: { id: props.author._id } })
-    }
 
-    const openARView = () => {
-        router.push({
-            name: 'ARView',
-            params: { id: props.id },
-        })
-    }
-
-    </script>
-
-    <style scoped>
-    .card {
-        width: 340px;
-        height: fit-content;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        justify-self: center;
-    }
-    </style>
+<style scoped>
+.card {
+    width: 340px;
+    height: fit-content;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    justify-self: center;
+}
+</style>

@@ -5,24 +5,26 @@ import api from "../services/api";
 export const useTattooStore = defineStore("tattoos", () => {
   // Estado
   const tattoos = ref([]);
-  const styleFilter = ref("");
-  const cityFilter = ref("");
+  const styleFilters = ref([]);
+  const cityFilters = ref([]);
   const searchQuery = ref("");
 
   // Getters filtrados
   const filteredTattoos = computed(() => {
-    return tattoos.value.filter((t) => {
-      const matchesStyle = styleFilter.value
-        ? t.style === styleFilter.value
-        : true;
-      const matchesCity = cityFilter.value ? t.city === cityFilter.value : true;
-      const text = `${t.title} ${t.desc}`.toLowerCase();
-      const matchesSearch = searchQuery.value
-        ? text.includes(searchQuery.value.toLowerCase())
-        : true;
-      return matchesStyle && matchesCity && matchesSearch;
-    });
-  });
+    return tattoos.value.filter(tattoo => {
+      const matchesSearch = tattoo.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+        || tattoo.description.toLowerCase().includes(searchQuery.value.toLowerCase())
+
+      const matchesCity = cityFilters.value.length === 0 ||
+        (tattoo.author?.cities || []).some(city => cityFilters.value.includes(city))
+
+      // Verifica estilos
+      const matchesStyle = styleFilters.value.length === 0 ||
+        (tattoo.styles || []).some(style => styleFilters.value.includes(style))
+
+      return matchesSearch && matchesCity && matchesStyle
+    })
+  })
 
   // Acciones para integrar con backend
   async function fetchTattoos(params = {}) {
@@ -31,7 +33,7 @@ export const useTattooStore = defineStore("tattoos", () => {
       tattoos.value = response.data;
 
       console.log(tattoos.value);
-      
+
     } catch (error) {
       console.error("Error fetching tattoos:", error);
       // Optionally, handle error state here (e.g., show notification)
@@ -73,8 +75,8 @@ export const useTattooStore = defineStore("tattoos", () => {
 
   return {
     tattoos,
-    styleFilter,
-    cityFilter,
+    styleFilters,
+    cityFilters,
     searchQuery,
     filteredTattoos,
     fetchTattoos,
