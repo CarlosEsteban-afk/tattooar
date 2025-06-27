@@ -5,8 +5,7 @@
                 <div class="w-full px-2 sm:px-4 md:px-4 p-4 md:p-6 pt-6 md:pt-6 sm:pt-6">
                     <!-- Sidebar y TopBar -->
                     <AdminSidebar @logout="logout" />
-                    <TopBar :title="`Editar Usuario: ${user.nombre} ${user.apellido} (${user.alias})`"
-                        :notificationCount="3" />
+                    <TopBar :title="`Editar Usuario: ${user.fullName}`" :notificationCount="3" />
                     <br />
                     <div class="flex justify-center">
                         <form @submit.prevent="onSubmit"
@@ -19,80 +18,115 @@
                             </button>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
                                 <div>
-                                    <label class="block text-sm font-semibold text-[#2E076B] mb-1">Alias</label>
-                                    <input type="text" v-model="user.alias" required
+                                    <label class="block text-sm font-semibold text-[#2E076B] mb-1">Nombre de
+                                        usuario</label>
+                                    <input type="text" v-model="user.username" required
                                         class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-[#2E076B] mb-1">Correo
                                         electrónico</label>
-                                    <input type="email" v-model="user.correo" required
+                                    <input type="email" v-model="user.email" required
                                         class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-semibold text-[#2E076B] mb-1">Nombre</label>
-                                    <input type="text" v-model="user.nombre" required
-                                        class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-semibold text-[#2E076B] mb-1">Apellido</label>
-                                    <input type="text" v-model="user.apellido" required
+                                    <label class="block text-sm font-semibold text-[#2E076B] mb-1">Nombre
+                                        completo</label>
+                                    <input type="text" v-model="user.fullName" required
                                         class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-[#2E076B] mb-1">Estado</label>
-                                    <select v-model="user.estado" required
+                                    <select v-model="user.status" required
                                         class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition cursor-pointer">
-                                        <option value="Activo">Activo</option>
-                                        <option value="Inactivo">Inactivo</option>
+                                        <option value="active">Activo</option>
+                                        <option value="inactive">Inactivo</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-[#2E076B] mb-1">Rol</label>
-                                    <select v-model="user.rol" required
+                                    <select v-model="user.role" required
                                         class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition cursor-pointer">
-                                        <option value="Cliente">Cliente</option>
-                                        <option value="Tatuador">Tatuador</option>
+                                        <option value="client">Cliente</option>
+                                        <option value="tattooer">Tatuador</option>
+                                        <option value="admin">Administrador</option>
                                     </select>
                                 </div>
                                 <div class="md:col-span-2 flex flex-col md:flex-row md:items-center gap-6">
                                     <div class="flex-1">
-                                        <label class="block text-sm font-semibold text-[#2E076B] mb-1">Imagen de perfil
-                                            (URL)</label>
-                                        <input type="text" v-model="user.imagen" placeholder="https://..."
+                                        <label class="block text-sm font-semibold text-[#2E076B] mb-1">Imagen de perfil</label>
+                                        <input type="file" accept="image/*" @change="onFileChange"
                                             class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
                                     </div>
-                                    <div v-if="user.imagen"
+                                    <div v-if="user.profileImageUrl"
                                         class="flex-shrink-0 flex justify-center items-center bg-purple-50 p-2 rounded-lg border border-purple-200">
-                                        <img :src="user.imagen" alt="Previsualización"
+                                        <img :src="user.profileImageUrl" alt="Previsualización"
                                             class="h-32 w-32 object-cover rounded-full border-4 border-purple-400 shadow" />
                                     </div>
                                 </div>
                                 <!-- Solo para Tatuadores -->
-                                <template v-if="user.rol === 'Tatuador'">
+                                <template v-if="user.role === 'tattooer'">
                                     <div>
-                                        <label class="block text-sm font-semibold text-[#2E076B] mb-1">Estilos
-                                            (separados por coma)</label>
-                                        <input type="text" v-model="user.estilos"
-                                            placeholder="Ej: Realismo, Tradicional"
-                                            class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
+                                        <label class="block text-sm font-semibold text-[#2E076B] mb-1">Estilos</label>
+                                        <multiselect v-model="user.styles" :options="stylesOptions" :multiple="true"
+                                            :close-on-select="false" :clear-on-select="false" :preserve-search="true"
+                                            placeholder="Selecciona uno o más estilos" label="label" track-by="value"
+                                            class="mb-2" />
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-semibold text-[#2E076B] mb-1">Ciudades
-                                            (separadas por coma)</label>
-                                        <input type="text" v-model="user.ciudades"
-                                            placeholder="Ej: Santiago, Valparaíso"
-                                            class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
+                                        <label class="block text-sm font-semibold text-[#2E076B] mb-1">Ciudades</label>
+                                        <multiselect v-model="user.cities" :options="citiesOptions" :multiple="true"
+                                            :close-on-select="false" :clear-on-select="false" :preserve-search="true"
+                                            placeholder="Selecciona una o más ciudades" label="label" track-by="value"
+                                            class="mb-2" />
                                     </div>
                                     <div>
                                         <label class="block text-sm font-semibold text-[#2E076B] mb-1">WhatsApp</label>
-                                        <input type="text" v-model="user.whatsapp" placeholder="Ej: 56912345678"
+                                        <input type="text" v-model="user.socialMedia.whatsapp"
+                                            placeholder="Ej: 56912345678"
                                             class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
                                     </div>
                                     <div>
                                         <label class="block text-sm font-semibold text-[#2E076B] mb-1">Instagram</label>
-                                        <input type="text" v-model="user.instagram" placeholder="Ej: usuario_ig"
+                                        <input type="text" v-model="user.socialMedia.instagram"
+                                            placeholder="Ej: usuario_ig"
                                             class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-[#2E076B] mb-1">Facebook</label>
+                                        <input type="text" v-model="user.socialMedia.facebook"
+                                            placeholder="Ej: usuario_fb"
+                                            class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
+                                    </div>
+                                </template>
+                                <!-- Solo para Clientes -->
+                                <template v-if="user.role === 'client'">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-semibold text-[#2E076B] mb-1">Diseños
+                                            Favoritos</label>
+                                        <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                            <p class="text-sm text-gray-600">
+                                                {{ user.favorites ? user.favorites.length : 0 }} diseños favoritos
+                                            </p>
+                                            <p class="text-xs text-gray-500 mt-1">
+                                                Los favoritos se gestionan desde la vista de usuario
+                                            </p>
+                                        </div>
+                                    </div>
+                                </template>
+                                <!-- Solo para Administradores -->
+                                <template v-if="user.role === 'admin'">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-semibold text-[#2E076B] mb-1">Información de
+                                            Administrador</label>
+                                        <div class="bg-purple-50 p-3 rounded-lg border border-purple-200">
+                                            <p class="text-sm text-purple-700">
+                                                Usuario con privilegios de administrador
+                                            </p>
+                                            <p class="text-xs text-purple-600 mt-1">
+                                                Acceso completo al panel de administración
+                                            </p>
+                                        </div>
                                     </div>
                                 </template>
                             </div>
@@ -124,6 +158,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <div v-if="uploading" class="text-xs text-gray-500">Subiendo imagen...</div>
                             <div class="flex justify-end mt-8">
                                 <button type="submit"
                                     class="px-6 py-2 bg-[#2E076B] text-white rounded-lg font-semibold hover:bg-purple-800 transition shadow">
@@ -139,28 +174,58 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import TopBar from '../../components/TopBar.vue'
 import api from '../../services/api'
+import Multiselect from 'vue-multiselect'
 
 const router = useRouter()
 const showConfirmModal = ref(false)
 const showSuccessModal = ref(false)
 const user = ref({
-    alias: '',
-    correo: '',
-    nombre: '',
-    apellido: '',
-    estado: 'Activo',
-    rol: 'Cliente',
-    imagen: '',
-    estilos: '',
-    ciudades: '',
-    whatsapp: '',
-    instagram: ''
+    username: '',
+    email: '',
+    fullName: '',
+    status: 'active',
+    role: 'client',
+    profileImageUrl: '',
+    styles: [],
+    cities: [],
+    socialMedia: {
+        whatsapp: '',
+        instagram: '',
+        facebook: ''
+    },
+    favorites: [],
+    designs: [],
+    portfolio: [],
+    reportCount: 0
 })
+
+const stylesOptions = [
+    { value: 'moderno', label: 'Moderno' },
+    { value: 'tradicional', label: 'Tradicional' },
+    { value: 'realista', label: 'Realista' },
+    { value: 'geométrico', label: 'Geométrico' },
+    { value: 'minimalista', label: 'Minimalista' },
+    { value: 'japones', label: 'Japonés' },
+    { value: 'tribal', label: 'Tribal' },
+    { value: 'acuarela', label: 'Acuarela' },
+    { value: 'blackwork', label: 'Blackwork' }
+]
+
+const citiesOptions = [
+    { value: 'Santiago', label: 'Santiago' },
+    { value: 'Valparaíso', label: 'Valparaíso' },
+    { value: 'Concepción', label: 'Concepción' },
+    { value: 'La Serena', label: 'La Serena' },
+    { value: 'Antofagasta', label: 'Antofagasta' },
+    { value: 'Temuco', label: 'Temuco' },
+    { value: 'Arica', label: 'Arica' },
+    { value: 'Puerto Montt', label: 'Puerto Montt' }
+]
 
 // Simulate fetching user data based on ID passed in route params
 const userId = router.currentRoute.value.params.id
@@ -171,31 +236,55 @@ async function fetchUser() {
         const response = await api.get(`admin/users/${userId}`)
         const data = response.data
         user.value = {
-            alias: data.alias || '',
-            correo: data.correo || '',
-            nombre: data.nombre || '',
-            apellido: data.apellido || '',
-            estado: data.estado || 'Activo',
-            rol: data.rol || 'Cliente',
-            imagen: data.imagen || '',
-            estilos: data.estilos || '',
-            ciudades: data.ciudades || '',
-            whatsapp: data.whatsapp || '',
-            instagram: data.instagram || ''
+            username: data.username || '',
+            email: data.email || '',
+            fullName: data.fullName || '',
+            status: data.status || 'active',
+            role: data.role || 'client',
+            profileImageUrl: data.profileImageUrl || '',
+            styles: (data.styles || []).map(val => stylesOptions.find(opt => opt.value === val)).filter(Boolean),
+            cities: (data.cities || []).map(val => citiesOptions.find(opt => opt.value === val)).filter(Boolean),
+            socialMedia: {
+                whatsapp: data.socialMedia?.whatsapp || '',
+                instagram: data.socialMedia?.instagram || '',
+                facebook: data.socialMedia?.facebook || ''
+            },
+            favorites: data.favorites || [],
+            designs: data.designs || [],
+            portfolio: data.portfolio || [],
+            reportCount: data.reportCount || 0
         }
     } catch (error) {
         console.error('Error al cargar usuario:', error)
+        alert('Error al cargar los datos del usuario')
     }
 }
 
-fetchUser()
+// Cargar datos al montar el componente
+onMounted(() => {
+    fetchUser()
+})
 
 async function updateUser() {
     try {
-        await api.put(`admin/users/${userId}`, user.value)
+        // Preparar los datos para enviar
+        const userData = {
+            username: user.value.username,
+            email: user.value.email,
+            fullName: user.value.fullName,
+            status: user.value.status,
+            role: user.value.role,
+            profileImageUrl: user.value.profileImageUrl,
+            styles: user.value.styles.map(opt => opt.value),
+            cities: user.value.cities.map(opt => opt.value),
+            socialMedia: user.value.socialMedia
+        }
+
+        await api.put(`admin/users/${userId}`, userData)
         showSuccessModal.value = true
     } catch (error) {
         console.error('Error al actualizar usuario:', error)
+        alert('Error al actualizar el usuario')
     }
 }
 
@@ -219,5 +308,29 @@ function goBack() {
 
 function logout() {
     router.push({ name: 'LandingView' })
+}
+
+const uploading = ref(false);
+
+async function onFileChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    uploading.value = true;
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Cambia la URL por la de tu endpoint de subida de imágenes
+        const response = await api.post('admin/users/upload-profile-image', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        // Asume que el backend responde con { url: 'https://...' }
+        user.value.profileImageUrl = response.data.url;
+    } catch (err) {
+        alert('Error al subir la imagen');
+    } finally {
+        uploading.value = false;
+    }
 }
 </script>
