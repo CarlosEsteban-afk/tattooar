@@ -279,7 +279,7 @@ async function toggleUserStatus() {
     if (!confirm(confirmMsg)) return
 
     try {
-        const res = await api.patch(`admin/users/${user.value._id}`, {
+        const res = await api.put(`admin/users/${user.value._id}`, {
             status: nuevoEstado
         })
         user.value.status = nuevoEstado
