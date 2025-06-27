@@ -1,38 +1,28 @@
-name: Build and Deploy Vue Frontend
+name: Build and Push to Docker Hub
 
 on:
   push:
     branches:
-      - main
-
-env:
-  IMAGE_NAME: ghcr.io/${{ github.repository }}:latest
+      - feature/test
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
-
-      - name: Build Docker image
-        run: docker build -t $IMAGE_NAME .
-
-      - name: Push Docker image to GHCR
-        run: docker push $IMAGE_NAME
-
-      - name: SSH and update container on VPS
-        uses: appleboy/ssh-action@v0.1.6
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} -p ${{ secrets.GHCR_TOKEN }}
-            docker pull $IMAGE_NAME
-            docker stop frontend || true && docker rm frontend || true
-            docker run -d --name frontend -p 3000:80 --env-file /var/www/frontend/.env $IMAGE_NAME
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: carlso/tattooar-frontend:latest
