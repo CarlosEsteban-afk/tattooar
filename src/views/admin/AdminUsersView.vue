@@ -72,7 +72,7 @@
                                         No hay usuarios para mostrar
                                     </td>
                                 </tr>
-                                <tr v-for="(user, index) in filteredUsers" :key="user._id"
+                                <tr v-for="(user, index) in paginatedUsers" :key="user._id"
                                     class="odd:bg-white even:bg-gray-50 border-b border-gray-200 hover:bg-purple-50 transition">
                                     <td class="px-6 py-4 whitespace-nowrap text-xs md:text-sm">
                                         <div class="flex space-x-2">
@@ -127,6 +127,9 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Paginator -->
+                    <Paginator :currentPage="currentPage" :totalItems="filteredUsers.length" :itemsPerPage="itemsPerPage" @page-change="handlePageChange" />
                 </div>
             </div>
         </div>
@@ -134,11 +137,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import TopBar from '../../components/TopBar.vue'
+import Paginator from '../../components/Paginator.vue'
 import api from '../../services/api'
 import { useUserStore } from '../../stores/UserStore'
 
@@ -155,6 +159,10 @@ const users = ref([])
 const loadError = ref(false)
 const filterEstado = ref('')
 const filterRol = ref('')
+
+// Variables de paginación
+const currentPage = ref(1)
+const itemsPerPage = 10
 
 async function fetchUsers() {
     try {
@@ -196,6 +204,23 @@ const filteredUsers = computed(() => {
     return result
 })
 
+// Usuarios paginados
+const paginatedUsers = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage
+    const end = start + itemsPerPage
+    return filteredUsers.value.slice(start, end)
+})
+
+// Función para cambiar de página
+function handlePageChange(page) {
+    currentPage.value = page
+}
+
+// Resetear a la primera página cuando cambian los filtros
+function resetPagination() {
+    currentPage.value = 1
+}
+
 function goToUserDetail(userId) {
     router.push({ name: 'UserDetail', params: { id: userId } })
 }
@@ -204,4 +229,9 @@ function logout() {
     // Acción de logout simulada
     alert('Sesión cerrada')
 }
+
+// Watchers para resetear paginación cuando cambian filtros
+watch([filterEstado, filterRol, searchTerm], () => {
+    resetPagination()
+})
 </script>

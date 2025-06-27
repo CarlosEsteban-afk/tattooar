@@ -20,7 +20,7 @@
                                 <div>
                                     <label class="block text-sm font-semibold text-[#2E076B] mb-1">Nombre de
                                         usuario</label>
-                                    <input type="text" v-model="user.username" required
+                                    <input type="text" v-model="user.username" :required="isUsernameRequired"
                                         class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
                                 </div>
                                 <div>
@@ -174,7 +174,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import TopBar from '../../components/TopBar.vue'
@@ -333,4 +333,8 @@ async function onFileChange(e) {
         uploading.value = false;
     }
 }
+
+const isUsernameRequired = computed(() => {
+    return user.value.role === 'tattooer';
+});
 </script>

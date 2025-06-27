@@ -30,7 +30,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="log in filteredLogs" :key="log.id"
+            <tr v-for="log in paginatedLogs" :key="log.id"
               class="odd:bg-white even:bg-gray-50 border-b border-gray-200 hover:bg-purple-50 transition">
               <td class="px-6 py-4 font-bold text-gray-900 whitespace-nowrap">
                 {{ log.description }}
@@ -46,6 +46,9 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Paginator -->
+      <Paginator :currentPage="currentPage" :totalItems="filteredLogs.length" :itemsPerPage="itemsPerPage" @page-change="handlePageChange" />
     </main>
   </div>
 </template>
@@ -54,11 +57,16 @@
 import axios from "axios";
 import Topbar from '../../components/TopBar.vue'
 import AdminSidebar from '../../components/AdminSidebar.vue'
-import { ref, computed, onMounted } from 'vue'
+import Paginator from '../../components/Paginator.vue'
+import { ref, computed, onMounted, watch } from 'vue'
 
 const search = ref("")
 
 const logs = ref([]);
+
+// Variables de paginación
+const currentPage = ref(1)
+const itemsPerPage = 10
 
 onMounted(async () => {
   try {
@@ -69,8 +77,6 @@ onMounted(async () => {
     console.error("Error al obtener logs:", error);
   }
 });
-
-
 
 function formatDate(dateStr) {
   const date = new Date(dateStr);
@@ -101,4 +107,26 @@ const filteredLogs = computed(() =>
     t.description.toLowerCase().includes(search.value.toLowerCase())
   )
 )
+
+// Logs paginados
+const paginatedLogs = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage
+    const end = start + itemsPerPage
+    return filteredLogs.value.slice(start, end)
+})
+
+// Función para cambiar de página
+function handlePageChange(page) {
+    currentPage.value = page
+}
+
+// Resetear a la primera página cuando cambia la búsqueda
+function resetPagination() {
+    currentPage.value = 1
+}
+
+// Watcher para resetear paginación cuando cambia la búsqueda
+watch(search, () => {
+    resetPagination()
+})
 </script>

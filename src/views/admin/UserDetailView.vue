@@ -7,6 +7,16 @@
                 <div class="flex justify-center items-center mt-4">
                     <div
                         class="w-full max-w-5xl bg-white rounded-2xl shadow-xl border border-gray-200 p-4 md:p-10 flex flex-col gap-4">
+                        <!-- Botón Volver dentro del container -->
+                        <div class="flex justify-start mb-2">
+                            <button @click="goBack" title="Volver"
+                                class="flex items-center px-4 py-2 bg-purple-100 hover:bg-purple-200 text-[#2E076B] font-semibold rounded-lg shadow-sm transition duration-150 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                </svg>
+                                Volver
+                            </button>
+                        </div>
                         <div v-if="user" class="flex flex-col md:flex-row gap-8 items-start">
                             <!-- Columna izquierda: Imagen y acciones -->
                             <div class="flex flex-col items-center gap-2 w-full md:w-1/3">
@@ -64,14 +74,6 @@
                                                 d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                                         </svg>
                                         <span class="hidden md:inline">Editar</span>
-                                    </button>
-                                    <button @click="goBack" title="Volver"
-                                        class="flex items-center justify-center px-3 py-2 rounded-lg bg-purple-100 hover:bg-purple-200 text-[#2E076B] font-semibold shadow-sm transition duration-150 text-xs md:text-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5 mr-1"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                                        </svg>
-                                        <span class="hidden md:inline">Volver</span>
                                     </button>
                                 </div>
                             </div>
