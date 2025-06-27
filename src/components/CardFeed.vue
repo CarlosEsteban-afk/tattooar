@@ -44,6 +44,7 @@
                     Ingresa el motivo del reporte. Esta acción enviará una notificación al administrador.
                 </p>
                 <textarea
+                    v-model="reportReason"
                     class="w-full h-24 p-2 mb-2 text-md border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500"
                     placeholder="Escribe tu motivo aquí..."></textarea>
                 <div class="flex justify-end space-x-4">
@@ -65,6 +66,7 @@ import { useRouter } from 'vue-router';
 import { ref, computed, onMounted } from 'vue';
 import { Flag, Heart } from 'lucide-vue-next'
 import { useFavoritesStore } from '../stores/FavoritesStore';
+import api from '../services/api';
 
 const favoritesStore = useFavoritesStore()
 const router = useRouter()
@@ -78,6 +80,7 @@ const props = defineProps({
 })
 
 const showReportModal = ref(false)
+const reportReason = ref('')
 
 const isLiked = computed(() => favoritesStore.isFavorite(props.id))
 
@@ -85,11 +88,28 @@ const toggleLike = () => {
     favoritesStore.toggleFavorite(props.id)
 }
 
-const confirmReport = () => {
-    // enviar reporte al backend
-    console.log('Reporte enviado')
-    showReportModal.value = false
-}
+const confirmReport = async () => {
+    if (!reportReason.value.trim()) {
+        alert('Por favor ingresa un motivo.');
+        return;
+    }
+
+    try {
+        await api.post('/users/report', {
+            reports_id: props.id,    // el ID del diseño reportado
+            type: 'design',          // el tipo de reporte
+            reason: 'Inapropiado',   // podrías hacer que el usuario elija un motivo predefinido
+            description: reportReason.value,
+            image: props.image       // opcional, el backend lo puede completar si falta
+        });
+        alert('Reporte enviado correctamente');
+        showReportModal.value = false;
+        reportReason.value = '';
+    } catch (error) {
+        console.error('Error al enviar el reporte', error);
+        alert('Error al enviar el reporte');
+    }
+};
 
 const goToProfile = () => {
     router.push({ name: 'TattooProfile', params: { id: props.author._id } })
