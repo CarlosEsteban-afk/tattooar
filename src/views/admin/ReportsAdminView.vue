@@ -208,7 +208,7 @@
 
                     <button
                       class="flex items-center gap-1 px-1 py-0.5 bg-yellow-100 text-yellow-700 rounded text-[10px] hover:bg-yellow-200"
-                      @click="suspendTattooer(report.reports_id)"
+                      @click="suspendTattooer(report.reports_id._id)"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -226,7 +226,7 @@
                     </button>
                     <button
                       class="flex items-center gap-1 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] hover:bg-blue-200 w-full"
-                      @click="goToProfile(report.reports_id)"
+                      @click="goToProfile(report.reports_id._id)"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -310,6 +310,7 @@ const goToProfile = (author) => {
 };
 
 const suspendTattoo = async (id) => {
+  console.log("Suspender tatuaje con ID:", id);
   try {
     await api.put(`/admin/designs/bantattoo/${id}`);
     // Vuelve a pedir la lista de reportes
@@ -324,6 +325,7 @@ const suspendTattoo = async (id) => {
 };
 
 const suspendTattooer = async (id) => {
+   console.log("Suspender tatuador con ID:", id);
   try {
     await api.put(`/admin/users/toggle-state/${id}`);
     // Vuelve a pedir la lista de reportes
@@ -487,4 +489,6 @@ function formatDate(dateStr) {
     year: 'numeric',
   });
 }
+
+
 </script>
