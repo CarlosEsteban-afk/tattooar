@@ -85,6 +85,7 @@ import { initFlowbite } from 'flowbite'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import TopBar from '../../components/TopBar.vue'
 import api from '../../services/api'
+import { useUserStore } from '../../stores/UserStore'
 
 const totalUsers = ref(0)
 const totalTattoos = ref(0)
@@ -94,10 +95,16 @@ const topTattoos = ref([])
 const usersByRoleChartRef = ref(null)
 const tattoosByStyleChartRef = ref(null)
 const router = useRouter()
+const userStore = useUserStore()
+const token = userStore.token
 
 async function fetchDashboardData() {
     // Fetch users
-    const usersRes = await api.get('admin/users')
+    const usersRes = await api.get('admin/users', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
     const users = usersRes.data
     totalUsers.value = users.length
 
@@ -115,7 +122,11 @@ async function fetchDashboardData() {
         .slice(0, 3)
 
     // Fetch tattoos
-    const tattoosRes = await api.get('/tattoos')
+    const tattoosRes = await api.get('/tattoos', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
     const tattoos = tattoosRes.data
     totalTattoos.value = tattoos.length
 

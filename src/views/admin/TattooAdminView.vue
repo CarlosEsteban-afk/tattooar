@@ -165,6 +165,10 @@ import Topbar from "../../components/TopBar.vue";
 import AdminSidebar from "../../components/AdminSidebar.vue";
 import { ref, computed, onMounted } from "vue";
 import TatuIMG from "../../assets/tatu.jpg";
+import { useUserStore } from "../../stores/UserStore";
+
+const userStore = useUserStore();
+const token = userStore.token;
 
 const search = ref("");
 
@@ -172,7 +176,13 @@ const tattoos = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:4000/v1/admin/designs");
+    console.log("Token utilizado:", token);
+    const response = await axios.get("http://localhost:4000/v1/admin/designs", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Token utilizado:", token);
     tattoos.value = response.data;
     console.log("Tatuajes obtenidos:", tattoos.value);
   } catch (error) {

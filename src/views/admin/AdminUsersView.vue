@@ -155,6 +155,7 @@ onMounted(async () => {
 
 const router = useRouter()
 const userStore = useUserStore()
+const token = userStore.token
 const users = ref([])
 const loadError = ref(false)
 const filterEstado = ref('')
@@ -171,7 +172,11 @@ async function fetchUsers() {
             userStore.setupAuthHeaders()
         }
         
-        const response = await api.get('/admin/users')
+        const response = await api.get('/admin/users', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
         users.value = response.data
         loadError.value = false
     } catch (error) {

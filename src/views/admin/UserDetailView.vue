@@ -243,28 +243,43 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import TopBar from '../../components/TopBar.vue'
 import api from '../../services/api'
+import { useUserStore } from '../../stores/UserStore'
 
 const defaultImg = 'https://ui-avatars.com/api/?name=User&background=7B6EAD&color=fff'
 
 const route = useRoute()
 const router = useRouter()
+const userStore = useUserStore()
+const token = userStore.token
 const user = ref(null)
 const designs = ref([])
+
+const isUsernameRequired = computed(() => {
+    return user.value.role === 'tattooer' && !!user.value.username;
+});
 
 onMounted(async () => {
     try {
         const id = route.params.id
-        const res = await api.get(`admin/users/${id}`)
+        const res = await api.get(`admin/users/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
         user.value = res.data
 
         // Si el usuario tiene diseños, obtén los datos completos
         if (user.value.designs && user.value.designs.length > 0) {
             const designIds = user.value.designs.map(d => typeof d === 'object' && d.$oid ? d.$oid : d)
-            const designPromises = designIds.map(id => api.get(`designs/${id}`))
+            const designPromises = designIds.map(id => api.get(`designs/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }))
             const designResponses = await Promise.all(designPromises)
             designs.value = designResponses.map(r => r.data)
         }
@@ -283,6 +298,10 @@ async function toggleUserStatus() {
     try {
         const res = await api.put(`admin/users/${user.value._id}`, {
             status: nuevoEstado
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         })
         user.value.status = nuevoEstado
         alert(`Usuario ${nuevoEstado === 'active' ? 'activado' : 'desactivado'} correctamente.`)

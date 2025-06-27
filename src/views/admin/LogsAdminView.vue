@@ -54,12 +54,16 @@
 </template>
 
 <script setup>
+import { useUserStore } from "../../stores/UserStore";
+
 import axios from "axios";
 import Topbar from '../../components/TopBar.vue'
 import AdminSidebar from '../../components/AdminSidebar.vue'
 import Paginator from '../../components/Paginator.vue'
 import { ref, computed, onMounted, watch } from 'vue'
 
+const userStore = useUserStore();
+const token = userStore.token;
 const search = ref("")
 
 const logs = ref([]);
@@ -70,7 +74,11 @@ const itemsPerPage = 10
 
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:4000/v1/logs/");
+    const response = await axios.get("http://localhost:4000/v1/logs/",{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     logs.value = response.data;
     console.log("Logs obtenidos:", logs.value);
   } catch (error) {

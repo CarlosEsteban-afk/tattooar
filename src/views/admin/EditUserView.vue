@@ -180,8 +180,11 @@ import AdminSidebar from '../../components/AdminSidebar.vue'
 import TopBar from '../../components/TopBar.vue'
 import api from '../../services/api'
 import Multiselect from 'vue-multiselect'
+import { useUserStore } from '../../stores/UserStore'
 
 const router = useRouter()
+const userStore = useUserStore()
+const token = userStore.token
 const showConfirmModal = ref(false)
 const showSuccessModal = ref(false)
 const user = ref({
@@ -233,7 +236,11 @@ const userId = router.currentRoute.value.params.id
 // Fetch user data (this should be replaced with actual API call)
 async function fetchUser() {
     try {
-        const response = await api.get(`admin/users/${userId}`)
+        const response = await api.get(`admin/users/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
         const data = response.data
         user.value = {
             username: data.username || '',
@@ -280,7 +287,11 @@ async function updateUser() {
             socialMedia: user.value.socialMedia
         }
 
-        await api.put(`admin/users/${userId}`, userData)
+        await api.put(`admin/users/${userId}`, userData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
         showSuccessModal.value = true
     } catch (error) {
         console.error('Error al actualizar usuario:', error)
@@ -303,7 +314,7 @@ function confirmSave() {
 }
 
 function goBack() {
-    router.push({ name: 'AdminUsersView' })
+    router.push({ name: 'UserDetail', params: { id: userId } })
 }
 
 function logout() {
@@ -322,7 +333,10 @@ async function onFileChange(e) {
 
         // Cambia la URL por la de tu endpoint de subida de imágenes
         const response = await api.post('admin/users/upload-profile-image', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
+            headers: { 
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`,
+            }
         });
 
         // Asume que el backend responde con { url: 'https://...' }
