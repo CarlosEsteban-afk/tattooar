@@ -325,13 +325,28 @@ const suspendTattoo = async (id) => {
 };
 
 const suspendTattooer = async (id) => {
-   console.log("Suspender tatuador con ID:", id);
+  console.log("Suspender tatuador con ID:", id);
   try {
     await api.put(`/admin/users/toggle-state/${id}`);
-    // Vuelve a pedir la lista de reportes
+    // Vuelve a pedir la lista de reportes y mapea igual que en onMounted
     console.log("Tatuador suspendido con éxito:", id);
     const response = await api.get("/reports/");
-    reports.value = response.data;
+    const reportsData = response.data;
+    const reportsWithNames = await Promise.all(
+      reportsData.map(async (report) => {
+        if (report.user_id) {
+          try {
+            const userRes = await api.get(`/users/${report.user_id}`);
+            return { ...report, author: userRes.data.fullName };
+          } catch (e) {
+            return { ...report, author: "Desconocido" };
+          }
+        } else {
+          return { ...report, author: "Desconocido" };
+        }
+      })
+    );
+    reports.value = reportsWithNames;
     alert("Cambio de estado de tatuador realizado con éxito");
   } catch (error) {
     console.error("Error al suspender el tatuador:", error);
@@ -343,9 +358,24 @@ const resolveReport = async (id) => {
   try {
     await api.put(`/reports/updateReport/${id}`);
     console.log("estado reporte cambiado con éxito:", id);
-    // Vuelve a pedir la lista de reportes
+    // Vuelve a pedir la lista de reportes y mapea igual que en onMounted
     const response = await api.get("/reports/");
-    reports.value = response.data;
+    const reportsData = response.data;
+    const reportsWithNames = await Promise.all(
+      reportsData.map(async (report) => {
+        if (report.user_id) {
+          try {
+            const userRes = await api.get(`/users/${report.user_id}`);
+            return { ...report, author: userRes.data.fullName };
+          } catch (e) {
+            return { ...report, author: "Desconocido" };
+          }
+        } else {
+          return { ...report, author: "Desconocido" };
+        }
+      })
+    );
+    reports.value = reportsWithNames;
     alert("Cambio de estado de reporte realizado con éxito");
   } catch (error) {
     console.error("Error al resolver el reporte:", error);

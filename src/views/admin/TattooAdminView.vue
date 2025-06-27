@@ -203,6 +203,7 @@ const goToProfile = (author) => {
 };
 
 const suspendTattoo = async (id) => {
+console.log("entrando al metodo suspendTattoo con id:", id);
   try {
     await api.put(`/admin/designs/bantattoo/${id}`);
     // Vuelve a pedir la lista de tatuajes
