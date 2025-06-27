@@ -60,7 +60,7 @@
             :styles="report.styles"
             :updatedAt="formatDate(report.date)"
             :type="report.type"
-            :designURL="report.designURL"
+            :designURL="report.image"
             :reportCount="report.reportCount"
             :state="report.state"
             class="max-w-xs w-full"

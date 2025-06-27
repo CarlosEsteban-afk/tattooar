@@ -53,6 +53,7 @@
                 :key="n.id"
                 class="hover:bg-gray-100 cursor-pointer px-4 py-2 text-sm"
                 @click="goToNotification(n)"
+                @mouseenter="markAsRead(n)"
               >
                 <img
                   :src="getImgUrl(n.image)"
@@ -62,7 +63,7 @@
                 <strong class="text-gray-800">{{ n.title }}</strong>
                 <br />
                 {{ n.description }} <br />
-                <span class="text-gray-500 text-xs">{{ n.createdAt }}</span>
+                <span class="text-gray-500 text-xs">{{ formatDate(n.createdAt) }}</span>
                 <br />
                 <span v-if="n.isRead === false" class="text-yellow-500 text-xs"
                   >Mensaje sin leer</span
@@ -83,61 +84,37 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import api from "../services/api";
 
 const showMenu = ref(false);
+const notifications = ref([]); // Ahora es reactivo
+const notificationCount = ref(0);
 const router = useRouter();
 
-const notifications = [
-  {
-    id: 1,
-    user: 1, // ID del usuario admin que se le asigna la notificación
-    type: "design",
-    description: "Este tatuaje es satánico",
-    image: "../assets/tatu.jpg",
-    title: "Tatuaje de dragón",
-    link: "/admin/reports",
-    isRead: false,
-    createdAt: "2025-05-20 10:00",
-  },
-  {
-    id: 2,
-    user: 1,
-    type: "tattooer",
-    description: "Un usuario ha reclamado por contenido ofensivo",
-    image: "../assets/tatu.jpg",
-    title: "Reclamo de usuario",
-    link: "/admin/users",
-    isRead: false,
-    createdAt: "2025-05-21 09:30",
-  },
-  {
-    id: 3,
-    user: 1,
-    type: "claim",
-    description: "Se reportó un diseño por derechos de autor",    
-    image: "../assets/tatu.jpg",
-    title: "Reporte de copyright",
-    link: "/admin/reports",
-    isRead: true,
-    createdAt: "2025-05-22 14:15",
-  },
-    {
-    id: 4,
-    user: 1,
-    type: "claim",
-    description: "Se reportó un diseño por derechos de autor",    
-    image: "../assets/tatu.jpg",
-    title: "Reporte de copyright",
-    link: "/admin/reports",
-    isRead: true,
-    createdAt: "2025-05-22 14:15",
-  },
-  
-];
-const notificationCount = notifications.length; // Número de notificaciones
+async function getNotifications() {
+  try {
+    // Llama a la API usando axios
+    const res = await api.get("/reports/notifications");
+    console.log("Notificaciones:", res.data);
+    notifications.value = res.data;
+    notificationCount.value = res.data.length;
+  } catch (e) {
+    notifications.value = [];
+    notificationCount.value = 0;
+    // Puedes mostrar un error si lo deseas
+  }
+}
+
+onMounted(() => {
+  getNotifications();
+});
+
 function getImgUrl(path) {
+  if (!path) return new URL("../assets/tatu.jpg", import.meta.url).href; // fallback
+  // Si es url absoluta, retorna tal cual
+  if (path && path.startsWith("http")) return path;
   return new URL(path, import.meta.url).href;
 }
 function toggleMenu() {
@@ -148,7 +125,25 @@ function goToNotification(notification) {
   showMenu.value = false;
   router.push(notification.link);
 }
-
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('es-CL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
+async function markAsRead(notification) {
+  const notifId = notification.id || notification._id;
+  if (notification.isRead || !notifId) return; // Evita llamadas innecesarias
+  try {
+    const res = await api.put(`/reports/notificationChange/${notifId}`);
+    notification.isRead = true;
+  } catch (e) {
+    console.error('Error al marcar como leída:', e);
+  }
+}
 defineProps({
   title: String,
 });
